@@ -1,65 +1,77 @@
-import { useState } from "react"
-import reactLogo from "./assets/react.svg"
-import viteLogo from "/vite.svg"
-import "./App.css"
 import clsx from "clsx"
 
 function App() {
-  const [count, setCount] = useState(0)
-
   return (
-    <>
-      <div className="flex">
-        <div
-          className={clsx([
-            "bg-blue-200",
-            "text-4xl",
-            "text-red-200",
-            "h-10",
-            "m:h-40",
-          ])}
-        >
-          test
-        </div>
-        <div
-          className={clsx(
-            "flex",
-            "m:bg-red-500",
-            "m:h-20",
-            "m:text-8xl",
-            "m:font-bold",
-            "m:text-blue-500",
-            "h-10",
-            "flex-auto",
-            "bg-blue-500",
-          )}
-        >
-          tett asdas asdasdasdasdasdasdas asdasd asd
-        </div>
-        <div className="flex-auto bg-red-500"></div>
-        <div className="flex-auto bg-yellow-500"></div>
+    <div className="flex flex-col">
+      <h1>Test Icon</h1>
+      <span
+        className={clsx([
+          "material-symbols-outlined",
+          "text-8xl",
+          "animate-spin",
+          "duration-300",
+          "w-24",
+        ])}
+      >
+        progress_activity
+      </span>
+      <span
+        className={clsx([
+          "material-icons",
+          "text-8xl",
+          "animate-spin",
+          "duration-300",
+          "w-24",
+        ])}
+      >
+        add
+      </span>
+      <span
+        className={clsx([
+          "material-icons",
+          "text-8xl",
+          "animate-spin",
+          "duration-300",
+          "w-24",
+        ])}
+      >
+        refresh
+      </span>
+      <span
+        className={clsx([
+          "material-icons",
+          "text-8xl",
+          "animate-spin",
+          "duration-300",
+          "w-24",
+        ])}
+      >
+        cached
+      </span>
+      <span className={clsx(["material-icons"])}>autorenew</span>
+      <span className={clsx(["material-icons", "m:active:text-red-500"])}>
+        calendar_month
+      </span>
+      <span className="material-icons">save</span>
+      <span className="material-icons">menu</span>
+      <span className="material-icons">logout</span>
+      <span className="material-icons text-black hover:text-5xl hover:bg-black hover:text-white transition-all duration-300">
+        home
+      </span>
+      <div className="house-icon">Icon</div>
+      <div className="clock-icon">Icon</div>
+      <div className="calendar-icon">Icon</div>
+      <div>Test text which must show font-family/ И сразу же на кириллице</div>
+      <div className="font-sans">
+        Test text which must show font-family/ И сразу же на кириллице
       </div>
-      <div className="flex">
-        <a href="https://vite.dev" target="_blank" className="w-14 flex-auto">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank" className="w-64 flex-2">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+      <div className="font-[Inter]">
+        Test text which must show font-family/ И сразу же на кириллице
       </div>
-      <h1 className="bg-white text-8xl">Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p className="text-2xl underline">
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
+      <div className="font-bold">
+        Test text which must show font-family/ И сразу же на кириллице
       </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+    </div>
   )
 }
 
