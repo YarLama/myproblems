@@ -12,8 +12,8 @@ export default defineConfig(({ mode }) => {
     base: env.VITE_BASE_PATH || "/",
     resolve: {
       alias: {
-        "!": path.resolve(__dirname, "./"),
-        "@": path.resolve(__dirname, "./src/"),
+        "@root": path.resolve(__dirname, "./"),
+        "@ui": path.resolve(__dirname, "./src/shared/ui/index.ts"),
         "@fonts": path.resolve(__dirname, "./src/shared/styles/fonts"),
       },
     },

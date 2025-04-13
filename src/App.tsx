@@ -1,9 +1,11 @@
+import { IconButton } from "@ui"
 import clsx from "clsx"
 
 function App() {
   return (
     <div className="flex flex-col">
       <h1>Test Icon</h1>
+      <IconButton icon="delete"/>
       <span
         className={clsx([
           "material-symbols-outlined",
