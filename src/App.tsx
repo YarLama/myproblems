@@ -5,6 +5,7 @@ function App() {
   return (
     <div className="flex flex-col">
       <h1>Test Icon</h1>
+      <h1>Test #2</h1>
       <p>Test message</p>
       <IconButton icon="delete"/>
       <span
