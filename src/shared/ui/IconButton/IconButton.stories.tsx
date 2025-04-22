@@ -1,10 +1,12 @@
 import { Meta, StoryObj } from "@storybook/react";
 import {
   IconButton,
+} from "./IconButton";
+import {
   Icons,
   IconsHoverVariant,
   IconsSizes,
-} from "./IconButton";
+} from "./IconButton.types.ts"
 
 const meta: Meta<typeof IconButton> = {
   title: "UI/IconButton",
@@ -43,16 +45,16 @@ export const Default: Story = {
 };
 
 export const AllIcons: Story = {
-  render: () => (
+  render: (args) => (
     <div className="flex flex-wrap gap-4">
       {(
         Object.keys(Icons) as Array<keyof typeof Icons>
       ).map((icon) => (
         <div
           key={icon}
-          className="flex flex-col items-center"
+          className="flex flex-col items-center justify-center"
         >
-          <IconButton icon={icon} />
+          <IconButton icon={icon} size={args.size}/>
           <span className="mt-2 text-sm text-gray-600">
             {icon}
           </span>
@@ -60,17 +62,4 @@ export const AllIcons: Story = {
       ))}
     </div>
   ),
-};
-
-export const CustomStyle: Story = {
-  args: {
-    icon: "search",
-  },
-  decorators: [
-    (Story) => (
-      <div className="p-4 bg-blue-50 rounded-lg">
-        <Story />
-      </div>
-    ),
-  ],
 };
