@@ -8,6 +8,35 @@ import {
   iconSizes,
 } from "./IconButton.types";
 
+const btnClasses = clsx([
+  "flex",
+  "border",
+  ["bg-gray-300", "text-gray-600", "border-gray-600"],
+  "rounded-lg",
+  "cursor-pointer",
+  "select-none",
+]);
+
+const sizeClasses: iconSizeClass = {
+  sm: "px-1 text-md",
+  md: "px-2 py-1 text-xl",
+  lg: "px-3 py-2 text-2xl",
+};
+
+const hoverVariantClasses: iconHoverVariantClass = {
+  default: clsx([
+    "hover:bg-gray-600",
+    "hover:text-gray-300",
+    "hover:border-gray-300",
+  ]),
+  positive: clsx([
+    ["hover:bg-green-300", "hover:text-gray-600"],
+  ]),
+  negative: clsx([
+    ["hover:bg-red-300", "hover:text-gray-600"],
+  ]),
+};
+
 export interface IconButtonProps
   extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   icon: iconNames;
@@ -22,40 +51,11 @@ export const IconButton: React.FC<IconButtonProps> = ({
   className,
   ...props
 }) => {
-  const btnCLasses = clsx([
-    "flex",
-    "border",
-    ["bg-gray-300", "text-gray-600", "border-gray-600"],
-    "rounded-lg",
-    "cursor-pointer",
-    "select-none",
-  ]);
-
-  const sizeClasses: iconSizeClass = {
-    sm: "px-1 text-lg",
-    md: "px-2 py-1 text-xl",
-    lg: "px-3 py-2 text-2xl",
-  };
-
-  const hoverVariantClasses: iconHoverVariantClass = {
-    default: clsx([
-      "hover:bg-gray-600",
-      "hover:text-gray-300",
-      "hover:border-gray-300",
-    ]),
-    positive: clsx([
-      ["hover:bg-green-300", "hover:text-gray-600"],
-    ]),
-    negative: clsx([
-      ["hover:bg-red-300", "hover:text-gray-600"],
-    ]),
-  };
-
   return (
     <button
       {...props}
       className={clsx([
-        btnCLasses,
+        btnClasses,
         hoverVariantClasses[hoverVariant],
         sizeClasses[size],
         className,
