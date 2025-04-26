@@ -2,15 +2,16 @@ import clsx from "clsx";
 import {
   iconHoverVariant,
   iconHoverVariantClass,
-  iconNames,
-  Icons,
   iconSizeClass,
   iconSizes,
 } from "./IconButton.types";
+import { iconNames, Icons } from "@shared/constanst/icons";
+
 
 const btnClasses = clsx([
   "flex",
   "border",
+  "justify-center",
   ["bg-gray-300", "text-gray-600", "border-gray-600"],
   "rounded-lg",
   "cursor-pointer",

@@ -16,6 +16,7 @@ export default defineConfig(({ mode }) => {
           __dirname,
           "./src/shared/ui/index.ts",
         ),
+        "@shared/constanst": path.resolve(__dirname, "./src/shared/constants"),
         "@fonts": path.resolve(
           __dirname,
           "./src/shared/styles/fonts",

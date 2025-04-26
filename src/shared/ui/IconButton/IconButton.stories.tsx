@@ -3,10 +3,10 @@ import {
   IconButton,
 } from "./IconButton";
 import {
-  Icons,
   IconsHoverVariant,
   IconsSizes,
 } from "./IconButton.types.ts"
+import { Icons } from "@shared/constanst/icons.ts";
 
 const meta: Meta<typeof IconButton> = {
   title: "UI/IconButton",

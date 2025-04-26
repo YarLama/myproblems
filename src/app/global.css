@@ -2,6 +2,11 @@
 @config "@root/tailwind.config.js";
 
 @layer base {
+
+  :root {
+    --header-height: 4rem;
+  }
+
   @font-face {
     font-family: "Material Symbols Outlined";
     font-style: normal;
