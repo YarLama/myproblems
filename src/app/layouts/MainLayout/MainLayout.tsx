@@ -23,7 +23,7 @@ export const MainLayout = () => {
           <IconButton icon="ok" hoverVariant="positive"/>
         </div>
       </nav>
-      <main className="pt-[var(--header-height)] bg-gray-600 text-gray-300">
+      <main className="pt-[var(--header-height)] bg-gray-800 text-gray-300">
         <App />
       </main>
     </div>

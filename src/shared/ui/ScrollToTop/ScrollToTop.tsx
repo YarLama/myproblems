@@ -60,6 +60,7 @@ export const ScrollToTop: React.FC<ScrollToTopProps> = ({
     <div
       className={getDivClasses()}
       onClick={doScrollToTop}
+      role="button"
     >
       <span className={Icons.up.class}>
         {Icons.up.content}

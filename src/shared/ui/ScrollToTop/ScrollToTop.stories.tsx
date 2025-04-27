@@ -11,6 +11,14 @@ const meta: Meta<typeof ScrollToTop> = {
       control: { type: "number", min: 0, max: 500 },
       description: "Scroll Y threshold for visible",
     },
+    containerRef: {
+      description: "React ref for embed component into container",
+      table: {
+        defaultValue: {
+          summary: "window"
+        }
+      }
+    },
   },
 };
 
