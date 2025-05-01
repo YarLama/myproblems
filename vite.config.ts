@@ -12,11 +12,18 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@root": path.resolve(__dirname, "./"),
+        "@features": path.resolve(
+          __dirname,
+          "./src/features/index.ts",
+        ),
         "@ui": path.resolve(
           __dirname,
           "./src/shared/ui/index.ts",
         ),
-        "@shared/constanst": path.resolve(__dirname, "./src/shared/constants"),
+        "@shared/constanst": path.resolve(
+          __dirname,
+          "./src/shared/constants",
+        ),
         "@fonts": path.resolve(
           __dirname,
           "./src/shared/styles/fonts",

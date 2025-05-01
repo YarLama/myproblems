@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "paths": {
+      "@features": ["./src/features/index.ts"],
       "@ui": ["./src/shared/ui/index.ts"],
       "@shared/constanst/*": ["./src/shared/constants/*"],
       "@root/*": ["./*"]
