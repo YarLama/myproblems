@@ -1,20 +1,63 @@
-import { IconButton, ScrollToTop } from "@ui";
+import { IconButton, ScrollToTop, TaskCard } from "@ui";
 import clsx from "clsx";
 import { useRef } from "react";
 
 function App() {
-
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
     <div className="flex flex-col">
+      <div className={clsx([
+        "flex",
+        "flex-wrap",
+        "justify-center"
+      ])}>
+        <TaskCard
+          title="test1"
+          description="testDescription"
+          tags={["js", "ts", "array"]}
+        />
+        <TaskCard
+          title="test1"
+          description="testDescription"
+          tags={["js", "ts", "array"]}
+        />
+        <TaskCard
+          title="test1"
+          description="ttestDescriptiontestDescriptiontestDescriptiontestDescriptiontestDescriptionestDescription"
+          tags={["js", "ts", "array"]}
+        />
+        <TaskCard
+          title="test1"
+          description="testDescription"
+          tags={["js", "ts", "array"]}
+        />
+        <TaskCard
+          title="test1"
+          description="testDescription"
+          tags={["js", "ts", "array"]}
+        />
+        <TaskCard
+          title="test1"
+          description="testDescription"
+          tags={["js", "ts", "array"]}
+        />
+        <TaskCard
+          title="test1"
+          description="testDescription"
+          tags={["js", "ts", "array"]}
+        />
+      </div>
       <ScrollToTop thresholdY={200} />
       <h1>Test Icon</h1>
       <h1>Test #2</h1>
       <h1>Test #3</h1>
       <p>Test message</p>
       <IconButton icon="delete" className="w-48" />
-      <div className="w-96 h-96 overflow-auto relative" ref={containerRef}>
+      <div
+        className="w-96 h-96 overflow-auto relative"
+        ref={containerRef}
+      >
         <div className="font-[Inter]">
           Test text which must show font-family/ И сразу же
           на кириллице
@@ -67,7 +110,7 @@ function App() {
           Test text which must show font-family/ И сразу же
           на кириллице
         </div>
-        <ScrollToTop containerRef={containerRef}/>
+        <ScrollToTop containerRef={containerRef} />
       </div>
       <span
         className={clsx([
