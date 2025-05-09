@@ -2,7 +2,7 @@ import { IconButton, ScrollToTop, TaskCard } from "@ui";
 import clsx from "clsx";
 import { useRef } from "react";
 
-function App() {
+export const TasksPage = () => {
   const containerRef = useRef<HTMLDivElement>(null);
 
   return (
@@ -243,5 +243,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
