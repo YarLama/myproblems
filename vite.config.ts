@@ -12,6 +12,10 @@ export default defineConfig(({ mode }) => {
     resolve: {
       alias: {
         "@root": path.resolve(__dirname, "./"),
+        "@layouts": path.resolve(
+          __dirname,
+          "./src/app/layouts/index.ts",
+        ),
         "@pages": path.resolve(
           __dirname,
           "./src/pages/index.ts",
