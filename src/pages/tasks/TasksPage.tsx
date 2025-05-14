@@ -11,38 +11,21 @@ export const TasksPage = () => {
         "justify-center"
       ])}>
         <TaskCard
+          id={1}
           title="test1"
           description="testDescription"
           tags={["js", "ts", "array"]}
         />
         <TaskCard
+          id={2}
           title="test1"
           description="testDescription"
           tags={["js", "ts", "array"]}
         />
         <TaskCard
+          id={3}
           title="test1"
           description="ttestDescriptiontestDescriptiontestDescriptiontestDescriptiontestDescriptionestDescription"
-          tags={["js", "ts", "array"]}
-        />
-        <TaskCard
-          title="test1"
-          description="testDescription"
-          tags={["js", "ts", "array"]}
-        />
-        <TaskCard
-          title="test1"
-          description="testDescription"
-          tags={["js", "ts", "array"]}
-        />
-        <TaskCard
-          title="test1"
-          description="testDescription"
-          tags={["js", "ts", "array"]}
-        />
-        <TaskCard
-          title="test1"
-          description="testDescription"
           tags={["js", "ts", "array"]}
         />
       </div>

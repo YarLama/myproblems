@@ -1,10 +1,13 @@
 import clsx from "clsx";
+import { useNavigate } from "react-router";
 
 interface TaskCardProps {
+  id: number;
   title?: string;
   description?: string;
   size?: "sm" | "md" | "lg";
   tags?: string[];
+  clickable?: boolean;
 }
 
 const sizeClasses: Partial<
@@ -16,11 +19,20 @@ const sizeClasses: Partial<
 };
 
 export const TaskCard: React.FC<TaskCardProps> = ({
+  id,
   title,
   description,
   size = "md",
   tags,
+  clickable = true,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    if (!clickable) return;
+    navigate(`/tasks/${id}`);
+  };
+
   return (
     <article
       className={clsx([
@@ -34,12 +46,12 @@ export const TaskCard: React.FC<TaskCardProps> = ({
         ],
         ["w-48", "m-2", "cursor-pointer"],
       ])}
+      data-id={id}
+      onClick={handleClick}
     >
       {title && <h3>{title}</h3>}
       {description && (
-        <p className={clsx(["truncate"])}>
-          {description}
-        </p>
+        <p className={clsx(["truncate"])}>{description}</p>
       )}
       {tags?.length && (
         <div>
