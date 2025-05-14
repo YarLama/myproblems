@@ -1,5 +1,6 @@
 import { createHashRouter } from "react-router";
 import { TasksPage } from "@pages";
+import { MainLayout, TasksLayout } from "@layouts";
 
 const routes = [
   {
