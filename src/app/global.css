@@ -4,6 +4,13 @@
 @layer base {
   :root {
     --header-height: 4rem;
+
+    --color-primary: #111827;
+    /* gray-900 */
+    --color-secondary: oklch(44.6% 0.03 256.802);
+    /* gray-600 */
+    --color-text: oklch(87.2% 0.01 258.338);
+    /* gray-300 */
   }
 
   @font-face {
