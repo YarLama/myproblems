@@ -5,6 +5,7 @@
       "@pages": ["./src/pages/index.ts"],
       "@features": ["./src/features/index.ts"],
       "@ui": ["./src/shared/ui/index.ts"],
+      "@types": ["./src/shared/types/index.ts"],
       "@shared/constanst/*": ["./src/shared/constants/*"],
       "@root/*": ["./*"]
     },

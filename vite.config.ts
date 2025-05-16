@@ -28,6 +28,10 @@ export default defineConfig(({ mode }) => {
           __dirname,
           "./src/shared/ui/index.ts",
         ),
+        "@types": path.resolve(
+          __dirname,
+          "./src/shared/types/index.ts",
+        ),
         "@shared/constanst": path.resolve(
           __dirname,
           "./src/shared/constants",

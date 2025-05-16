@@ -1,7 +1,17 @@
+import { getTestTasks } from "@root/src/shared/testData/testTasks";
+import { Problem } from "@root/src/shared/types";
 import { ScrollToTop, TaskCard } from "@ui";
 import clsx from "clsx";
+import { useEffect, useState } from "react";
 
 export const TasksPage = () => {
+
+  const [problems, setProblems] = useState<Problem[]>([])
+
+  useEffect(() => {
+    const data = getTestTasks();
+    setProblems(data);
+  }, [])
 
   return (
     <div className="flex flex-col">
@@ -10,24 +20,12 @@ export const TasksPage = () => {
         "flex-wrap",
         "justify-center"
       ])}>
-        <TaskCard
-          id={1}
-          title="test1"
-          description="testDescription"
-          tags={["js", "ts", "array"]}
-        />
-        <TaskCard
-          id={2}
-          title="test1"
-          description="testDescription"
-          tags={["js", "ts", "array"]}
-        />
-        <TaskCard
-          id={3}
-          title="test1"
-          description="ttestDescriptiontestDescriptiontestDescriptiontestDescriptiontestDescriptionestDescription"
-          tags={["js", "ts", "array"]}
-        />
+        {problems.map((p, i) => {
+          return <TaskCard id={i} key={i} title={p.title} 
+          description={p.description.ru}
+          tags={p.category}
+          />
+        })}
       </div>
       <ScrollToTop thresholdY={200} />
     </div>
