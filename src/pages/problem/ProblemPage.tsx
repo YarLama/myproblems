@@ -8,7 +8,6 @@ export const ProblemPage = () => {
   const [problem, setProblem] = useState<Problem | null>(null);
 
   useEffect(() => {
-    console.log('test', id, typeof id)
     const data = getTestTasks();
     if (id && (typeof id === 'string')) {
       setProblem(data[+id])

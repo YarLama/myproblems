@@ -1,2 +1,2 @@
-export { TasksPage } from "./tasks/TasksPage.tsx";
+export { ProblemsPage } from "./problems/ProblemsPage.tsx";
 export { ProblemPage } from "./problem/ProblemPage.tsx";

@@ -1,6 +1,6 @@
 import { createHashRouter } from "react-router";
-import { ProblemPage, TasksPage } from "@pages";
-import { MainLayout, TasksLayout } from "@layouts";
+import { ProblemPage, ProblemsPage } from "@pages";
+import { MainLayout, ProblemsLayout } from "@layouts";
 
 const routes = [
   {
@@ -8,12 +8,12 @@ const routes = [
     element: <MainLayout />,
     children: [
       {
-        path: "tasks",
-        element: <TasksLayout />,
+        path: "problems",
+        element: <ProblemsLayout />,
         children: [
           {
             index: true,
-            element: <TasksPage />,
+            element: <ProblemsPage />,
           },
           {
             path: ":id",

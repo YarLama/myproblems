@@ -30,7 +30,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   const handleClick = () => {
     if (!clickable) return;
-    navigate(`/tasks/${id}`);
+    navigate(`/problems/${id}`);
   };
 
   return (
@@ -56,7 +56,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
       {tags?.length && (
         <div>
           {tags.map((tag) => (
-            <span>{tag}</span>
+            <span key={tag}>{tag}</span>
           ))}
         </div>
       )}

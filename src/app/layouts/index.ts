@@ -1,2 +1,2 @@
 export { MainLayout } from "./MainLayout/MainLayout.tsx";
-export { TasksLayout } from "./TasksLayout/TasksLayout.tsx";
+export { ProblemsLayout } from "./ProblemsLayout/ProblemsLayout.tsx";
