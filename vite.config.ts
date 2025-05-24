@@ -32,6 +32,10 @@ export default defineConfig(({ mode }) => {
           __dirname,
           "./src/shared/types/index.ts",
         ),
+        "@lib": path.resolve(
+          __dirname,
+          "./src/shared/lib/index.ts",
+        ),
         "@model": path.resolve(
           __dirname,
           "./src/shared/model/index.ts",

@@ -1,50 +1,42 @@
-import { Problem, ProblemList } from "@types";
-import { makeAutoObservable } from "mobx";
+import { ProblemList } from "@types";
+import { makeAutoObservable, runInAction } from "mobx";
 import { getTestProblemsList } from "../../testData/testTasks";
+import { LocalDB, createLocalDB } from "@lib";
 
-interface ProblemStore {
-  problemList: ProblemList | null;
-  currentProblem: Problem | null;
-  isLoading: boolean;
-  error: string | null;
-  addProblem: () => void;
-  updateProblem: () => void;
-  deleteProblem: () => void;
-  setCurrentProblem: () => void;
+class ProblemStore {
+  problemList: ProblemList | null = null;
+  isLoading = true;
+  error: string | null = null;
+  private db = createLocalDB();
+
+  constructor() {
+    makeAutoObservable(this);
+    this.init();
+  }
+
+  private async init() {
+    try {
+      const data = await this.db.get<ProblemList>(
+        LocalDB.dbStoreName,
+      );
+
+      // await new Promise(res => setTimeout(res, 3000))
+
+      runInAction(() => {
+        this.problemList = data || getTestProblemsList();
+      });
+    } catch (e) {
+      runInAction(() => {
+        this.error =
+          e instanceof Error ? e.message : "Error";
+        this.problemList = getTestProblemsList();
+      });
+    } finally {
+      runInAction(() => {
+        this.isLoading = false;
+      });
+    }
+  }
 }
 
-export const createProblemStore = (): ProblemStore => {
-  let problemList: ProblemList | null = null;
-  const currentProblem: Problem | null = null;
-  let isLoading: boolean = false;
-  const error: string | null = null;
-
-  const initProblems = async () => {
-    isLoading = true;
-    const data = getTestProblemsList();
-    problemList = data;
-    isLoading = false;
-  };
-
-  initProblems();
-
-  return makeAutoObservable({
-    get problemList() {
-      return problemList;
-    },
-    get currentProblem() {
-      return currentProblem;
-    },
-    get isLoading() {
-      return isLoading;
-    },
-    get error() {
-      return error;
-    },
-
-    addProblem() { },
-    updateProblem() { },
-    deleteProblem() { },
-    setCurrentProblem() { },
-  });
-};
+export const problemStore = new ProblemStore();
