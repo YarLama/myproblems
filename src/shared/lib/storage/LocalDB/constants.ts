@@ -1,4 +1,5 @@
 export const LocalDB = {
   dbName: "LocalDB",
-  dbStoreName: "ProblemList",
+  dbProblemListInfoStore: "ProblemsInfo",
+  dbProblemListStore: "Problems",
 } as const;

@@ -1,8 +1,22 @@
+import { Problem } from "@types";
 import { LocalDB } from "./constants";
 
+interface ProblemListInfo {
+  version: number;
+  format: "list";
+}
+
 interface LocalDB {
-  get<T>(key: string): Promise<T | null>;
-  set(key: string, value: unknown): Promise<void>;
+  getProblemListInfo(): Promise<ProblemListInfo>;
+  setProblemListInfo(info: ProblemListInfo): Promise<void>;
+  getAllProblems(): Promise<Record<number, Problem>>;
+  getProblem(id: number): Promise<Problem | null>;
+  addProblem(
+    item: Problem,
+    problemKey?: number,
+  ): Promise<void>;
+  updateProblem(item: Problem): Promise<void>;
+  deleteProblem(id: number): Promise<void>;
 }
 
 export const createLocalDB = (): LocalDB => {
@@ -15,7 +29,24 @@ export const createLocalDB = (): LocalDB => {
       const request = indexedDB.open(LocalDB.dbName, 1);
 
       request.onupgradeneeded = () => {
-        request.result.createObjectStore(LocalDB.dbStoreName);
+        const db = request.result;
+
+        if (
+          !db.objectStoreNames.contains(
+            LocalDB.dbProblemListInfoStore,
+          )
+        ) {
+          db.createObjectStore(
+            LocalDB.dbProblemListInfoStore,
+          );
+        }
+        if (
+          !db.objectStoreNames.contains(
+            LocalDB.dbProblemListStore,
+          )
+        ) {
+          db.createObjectStore(LocalDB.dbProblemListStore);
+        }
       };
 
       request.onsuccess = () => {
@@ -28,31 +59,54 @@ export const createLocalDB = (): LocalDB => {
   };
 
   return {
-    async get(key) {
+    async getProblemListInfo() {
+      const _storeName = LocalDB.dbProblemListInfoStore;
       const _db = await connect();
       return new Promise((res) => {
-        const tx = _db.transaction(
-          LocalDB.dbStoreName,
-          "readonly",
-        );
+        const tx = _db.transaction(_storeName, "readonly");
         const request = tx
-          .objectStore(LocalDB.dbStoreName)
-          .get(key);
-        request.onsuccess = () =>
-          res(request.result || null);
-        request.onerror = () => res(null);
+          .objectStore(_storeName)
+          .get("info");
+        request.onsuccess = () => res(request.result);
       });
     },
 
-    async set(key, value) {
+    async setProblemListInfo(info) {
+      const _storeName = LocalDB.dbProblemListInfoStore;
       const _db = await connect();
       return new Promise((res) => {
-        const tx = _db.transaction(
-          LocalDB.dbStoreName,
-          "readwrite",
-        );
-        tx.objectStore(LocalDB.dbStoreName).put(value, key);
+        const tx = _db.transaction(_storeName, "readwrite");
+        tx.objectStore(_storeName).put(info, "info");
         tx.oncomplete = () => res();
+      });
+    },
+
+    async getAllProblems() {
+      const _storeName = LocalDB.dbProblemListStore;
+      const _db = await connect();
+      return new Promise((res) => {
+        const tx = _db.transaction(_storeName, "readonly");
+        const request = tx.objectStore(_storeName).getAll();
+        request.onsuccess = () => {
+          console.log("FROM DB_:", request.result);
+          res(request.result || {});
+        };
+      });
+    },
+
+    async addProblem(item, problemKey = 1) {
+      const _storeName = LocalDB.dbProblemListStore;
+      const _db = await connect();
+      return new Promise((res, rej) => {
+        const tx = _db.transaction(_storeName, "readwrite");
+        const _store = tx.objectStore(_storeName);
+        const req = _store.put(item, problemKey);
+        console.log(req);
+        req.onsuccess = () => {
+          console.log('AAAAA', req.result, req)
+        }
+        tx.oncomplete = () => res();
+        tx.onerror = () => rej(tx.error);
       });
     },
   };
