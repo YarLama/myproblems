@@ -1,17 +1,17 @@
 import { Problem, ProblemList } from "@types";
 import { makeAutoObservable, runInAction } from "mobx";
 import { createLocalDB } from "@lib";
+import { v4 } from "uuid";
 
 class ProblemStore {
   problemList: ProblemList = {
     version: 1,
     format: "list",
-    data: {},
+    data: [],
   };
   isLoading = false;
   isEditing = false;
   error: string | null = null;
-  private nextId = 1;
   private db = createLocalDB();
 
   constructor() {
@@ -26,14 +26,14 @@ class ProblemStore {
     return { version: 1, format: "list" };
   };
 
-  private resetToDefault = () => {
-    const defaultInfo = this.getDefaultInfo();
-    this.problemList = {
-      version: defaultInfo.version,
-      format: defaultInfo.format,
-      data: {},
-    };
-  };
+  // private resetToDefault = () => {
+  //   const defaultInfo = this.getDefaultInfo();
+  //   this.problemList = {
+  //     version: defaultInfo.version,
+  //     format: defaultInfo.format,
+  //     data: [],
+  //   };
+  // };
 
   private init = async () => {
     try {
@@ -51,21 +51,13 @@ class ProblemStore {
         });
       }
 
-      if (problemListData) {
-        console.log('keys', Object.keys(problemListData))
-        const maxKey = Math.max(...Object.keys(problemListData).map(Number))
-        console.log(maxKey)
-      }
-
-      console.log(problemListData);
-
       runInAction(() => {
         this.problemList = {
           version:
-            problemListInfo.version || defaultInfo.version,
+            problemListInfo?.version || defaultInfo.version,
           format:
-            problemListInfo.format || defaultInfo.format,
-          data: problemListData || {},
+            problemListInfo?.format || defaultInfo.format,
+          data: problemListData || [],
         };
       });
     } finally {
@@ -77,8 +69,13 @@ class ProblemStore {
 
   addProblem = async (item: Problem) => {
     this.isEditing = true;
+
+    const test = {
+      ...item,
+      id: v4(),
+    };
     try {
-      await this.db.addProblem(item, this.nextId);
+      await this.db.addProblem(test);
     } catch (e) {
       runInAction(() => {
         this.error =
@@ -87,9 +84,8 @@ class ProblemStore {
     }
 
     runInAction(() => {
-      Object.assign(this.problemList.data, { [this.nextId]: item})
+      this.problemList.data.push(test);
       this.isEditing = false;
-      this.nextId++;
     });
   };
 

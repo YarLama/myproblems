@@ -14,6 +14,7 @@ export type ProblemTests<T = unknown, U = unknown> = {
 };
 
 export type Problem<T = unknown, U = unknown> = {
+  id: string;
   title: string;
   description: ProblemDescription;
   category: string[];
@@ -25,5 +26,5 @@ export type Problem<T = unknown, U = unknown> = {
 export type ProblemList = {
   version: number;
   format: "list";
-  data: Record<number, Problem>;
+  data: Problem[];
 };

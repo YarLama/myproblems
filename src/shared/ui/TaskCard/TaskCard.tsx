@@ -2,7 +2,7 @@ import clsx from "clsx";
 import { useNavigate } from "react-router";
 
 interface TaskCardProps {
-  id: number;
+  id: string;
   title?: string;
   description?: string;
   size?: "sm" | "md" | "lg";

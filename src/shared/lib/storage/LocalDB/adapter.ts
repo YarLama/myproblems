@@ -9,14 +9,11 @@ interface ProblemListInfo {
 interface LocalDB {
   getProblemListInfo(): Promise<ProblemListInfo>;
   setProblemListInfo(info: ProblemListInfo): Promise<void>;
-  getAllProblems(): Promise<Record<number, Problem>>;
-  getProblem(id: number): Promise<Problem | null>;
-  addProblem(
-    item: Problem,
-    problemKey?: number,
-  ): Promise<void>;
+  getAllProblems(): Promise<Problem[]>;
+  getProblem(id: string): Promise<Problem | null>;
+  addProblem(item: Problem): Promise<void>;
   updateProblem(item: Problem): Promise<void>;
-  deleteProblem(id: number): Promise<void>;
+  deleteProblem(id: string): Promise<void>;
 }
 
 export const createLocalDB = (): LocalDB => {
@@ -45,7 +42,10 @@ export const createLocalDB = (): LocalDB => {
             LocalDB.dbProblemListStore,
           )
         ) {
-          db.createObjectStore(LocalDB.dbProblemListStore);
+          db.createObjectStore(LocalDB.dbProblemListStore, {
+            keyPath: "id",
+            autoIncrement: false,
+          });
         }
       };
 
@@ -88,23 +88,18 @@ export const createLocalDB = (): LocalDB => {
         const tx = _db.transaction(_storeName, "readonly");
         const request = tx.objectStore(_storeName).getAll();
         request.onsuccess = () => {
-          console.log("FROM DB_:", request.result);
-          res(request.result || {});
+          res(request.result || []);
         };
       });
     },
 
-    async addProblem(item, problemKey = 1) {
+    async addProblem(item) {
       const _storeName = LocalDB.dbProblemListStore;
       const _db = await connect();
       return new Promise((res, rej) => {
         const tx = _db.transaction(_storeName, "readwrite");
         const _store = tx.objectStore(_storeName);
-        const req = _store.put(item, problemKey);
-        console.log(req);
-        req.onsuccess = () => {
-          console.log('AAAAA', req.result, req)
-        }
+        _store.add(item);
         tx.oncomplete = () => res();
         tx.onerror = () => rej(tx.error);
       });

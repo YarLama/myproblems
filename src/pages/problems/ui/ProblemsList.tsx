@@ -5,6 +5,7 @@ import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 
 const testProblem: Problem<number, number> = {
+  id: "qwerty",
   title: "test#1",
   description: {
     ru: "Описание на русском для test#1",
@@ -28,11 +29,7 @@ export const ProblemList = observer(() => {
   const { problemList, isLoading, addProblem } =
     problemStore;
 
-  console.log(problemList?.data);
-  console.log(Object.entries(problemList?.data));
-
   const handleAddClick = () => {
-    console.log('click')
     addProblem(testProblem);
   };
 
@@ -48,14 +45,14 @@ export const ProblemList = observer(() => {
         <IconButton icon="menu" />
       ) : (
         <>
-          {Object.entries(problemList.data).map(([i, p]) => {
+          {Array.from(problemList.data).map((el) => {
             return (
               <TaskCard
-                id={Number(i)}
-                key={i}
-                title={p.title}
-                description={p.description.ru}
-                tags={p.category}
+                id={el.id}
+                key={el.id}
+                title={el.title}
+                description={el.description.ru}
+                tags={el.category}
               />
             );
           })}
