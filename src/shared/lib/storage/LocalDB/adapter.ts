@@ -93,6 +93,17 @@ export const createLocalDB = (): LocalDB => {
       });
     },
 
+    async getProblem(id) {
+      const _storeName = LocalDB.dbProblemListStore;
+      const _db = await connect();
+      return new Promise((res) => {
+        const tx = _db.transaction(_storeName, "readonly");
+        const request = tx.objectStore(_storeName).get(id);
+        request.onsuccess = () =>
+          res(request.result || null);
+      });
+    },
+
     async addProblem(item) {
       const _storeName = LocalDB.dbProblemListStore;
       const _db = await connect();
