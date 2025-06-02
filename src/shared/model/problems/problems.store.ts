@@ -109,7 +109,12 @@ class ProblemStore {
 
     try {
       this.db.deleteProblem(id).then(() => {
-        this.problemList.data = this.problemList.data.filter((p) => p.id !== id);
+        runInAction(() => {
+          this.problemList.data =
+            this.problemList.data.filter(
+              (p) => p.id !== id,
+            );
+        });
       });
     } catch (e) {
       runInAction(() => {
