@@ -23,7 +23,10 @@ export const createLocalDB = (): LocalDB => {
     if (db) return db;
 
     return new Promise((res, rej) => {
-      const request = indexedDB.open(LocalDB.dbName, LocalDB.dbVersion);
+      const request = indexedDB.open(
+        LocalDB.dbName,
+        LocalDB.dbVersion,
+      );
 
       request.onupgradeneeded = () => {
         const db = request.result;
@@ -58,86 +61,80 @@ export const createLocalDB = (): LocalDB => {
     });
   };
 
+  const executeWriteOperation = async (
+    storeName: string,
+    operation: (store: IDBObjectStore) => void,
+  ): Promise<void> => {
+    const db = await connect();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(storeName, "readwrite");
+      operation(tx.objectStore(storeName));
+      tx.oncomplete = () => res();
+      tx.onerror = () => rej(tx.error);
+    });
+  };
+
+  const executeReadOperation = async <T>(
+    storeName: string,
+    operation: (store: IDBObjectStore) => IDBRequest<T>,
+  ): Promise<T> => {
+    const db = await connect();
+    return new Promise((res, rej) => {
+      const tx = db.transaction(storeName, "readonly");
+      const request = operation(tx.objectStore(storeName));
+      request.onsuccess = () => res(request.result);
+      request.onerror = () => rej(request.error);
+    });
+  };
+
   return {
     async getProblemListInfo() {
-      const _storeName = LocalDB.dbProblemListInfoStore;
-      const _db = await connect();
-      return new Promise((res) => {
-        const tx = _db.transaction(_storeName, "readonly");
-        const request = tx
-          .objectStore(_storeName)
-          .get("info");
-        request.onsuccess = () => res(request.result);
-      });
+      return executeReadOperation(
+        LocalDB.dbProblemListInfoStore,
+        (store) => store.get("info"),
+      );
     },
 
     async setProblemListInfo(info) {
-      const _storeName = LocalDB.dbProblemListInfoStore;
-      const _db = await connect();
-      return new Promise((res) => {
-        const tx = _db.transaction(_storeName, "readwrite");
-        tx.objectStore(_storeName).put(info, "info");
-        tx.oncomplete = () => res();
-      });
+      return executeWriteOperation(
+        LocalDB.dbProblemListInfoStore,
+        (store) => store.put(info, "info"),
+      );
     },
 
     async getAllProblems() {
-      const _storeName = LocalDB.dbProblemListStore;
-      const _db = await connect();
-      return new Promise((res) => {
-        const tx = _db.transaction(_storeName, "readonly");
-        const request = tx.objectStore(_storeName).getAll();
-        request.onsuccess = () => {
-          res(request.result || []);
-        };
-      });
+      return executeReadOperation(
+        LocalDB.dbProblemListStore,
+        (store) => store.getAll(),
+      ).then((result) => result || []);
     },
 
     async getProblem(id) {
-      const _storeName = LocalDB.dbProblemListStore;
-      const _db = await connect();
-      return new Promise((res) => {
-        const tx = _db.transaction(_storeName, "readonly");
-        const request = tx.objectStore(_storeName).get(id);
-        request.onsuccess = () =>
-          res(request.result || null);
-      });
+      return executeReadOperation(
+        LocalDB.dbProblemListStore,
+        (store) => store.get(id),
+      ).then((result) => result || null);
     },
 
     async addProblem(item) {
-      const _storeName = LocalDB.dbProblemListStore;
-      const _db = await connect();
-      return new Promise((res, rej) => {
-        const tx = _db.transaction(_storeName, "readwrite");
-        const _store = tx.objectStore(_storeName);
-        const request = _store.add(item);
-        request.onsuccess = () => res();
-        request.onerror = () => rej(request.error);
-      });
+      return executeWriteOperation(
+        LocalDB.dbProblemListStore,
+        (store) => store.add(item),
+      );
     },
 
     async updateProblem(item) {
-      const _storeName = LocalDB.dbProblemListStore;
-      const _db = await connect();
-      return new Promise((res, rej) => {
-        const tx = _db.transaction(_storeName, "readwrite");
-        const _store = tx.objectStore(_storeName);
-        const request = _store.put(item);
-        request.onsuccess = () => res();
-        request.onerror = () => rej(request.error);
-      });
+      return executeWriteOperation(
+        LocalDB.dbProblemListStore,
+        (store) => store.put(item),
+      );
     },
 
     async deleteProblem(id) {
-      const _storeName = LocalDB.dbProblemListStore;
-      const _db = await connect();
-      return new Promise((res, rej) => {
-        const tx = _db.transaction(_storeName, "readwrite");
-        const _store = tx.objectStore(_storeName);
-        const request = _store.delete(id);
-        request.onsuccess = () => res();
-        request.onerror = () => rej(request.error);
-      });
+      return executeWriteOperation(
+        LocalDB.dbProblemListStore,
+        (store) => store.delete(id),
+      );
     },
   };
 };
