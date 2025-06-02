@@ -1,4 +1,5 @@
-export type AvailableLanguages = "en" | "ru";
+import { AvailableLanguages } from "@constants/languages.ts";
+
 export type ProblemDescription = Record<
   AvailableLanguages,
   string

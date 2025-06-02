@@ -1,4 +1,4 @@
-import { Icons } from "@shared/constanst/icons";
+import { Icons } from "@constants/icons";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
 

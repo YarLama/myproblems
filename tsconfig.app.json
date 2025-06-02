@@ -6,9 +6,10 @@
       "@features": ["./src/features/index.ts"],
       "@ui": ["./src/shared/ui/index.ts"],
       "@types": ["./src/shared/types/index.ts"],
+      "@entities": ["./src/entities/index.ts"],
       "@lib": ["./src/shared/lib/index.ts"],
       "@model": ["./src/shared/model/index.ts"],
-      "@shared/constanst/*": ["./src/shared/constants/*"],
+      "@constants/*": ["./src/shared/constants/*"],
       "@root/*": ["./*"]
     },
     "types": [

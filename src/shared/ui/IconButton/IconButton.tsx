@@ -5,7 +5,7 @@ import {
   iconSizeClass,
   iconSizes,
 } from "./IconButton.types";
-import { iconNames, Icons } from "@shared/constanst/icons";
+import { iconNames, Icons } from "@constants/icons";
 
 
 const btnClasses = clsx([
