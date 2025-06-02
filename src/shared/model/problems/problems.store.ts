@@ -26,15 +26,6 @@ class ProblemStore {
     return { version: 1, format: "list" };
   };
 
-  // private resetToDefault = () => {
-  //   const defaultInfo = this.getDefaultInfo();
-  //   this.problemList = {
-  //     version: defaultInfo.version,
-  //     format: defaultInfo.format,
-  //     data: [],
-  //   };
-  // };
-
   private init = async () => {
     try {
       const defaultInfo = this.getDefaultInfo();
@@ -89,17 +80,48 @@ class ProblemStore {
     });
   };
 
-  async editProblem() {
-    //find problem inner indexedDB first
-    //find problem inner store second
-    //replace old record in LocalDB
-    //replace record in store
-  }
+  editProblem = async (newItem: Problem) => {
+    this.isEditing = true;
 
-  async deleteProblem() {
-    //find problem inner indexedDB/store
-    //delete record from indexedDB/store
-  }
+    try {
+      this.db.updateProblem(newItem).then(() => {
+        const index = this.problemList.data.findIndex(
+          (p) => p.id === newItem.id,
+        );
+        if (index !== -1) {
+          this.problemList.data[index] = newItem;
+        }
+      });
+    } catch (e) {
+      runInAction(() => {
+        this.error =
+          e instanceof Error ? e.message : "Error update";
+      });
+    }
+
+    runInAction(() => {
+      this.isEditing = false;
+    });
+  };
+
+  deleteProblem = async (id: string) => {
+    this.isEditing = true;
+
+    try {
+      this.db.deleteProblem(id).then(() => {
+        this.problemList.data = this.problemList.data.filter((p) => p.id !== id);
+      });
+    } catch (e) {
+      runInAction(() => {
+        this.error =
+          e instanceof Error ? e.message : "Error delete";
+      });
+    }
+
+    runInAction(() => {
+      this.isEditing = false;
+    });
+  };
 }
 
 export const problemStore = new ProblemStore();

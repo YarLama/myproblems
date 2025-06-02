@@ -23,7 +23,7 @@ export const createLocalDB = (): LocalDB => {
     if (db) return db;
 
     return new Promise((res, rej) => {
-      const request = indexedDB.open(LocalDB.dbName, 1);
+      const request = indexedDB.open(LocalDB.dbName, LocalDB.dbVersion);
 
       request.onupgradeneeded = () => {
         const db = request.result;
@@ -110,9 +110,33 @@ export const createLocalDB = (): LocalDB => {
       return new Promise((res, rej) => {
         const tx = _db.transaction(_storeName, "readwrite");
         const _store = tx.objectStore(_storeName);
-        _store.add(item);
-        tx.oncomplete = () => res();
-        tx.onerror = () => rej(tx.error);
+        const request = _store.add(item);
+        request.onsuccess = () => res();
+        request.onerror = () => rej(request.error);
+      });
+    },
+
+    async updateProblem(item) {
+      const _storeName = LocalDB.dbProblemListStore;
+      const _db = await connect();
+      return new Promise((res, rej) => {
+        const tx = _db.transaction(_storeName, "readwrite");
+        const _store = tx.objectStore(_storeName);
+        const request = _store.put(item);
+        request.onsuccess = () => res();
+        request.onerror = () => rej(request.error);
+      });
+    },
+
+    async deleteProblem(id) {
+      const _storeName = LocalDB.dbProblemListStore;
+      const _db = await connect();
+      return new Promise((res, rej) => {
+        const tx = _db.transaction(_storeName, "readwrite");
+        const _store = tx.objectStore(_storeName);
+        const request = _store.delete(id);
+        request.onsuccess = () => res();
+        request.onerror = () => rej(request.error);
       });
     },
   };
