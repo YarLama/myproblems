@@ -1,3 +1,4 @@
+import { ProblemSolution, useExecuteCode } from "@entities";
 import { createLocalDB } from "@lib";
 import { problemStore } from "@model";
 import { Problem } from "@types";
@@ -11,6 +12,24 @@ export const ProblemPage = () => {
   const [problem, setProblem] = useState<Problem | null>(
     null,
   );
+  const [output, setOutput] = useState<string>("");
+  const [currentSolution, setCurrentSolution] =
+    useState<ProblemSolution | null>(null);
+  const { mutate: execute, isPending: isExecuting } =
+    useExecuteCode({
+      onSuccess: (result) => {
+        setOutput(result.run.stdout);
+        if (result.run.stderr) {
+          console.error("Error: ", result.run.stderr);
+        }
+      },
+      onError: (error) => {
+        setOutput(`Error: ${error.message}`);
+      },
+      onSettled: () => {
+        console.log("Execute code completed");
+      },
+    });
 
   const handleEditClick = async () => {
     if (problem) {
@@ -34,12 +53,22 @@ export const ProblemPage = () => {
     }
   };
 
+  const handleCheckClick = async () => {
+    if (problem && currentSolution) {
+      execute({
+        language: currentSolution.language,
+        version: "*",
+        files: [{ content: currentSolution.code }],
+      });
+    }
+  };
+
   const handleDeleteClick = async () => {
     if (problem) {
       await problemStore.deleteProblem(problem.id);
-      navigate('/problems')
+      navigate("/problems");
     }
-  }
+  };
 
   useEffect(() => {
     if (id) {
@@ -47,6 +76,9 @@ export const ProblemPage = () => {
       data.then((res) => {
         if (res) {
           setProblem(res);
+          if (res.solution.length) {
+            setCurrentSolution(res.solution[0]);
+          }
         } else {
           navigate(`/problems`);
         }
@@ -62,8 +94,27 @@ export const ProblemPage = () => {
       <div>{problem.category}</div>
       <div>{problem.description.ru}</div>
       <div>{problem.solution[0].code}</div>
-      <button onClick={handleEditClick}>Edit</button>
-      <button onClick={handleDeleteClick}>Delete</button>
+      <div>
+        <button onClick={handleEditClick}>Edit</button>
+      </div>
+      <div>
+        <button onClick={handleDeleteClick}>Delete</button>
+      </div>
+      <div>
+        <button onClick={handleCheckClick}>
+          Send To Check
+        </button>
+      </div>
+      <div>
+        {isExecuting ? (
+          <h3>Executing...</h3>
+        ) : (
+          <>
+            <h3>Output:</h3>
+            <pre>{output}</pre>
+          </>
+        )}
+      </div>
     </div>
   );
 };

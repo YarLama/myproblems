@@ -9,6 +9,7 @@
       "@entities": ["./src/entities/index.ts"],
       "@lib": ["./src/shared/lib/index.ts"],
       "@model": ["./src/shared/model/index.ts"],
+      "@api": ["./src/shared/api/index.ts"],
       "@constants/*": ["./src/shared/constants/*"],
       "@root/*": ["./*"]
     },

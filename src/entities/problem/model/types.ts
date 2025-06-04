@@ -1,11 +1,11 @@
-import { AvailableLanguages } from "@constants/languages.ts";
+import { AvailableLanguages, AvailableProgrammingLanguages } from "@constants/languages.ts";
 
 export type ProblemDescription = Record<
   AvailableLanguages,
   string
 >;
 export type ProblemSolution = {
-  language: string;
+  language: AvailableProgrammingLanguages;
   code: string;
 };
 

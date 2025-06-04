@@ -44,6 +44,10 @@ export default defineConfig(({ mode }) => {
           __dirname,
           "./src/shared/model/index.ts",
         ),
+        "@api": path.resolve(
+          __dirname,
+          "./src/shared/api/index.ts",
+        ),
         "@constants": path.resolve(
           __dirname,
           "./src/shared/constants",
