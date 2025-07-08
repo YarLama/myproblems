@@ -41,6 +41,18 @@ export const ProblemPage = () => {
           en: "Description on english for test#2",
         },
         category: ["trees"],
+        solution: [
+          {
+            code: `
+          function add(x,y) {
+            return x + y;
+          }
+
+          console.log(add(5,4))
+          `,
+            language: "javascript",
+          },
+        ],
         difficulty: "hard",
         tests: {
           input: [3, 4],
@@ -49,6 +61,7 @@ export const ProblemPage = () => {
       };
 
       setProblem(newTestProblem);
+      setCurrentSolution(newTestProblem.solution[0]);
       await problemStore.editProblem(newTestProblem);
     }
   };
