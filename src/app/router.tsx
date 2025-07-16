@@ -1,14 +1,15 @@
 import { createHashRouter } from "react-router";
 import { ProblemPage, ProblemsPage } from "@pages";
 import { MainLayout, ProblemsLayout } from "@layouts";
+import { routePath } from "@constants/routePaths";
 
 const routes = [
   {
-    path: "/",
+    path: routePath.root,
     element: <MainLayout />,
     children: [
       {
-        path: "problems",
+        path: routePath.problems.root,
         element: <ProblemsLayout />,
         children: [
           {
@@ -16,17 +17,17 @@ const routes = [
             element: <ProblemsPage />,
           },
           {
-            path: ":id",
+            path: routePath.problems.byIdTemplate,
             element: <ProblemPage />,
           },
         ],
       },
       {
-        path: "add",
+        path: routePath.add.root,
         element: <div>add page</div>,
       },
       {
-        path: "*",
+        path: routePath.notFound.root,
         element: <div>404 Page</div>,
       },
     ],

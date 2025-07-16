@@ -1,21 +1,41 @@
-import { SearchFeature } from "@features"
-import { IconButton } from "@ui"
-import clsx from "clsx"
+import clsx from "clsx";
+import {
+  matchPath,
+  useLocation
+} from "react-router";
+import { ProblemsNav } from "./components/ProblemsNav";
+import { ProblemNav } from "./components/ProblemNav";
+import { DefaultNav } from "./components/DefaultNav";
+import { routePath } from "@constants/routePaths";
+
+const navClasses = clsx([
+  "fixed",
+  "top-0",
+  "inset-x-0",
+  "z-99",
+  "h-[var(--header-height)]",
+  "flex",
+  "items-center",
+  "justify-between",
+  "p-4",
+  "bg-gray-600",
+  "border-b",
+  "border-b-gray-700",
+]);
 
 export const Nav = () => {
+  const { pathname } = useLocation();
+
+  const getNavContent = (path: string) => {
+    if (path === routePath.problems.root)
+      return ProblemsNav();
+    if (matchPath({ path }, path)) return ProblemNav();
+    return DefaultNav();
+  };
+
   return (
-      <nav className="fixed top-0 inset-x-0 z-99 h-[var(--header-height)] flex items-center justify-between p-4 bg-gray-600 border-b border-b-gray-700">
-        <div className={clsx(["flex", "space-x-2"])}>
-          <IconButton icon="menu" />
-          <IconButton icon="add" />
-        </div>
-        <div className="flex-1 max-w-md mx-4">
-          <SearchFeature />
-        </div>
-        <div className="flex space-x-2">
-          <IconButton icon="shuffle" />
-        </div>
-      </nav>
- 
-  )
-}
+    <nav className={navClasses}>
+      {getNavContent(pathname)}
+    </nav>
+  );
+};

@@ -28,6 +28,9 @@ class ProblemStore {
 
   private init = async () => {
     try {
+      runInAction(() => {
+        this.isLoading = true;
+      });
       const defaultInfo = this.getDefaultInfo();
       const [problemListInfo, problemListData] =
         await Promise.all([
@@ -43,6 +46,7 @@ class ProblemStore {
       }
 
       runInAction(() => {
+        console.log('Пуньк')
         this.problemList = {
           version:
             problemListInfo?.version || defaultInfo.version,
@@ -50,12 +54,40 @@ class ProblemStore {
             problemListInfo?.format || defaultInfo.format,
           data: problemListData || [],
         };
+        
+        this.isLoading = false;
+        console.log(this.problemList.data)
       });
     } finally {
       runInAction(() => {
         this.isLoading = false;
       });
     }
+  };
+
+  getPrevProblemId = (currentId: string): string => {
+    const currentIndex = this.problemList.data.findIndex(
+      (el) => el.id === currentId,
+    );
+    if (currentIndex < 1) return "";
+    return this.problemList.data[currentIndex - 1].id;
+  };
+
+  getNextProblemId = (currentId: string): string => {
+    const currentIndex = this.problemList.data.findIndex(
+      (el) => el.id === currentId,
+    );
+    if (currentIndex + 1 >= this.problemList.data.length)
+      return "";
+    return this.problemList.data[currentIndex + 1].id;
+  };
+
+  getProblemTitle = (currentId: string): string => {
+    const currentIndex = this.problemList.data.findIndex(
+      (el) => el.id === currentId,
+    );
+    if (currentIndex < 0) return ""
+    return this.problemList.data[currentIndex].title;
   };
 
   addProblem = async (item: Problem) => {
