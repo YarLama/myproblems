@@ -28,9 +28,9 @@ export const Nav = () => {
 
   const getNavContent = (path: string) => {
     if (path === routePath.problems.root)
-      return ProblemsNav();
-    if (matchPath({ path }, path)) return ProblemNav();
-    return DefaultNav();
+      return <ProblemsNav />;
+    if (matchPath({ path }, path)) return <ProblemNav />;
+    return <DefaultNav />
   };
 
   return (

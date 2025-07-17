@@ -2,10 +2,11 @@ import { routePath } from "@constants/routePaths";
 import { problemStore } from "@model";
 import { IconButton } from "@ui";
 import clsx from "clsx";
+import { observer } from "mobx-react-lite";
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-export const ProblemNav = () => {
+export const ProblemNav = observer(() => {
   const [prevId, setPrevId] = useState("");
   const [nextId, setNextId] = useState("");
   const [title, setTitle] = useState("Problem Title");
@@ -15,7 +16,7 @@ export const ProblemNav = () => {
     getPrevProblemId,
     getNextProblemId,
     getProblemTitle,
-    isLoading,
+    isInitialized,
   } = problemStore;
   const { id } = useParams<{ id: string }>();
 
@@ -30,15 +31,13 @@ export const ProblemNav = () => {
   };
 
   useEffect(() => {
-    console.log(isLoading);
-    if (!isLoading && id) {
-      console.log("pizda");
+    if (isInitialized && id) {
       setPrevId(getPrevProblemId(id));
       setNextId(getNextProblemId(id));
       setTitle(getProblemTitle(id));
     }
   }, [
-    isLoading,
+    isInitialized,
     id,
     title,
     getPrevProblemId,
@@ -66,4 +65,4 @@ export const ProblemNav = () => {
       </div>
     </>
   );
-};
+});

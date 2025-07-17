@@ -9,6 +9,7 @@ class ProblemStore {
     format: "list",
     data: [],
   };
+  isInitialized = false;
   isLoading = false;
   isEditing = false;
   error: string | null = null;
@@ -46,17 +47,16 @@ class ProblemStore {
       }
 
       runInAction(() => {
-        console.log('Пуньк')
         this.problemList = {
           version:
-            problemListInfo?.version || defaultInfo.version,
+            problemListInfo.version ?? defaultInfo.version,
           format:
-            problemListInfo?.format || defaultInfo.format,
-          data: problemListData || [],
+            problemListInfo.format ?? defaultInfo.format,
+          data: problemListData ?? [],
         };
-        
-        this.isLoading = false;
-        console.log(this.problemList.data)
+        if (problemListData) {
+          this.isInitialized = true
+        }
       });
     } finally {
       runInAction(() => {
