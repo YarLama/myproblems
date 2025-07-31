@@ -9,9 +9,7 @@ export const ProblemPage = () => {
   const db = useRef(createLocalDB());
   const { id } = useParams();
   const navigate = useRef(useNavigate()).current;
-  const [problem, setProblem] = useState<Problem | null>(
-    null,
-  );
+  const { currentProblem, setCurrentProblem, editProblem } = problemStore;
   const [output, setOutput] = useState<string>("");
   const [currentSolution, setCurrentSolution] =
     useState<ProblemSolution | null>(null);
@@ -32,9 +30,9 @@ export const ProblemPage = () => {
     });
 
   const handleEditClick = async () => {
-    if (problem) {
+    if (currentProblem) {
       const newTestProblem: Problem<number, number> = {
-        ...problem,
+        ...currentProblem,
         title: "test#2",
         description: {
           ru: "Описание на русском для test#2",
@@ -60,14 +58,14 @@ export const ProblemPage = () => {
         },
       };
 
-      setProblem(newTestProblem);
       setCurrentSolution(newTestProblem.solution[0]);
-      await problemStore.editProblem(newTestProblem);
+      setCurrentProblem(newTestProblem);
+      editProblem(newTestProblem);
     }
   };
 
   const handleCheckClick = async () => {
-    if (problem && currentSolution) {
+    if (currentProblem && currentSolution) {
       execute({
         language: currentSolution.language,
         version: "*",
@@ -77,8 +75,8 @@ export const ProblemPage = () => {
   };
 
   const handleDeleteClick = async () => {
-    if (problem) {
-      await problemStore.deleteProblem(problem.id);
+    if (currentProblem) {
+      await problemStore.deleteProblem(currentProblem.id);
       navigate("/problems");
     }
   };
@@ -88,7 +86,7 @@ export const ProblemPage = () => {
       const data = db.current.getProblem(id);
       data.then((res) => {
         if (res) {
-          setProblem(res);
+          setCurrentProblem(res);
           if (res.solution.length) {
             setCurrentSolution(res.solution[0]);
           }
@@ -97,16 +95,16 @@ export const ProblemPage = () => {
         }
       });
     }
-  }, [id, navigate, db]);
+  }, [id, navigate, db, setCurrentProblem]);
 
-  if (!problem) return null;
+  if (!currentProblem) return <div>Loader...</div>;
 
   return (
     <div>
-      <div>{problem.title}</div>
-      <div>{problem.category}</div>
-      <div>{problem.description.ru}</div>
-      <div>{problem.solution[0].code}</div>
+      <div>{currentProblem.title}</div>
+      <div>{currentProblem.category}</div>
+      <div>{currentProblem.description.ru}</div>
+      <div>{currentProblem.solution[0].code}</div>
       <div>
         <button onClick={handleEditClick}>Edit</button>
       </div>

@@ -9,6 +9,7 @@ class ProblemStore {
     format: "list",
     data: [],
   };
+  currentProblem: Problem | null = null;
   isInitialized = false;
   isLoading = false;
   isEditing = false;
@@ -55,7 +56,7 @@ class ProblemStore {
           data: problemListData ?? [],
         };
         if (problemListData) {
-          this.isInitialized = true
+          this.isInitialized = true;
         }
       });
     } finally {
@@ -86,19 +87,26 @@ class ProblemStore {
     const currentIndex = this.problemList.data.findIndex(
       (el) => el.id === currentId,
     );
-    if (currentIndex < 0) return ""
+    if (currentIndex < 0) return "";
     return this.problemList.data[currentIndex].title;
+  };
+
+  getProblem = (id: string): Problem | null => {
+    const problem = this.problemList.data.find(
+      (el) => el.id === id,
+    );
+    return problem ? problem : null;
   };
 
   addProblem = async (item: Problem) => {
     this.isEditing = true;
 
-    const test = {
+    const newProblem = {
       ...item,
       id: v4(),
     };
     try {
-      await this.db.addProblem(test);
+      await this.db.addProblem(newProblem);
     } catch (e) {
       runInAction(() => {
         this.error =
@@ -107,7 +115,7 @@ class ProblemStore {
     }
 
     runInAction(() => {
-      this.problemList.data.push(test);
+      this.problemList.data.push(newProblem);
       this.isEditing = false;
     });
   };
@@ -121,7 +129,10 @@ class ProblemStore {
           (p) => p.id === newItem.id,
         );
         if (index !== -1) {
-          this.problemList.data[index] = newItem;
+          runInAction(() => {
+            this.problemList.data[index] = newItem;
+            this.currentProblem = newItem;
+          })
         }
       });
     } catch (e) {
@@ -159,6 +170,14 @@ class ProblemStore {
       this.isEditing = false;
     });
   };
+
+  setCurrentProblem = (problem: Problem | null) => {
+    if (problem) {
+      runInAction(() => {
+        this.currentProblem = problem;
+      })
+    }
+  }
 }
 
 export const problemStore = new ProblemStore();
