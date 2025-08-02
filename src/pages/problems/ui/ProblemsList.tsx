@@ -5,7 +5,7 @@ import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 
 const testProblem: Problem<number, number> = {
-  id: "qwerty",
+  id: "",
   title: "test#1",
   description: {
     ru: "Описание на русском для test#1",

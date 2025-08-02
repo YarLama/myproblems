@@ -103,7 +103,7 @@ class ProblemStore {
 
     const newProblem = {
       ...item,
-      id: v4(),
+      id: item.id ? item.id : v4(),
     };
     try {
       await this.db.addProblem(newProblem);
