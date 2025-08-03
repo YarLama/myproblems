@@ -1,5 +1,8 @@
 import { routePath } from "@constants/routePaths";
-import { ProblemNavigationButtons } from "@features";
+import {
+  EditableText,
+  ProblemNavigationButtons,
+} from "@features";
 import { problemStore } from "@model";
 import { IconButton } from "@ui";
 import clsx from "clsx";
@@ -8,10 +11,22 @@ import { useNavigate } from "react-router";
 
 export const ProblemNav = observer(() => {
   const navigate = useNavigate();
-  const { currentProblem } = problemStore;
+  const { currentProblem, setCurrentProblem, editProblem } =
+    problemStore;
 
   const handleBackClick = () => {
     navigate(routePath.problems.root);
+  };
+
+  const handleEditTitle = async (value: string) => {
+    if (value && currentProblem) {
+      const newProblem = {
+        ...currentProblem,
+        title: value,
+      };
+      setCurrentProblem(newProblem);
+      editProblem(newProblem);
+    }
   };
 
   return (
@@ -20,10 +35,20 @@ export const ProblemNav = observer(() => {
         <IconButton icon="menu" />
         <IconButton icon="left" onClick={handleBackClick} />
       </div>
-      <div className="flex-1 max-w-md mx-4">
-        {currentProblem?.title ?? "Problem title"}
-      </div>
-      {currentProblem ? <ProblemNavigationButtons /> : null}
+      {currentProblem ? (
+        <>
+          <div className="flex-1 max-w-md mx-4">
+            <EditableText
+              key={currentProblem.id}
+              value={
+                currentProblem?.title ?? "Problem title"
+              }
+              onChange={handleEditTitle}
+            />
+          </div>
+          <ProblemNavigationButtons />
+        </>
+      ) : null}
     </>
   );
 });

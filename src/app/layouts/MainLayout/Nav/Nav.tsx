@@ -1,8 +1,5 @@
 import clsx from "clsx";
-import {
-  matchPath,
-  useLocation
-} from "react-router";
+import { matchPath, useLocation } from "react-router";
 import { ProblemsNav } from "./components/ProblemsNav";
 import { ProblemNav } from "./components/ProblemNav";
 import { DefaultNav } from "./components/DefaultNav";
@@ -30,7 +27,7 @@ export const Nav = () => {
     if (path === routePath.problems.root)
       return <ProblemsNav />;
     if (matchPath({ path }, path)) return <ProblemNav />;
-    return <DefaultNav />
+    return <DefaultNav />;
   };
 
   return (

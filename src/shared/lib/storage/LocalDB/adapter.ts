@@ -117,16 +117,18 @@ export const createLocalDB = (): LocalDB => {
     },
 
     async addProblem(item) {
+      const plainItem = JSON.parse(JSON.stringify(item));
       return executeWriteOperation(
         LocalDB.dbProblemListStore,
-        (store) => store.add(item),
+        (store) => store.add(plainItem),
       );
     },
 
     async updateProblem(item) {
+      const plainItem = JSON.parse(JSON.stringify(item));
       return executeWriteOperation(
         LocalDB.dbProblemListStore,
-        (store) => store.put(item),
+        (store) => store.put(plainItem),
       );
     },
 

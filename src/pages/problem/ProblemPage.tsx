@@ -1,15 +1,18 @@
 import { ProblemSolution, useExecuteCode } from "@entities";
+import { EditableText } from "@features";
 import { createLocalDB } from "@lib";
 import { problemStore } from "@model";
 import { Problem } from "@types";
+import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 
-export const ProblemPage = () => {
+export const ProblemPage = observer(() => {
   const db = useRef(createLocalDB());
   const { id } = useParams();
   const navigate = useRef(useNavigate()).current;
-  const { currentProblem, setCurrentProblem, editProblem } = problemStore;
+  const { currentProblem, setCurrentProblem, editProblem } =
+    problemStore;
   const [output, setOutput] = useState<string>("");
   const [currentSolution, setCurrentSolution] =
     useState<ProblemSolution | null>(null);
@@ -103,7 +106,12 @@ export const ProblemPage = () => {
     <div>
       <div>{currentProblem.title}</div>
       <div>{currentProblem.category}</div>
-      <div>{currentProblem.description.ru}</div>
+      <EditableText
+        label="Описание"
+        value={currentProblem.description.ru}
+        isMultiline
+        onChange={(value) => console.log(value)}
+      />
       <div>{currentProblem.solution[0].code}</div>
       <div>
         <button onClick={handleEditClick}>Edit</button>
@@ -112,20 +120,20 @@ export const ProblemPage = () => {
         <button onClick={handleDeleteClick}>Delete</button>
       </div>
       <div>
+        <h3>Output: </h3>
         <button onClick={handleCheckClick}>
           Send To Check
         </button>
-      </div>
-      <div>
-        {isExecuting ? (
-          <h3>Executing...</h3>
-        ) : (
-          <>
-            <h3>Output:</h3>
-            <pre>{output}</pre>
-          </>
-        )}
+        <div>
+          {isExecuting ? (
+            <p>Executing...</p>
+          ) : (
+            <>
+              <pre>{output}</pre>
+            </>
+          )}
+        </div>
       </div>
     </div>
   );
-};
+});
