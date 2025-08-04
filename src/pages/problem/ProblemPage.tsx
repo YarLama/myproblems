@@ -1,8 +1,9 @@
 import { ProblemSolution, useExecuteCode } from "@entities";
-import { EditableText } from "@features";
+import { EditableTest, EditableText } from "@features";
 import { createLocalDB } from "@lib";
 import { problemStore } from "@model";
 import { Problem } from "@types";
+import { toJS } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -104,17 +105,29 @@ export const ProblemPage = observer(() => {
 
   return (
     <div>
-      <div>{currentProblem.title}</div>
+      <div className="flex justify-center p-4">
+        <EditableText
+          key={id}
+          label="Описание"
+          value={currentProblem.description.ru}
+          isMultiline
+          onChange={(value) => console.log(value)}
+        />
+      </div>
       <div>{currentProblem.category}</div>
-      <EditableText
-        label="Описание"
-        value={currentProblem.description.ru}
-        isMultiline
-        onChange={(value) => console.log(value)}
-      />
       <div>{currentProblem.solution[0].code}</div>
+      <div>{`${currentProblem.tests.input} ${currentProblem.tests.output}`}</div>
+      <div className="flex justify-center p-4">
+        <EditableTest
+          label="Тесты"
+          key={`${id}-tests`}
+          tests={ currentProblem.tests}
+          onChange={(value) => console.log(value)}
+        />
+      </div>
+
       <div>
-        <button onClick={handleEditClick}>Edit</button>
+        <button onClick={handleEditClick}>TestFullEdit</button>
       </div>
       <div>
         <button onClick={handleDeleteClick}>Delete</button>
