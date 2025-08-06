@@ -1,8 +1,4 @@
 import { useEffect, useState } from "react";
-// import Editor from "react-simple-code-editor";
-// import { highlight, languages } from "prismjs";
-// import 'prismjs/plugins/line-numbers/prism-line-numbers';
-// import 'prismjs/plugins/line-numbers/prism-line-numbers.css';
 import Editor from "@monaco-editor/react";
 interface EditableCodeProps {
   value: string;
@@ -15,9 +11,12 @@ export const EditableCode: React.FC<EditableCodeProps> = ({
 }) => {
   const [code, setCode] = useState<string>(value);
 
-  const handleChangeCode = (v: string) => {
-    setCode(v);
-    onChange(code);
+  const handleChangeCode = (v: string | undefined) => {
+    //timer in future
+    if (v) {
+      setCode(v);
+      onChange(code);
+    }
   };
 
   useEffect(() => {
@@ -28,7 +27,7 @@ export const EditableCode: React.FC<EditableCodeProps> = ({
     <div>
       <Editor
         height="400px"
-        defaultLanguage="javascript"
+        defaultLanguage="plaintext"
         value={code}
         theme="vs-dark"
         onChange={handleChangeCode}

@@ -1,5 +1,6 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
+  purge: ['./src/**/*.{html,ts,tsx}'],
   theme: {
     screens: {
       m: { max: "767px" },

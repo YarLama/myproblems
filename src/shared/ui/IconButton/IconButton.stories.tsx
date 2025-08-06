@@ -6,7 +6,7 @@ import {
   IconsHoverVariant,
   IconsSizes,
 } from "./IconButton.types.ts"
-import { Icons } from "@shared/constants/icons.ts";
+import { Icons, iconNames } from "@constants/icons.ts";
 
 const meta: Meta<typeof IconButton> = {
   title: "UI/IconButton",
@@ -48,10 +48,10 @@ export const AllIcons: Story = {
   render: (args) => (
     <div className="flex flex-wrap gap-4">
       {(
-        Object.keys(Icons) as Array<keyof typeof Icons>
-      ).map((icon) => (
+        Object.keys(Icons) as Array<iconNames>
+      ).map((icon, i) => (
         <div
-          key={icon}
+          key={`${i}-icon`}
           className="flex flex-col items-center justify-center"
         >
           <IconButton icon={icon} size={args.size}/>

@@ -9,6 +9,9 @@ export default defineConfig(({ mode }) => {
   return {
     plugins: [react(), tailwindcssvite()],
     base: env.VITE_BASE_PATH || "/",
+    build: {
+      sourcemap: false,
+    },
     resolve: {
       alias: {
         "@root": path.resolve(__dirname, "./"),

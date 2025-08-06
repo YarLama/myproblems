@@ -29,6 +29,7 @@ export const SearchFeature = () => {
 
   const handleSuggestionSelect = (value: string) => {
     //Do something at click on suggestion
+    console.log(value);
     setIsSuggestionsVisible(false);
   };
 
