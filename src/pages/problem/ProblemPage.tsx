@@ -1,9 +1,8 @@
 import { ProblemSolution, useExecuteCode } from "@entities";
-import { EditableTest, EditableText } from "@features";
+import { EditableCode, EditableTest, EditableText } from "@features";
 import { createLocalDB } from "@lib";
 import { problemStore } from "@model";
 import { Problem } from "@types";
-import { toJS } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -45,13 +44,7 @@ export const ProblemPage = observer(() => {
         category: ["trees"],
         solution: [
           {
-            code: `
-          function add(x,y) {
-            return x + y;
-          }
-
-          console.log(add(5,4))
-          `,
+            code: `\nfunction add(x,y) {\nreturn x + y;\n}\n\nconsole.log(add(5,4))`,
             language: "javascript",
           },
         ],
@@ -116,6 +109,12 @@ export const ProblemPage = observer(() => {
       </div>
       <div>{currentProblem.category}</div>
       <div>{currentProblem.solution[0].code}</div>
+      <div>
+        <EditableCode 
+          value={currentProblem.solution[0].code}
+          onChange={(v) => console.log(v)}
+        />
+      </div>
       <div>{`${currentProblem.tests.input} ${currentProblem.tests.output}`}</div>
       <div className="flex justify-center p-4">
         <EditableTest

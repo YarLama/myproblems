@@ -6,7 +6,7 @@ import {
   IconsHoverVariant,
   IconsSizes,
 } from "./IconButton.types.ts"
-import { Icons } from "@shared/constanst/icons.ts";
+import { Icons } from "@shared/constants/icons.ts";
 
 const meta: Meta<typeof IconButton> = {
   title: "UI/IconButton",
