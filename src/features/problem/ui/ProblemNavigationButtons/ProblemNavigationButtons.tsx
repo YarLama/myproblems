@@ -1,5 +1,5 @@
 import { routePath } from "@constants/routePaths";
-import { problemStore } from "@model";
+import { problemStore } from "@features";
 import { IconButton } from "@ui";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router";

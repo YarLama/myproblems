@@ -1,4 +1,4 @@
-import { problemStore } from "@model";
+import { problemStore } from "@features";
 import { Problem } from "@types";
 import { IconButton, TaskCard } from "@ui";
 import clsx from "clsx";
@@ -13,12 +13,10 @@ const testProblem: Problem<number, number> = {
   },
   category: ["arrays"],
   difficulty: "easy",
-  solution: [
-    {
-      language: "javascript",
-      code: "console.log('test1')",
-    },
-  ],
+  solution: {
+    javascript: "console.log('test1')",
+  },
+
   tests: {
     input: [1, 2],
     output: [1, 2],

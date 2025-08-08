@@ -1,7 +1,11 @@
 import { ProblemSolution, useExecuteCode } from "@entities";
-import { EditableCode, EditableTest, EditableText } from "@features";
+import {
+  EditableCode,
+  EditableDescription,
+  EditableTest,
+} from "@features";
 import { createLocalDB } from "@lib";
-import { problemStore } from "@model";
+import { problemStore } from "@features";
 import { Problem } from "@types";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
@@ -42,12 +46,9 @@ export const ProblemPage = observer(() => {
           en: "Description on english for test#2",
         },
         category: ["trees"],
-        solution: [
-          {
-            code: `\nfunction add(x,y) {\nreturn x + y;\n}\n\nconsole.log(add(5,4))`,
-            language: "javascript",
-          },
-        ],
+        solution: {
+          javascript: `\nfunction add(x,y) {\nreturn x + y;\n}\n\nconsole.log(add(5,4))`,
+        },
         difficulty: "hard",
         tests: {
           input: [3, 4],
@@ -55,7 +56,7 @@ export const ProblemPage = observer(() => {
         },
       };
 
-      setCurrentSolution(newTestProblem.solution[0]);
+      setCurrentSolution(newTestProblem.solution);
       setCurrentProblem(newTestProblem);
       editProblem(newTestProblem);
     }
@@ -96,22 +97,27 @@ export const ProblemPage = observer(() => {
 
   if (!currentProblem) return <div>Loader...</div>;
 
+  console.log(currentProblem.description.ru);
+
   return (
     <div>
       <div className="flex justify-center p-4">
-        <EditableText
+        <EditableDescription
           key={id}
           label="Описание"
-          value={currentProblem.description.ru}
-          isMultiline
-          onChange={(value) => console.log(value)}
+          value={currentProblem.description}
+          onChange={(value) =>
+            setCurrentProblem({
+              ...currentProblem,
+              description: value,
+            })
+          }
         />
       </div>
       <div>{currentProblem.category}</div>
-      <div>{currentProblem.solution[0].code}</div>
       <div>
-        <EditableCode 
-          value={currentProblem.solution[0].code}
+        <EditableCode
+          value={currentProblem.solution}
           onChange={(v) => console.log(v)}
         />
       </div>
@@ -120,13 +126,15 @@ export const ProblemPage = observer(() => {
         <EditableTest
           label="Тесты"
           key={`${id}-tests`}
-          tests={ currentProblem.tests}
+          tests={currentProblem.tests}
           onChange={(value) => console.log(value)}
         />
       </div>
 
       <div>
-        <button onClick={handleEditClick}>TestFullEdit</button>
+        <button onClick={handleEditClick}>
+          TestFullEdit
+        </button>
       </div>
       <div>
         <button onClick={handleDeleteClick}>Delete</button>

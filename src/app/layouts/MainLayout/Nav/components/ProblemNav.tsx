@@ -3,7 +3,7 @@ import {
   EditableText,
   ProblemNavigationButtons,
 } from "@features";
-import { problemStore } from "@model";
+import { problemStore } from "@features";
 import { IconButton } from "@ui";
 import clsx from "clsx";
 import { observer } from "mobx-react-lite";

@@ -4,10 +4,7 @@ export type ProblemDescription = Record<
   AvailableLanguages,
   string
 >;
-export type ProblemSolution = {
-  language: AvailableProgrammingLanguages;
-  code: string;
-};
+export type ProblemSolution = Partial<Record<AvailableProgrammingLanguages, string>>;
 
 export type ProblemTests<T = unknown, U = unknown> = {
   input: T[];
@@ -20,7 +17,7 @@ export type Problem<T = unknown, U = unknown> = {
   description: ProblemDescription;
   category: string[];
   difficulty: "easy" | "medium" | "hard";
-  solution: ProblemSolution[];
+  solution: ProblemSolution;
   tests: ProblemTests<T, U>;
 };
 

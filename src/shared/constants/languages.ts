@@ -1,6 +1,4 @@
-const _languages = ["en", "ru"] as const;
-
-const _programmingLanguages = [
+export const ProgrammingLanguages = [
   "matl",
   "bash",
   "befunge93",
@@ -87,8 +85,10 @@ const _programmingLanguages = [
   "zig",
 ] as const;
 
+export const Languages = ["en", "ru"] as const;
+
 export type AvailableLanguages =
-  (typeof _languages)[number];
+  (typeof Languages)[number];
 
 export type AvailableProgrammingLanguages =
-  (typeof _programmingLanguages)[number];
+  (typeof ProgrammingLanguages)[number];
