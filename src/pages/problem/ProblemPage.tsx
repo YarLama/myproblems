@@ -3,6 +3,7 @@ import {
   EditableCode,
   EditableDescription,
   EditableTest,
+  problemEditorStore,
 } from "@features";
 import { createLocalDB } from "@lib";
 import { problemStore } from "@features";
@@ -17,6 +18,7 @@ export const ProblemPage = observer(() => {
   const navigate = useRef(useNavigate()).current;
   const { currentProblem, setCurrentProblem, editProblem } =
     problemStore;
+  const { currentLanguage, code } = problemEditorStore;
   const [output, setOutput] = useState<string>("");
   const [currentSolution, setCurrentSolution] =
     useState<ProblemSolution | null>(null);
@@ -65,9 +67,9 @@ export const ProblemPage = observer(() => {
   const handleCheckClick = async () => {
     if (currentProblem && currentSolution) {
       execute({
-        language: currentSolution.language,
+        language: currentLanguage,
         version: "*",
-        files: [{ content: currentSolution.code }],
+        files: [{ content: code }],
       });
     }
   };
@@ -85,9 +87,6 @@ export const ProblemPage = observer(() => {
       data.then((res) => {
         if (res) {
           setCurrentProblem(res);
-          if (res.solution.length) {
-            setCurrentSolution(res.solution[0]);
-          }
         } else {
           navigate(`/problems`);
         }
@@ -96,8 +95,6 @@ export const ProblemPage = observer(() => {
   }, [id, navigate, db, setCurrentProblem]);
 
   if (!currentProblem) return <div>Loader...</div>;
-
-  console.log(currentProblem.description.ru);
 
   return (
     <div>
@@ -116,10 +113,7 @@ export const ProblemPage = observer(() => {
       </div>
       <div>{currentProblem.category}</div>
       <div>
-        <EditableCode
-          value={currentProblem.solution}
-          onChange={(v) => console.log(v)}
-        />
+        <EditableCode solution={currentProblem.solution} />
       </div>
       <div>{`${currentProblem.tests.input} ${currentProblem.tests.output}`}</div>
       <div className="flex justify-center p-4">

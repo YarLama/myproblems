@@ -10,12 +10,12 @@ class ProblemEditorStore {
     makeAutoObservable(this);
   }
 
-  setLanguage(lang: AvailableProgrammingLanguages) {
+  setLanguage = (lang: AvailableProgrammingLanguages) => {
     this.currentLanguage = lang;
-  }
+  };
 
-  setCode(code: string) {
-    this.code = code;
+  setCode = (value: string) => {
+    this.code = value;
   }
 }
 
