@@ -41,6 +41,16 @@ export const EditableCode: React.FC<EditableCodeProps> =
     const handleLanguageChange = (
       v: AvailableProgrammingLanguages,
     ) => {
+      /*
+       * Если менять язык, нужно делать проверку, что если
+       * текст кода не пустой или очень маленький, то
+       * вызывать функцию сохранения изменений в бд.
+       *
+       * При закрытии вкладки, ничего не делать. Но если вдруг
+       * захочется сохранять изменения при закрытии вкладки,
+       * то нужно воспользоваться navigator.sendBeacon
+       *
+       */
       if (solution[v]) {
         setCode(solution[v]);
       } else {
