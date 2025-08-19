@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useRef } from "react";
 import Editor from "@monaco-editor/react";
 import { ProgrammingLanguageSelect } from "@ui";
 import { ProblemSolution } from "@entities";
@@ -12,24 +12,40 @@ interface EditableCodeProps {
 
 export const EditableCode: React.FC<EditableCodeProps> =
   observer(({ solution }) => {
-
+    const timeoutChangeRef = useRef<NodeJS.Timeout | null>(
+      null,
+    );
     const { currentLanguage, code, setLanguage, setCode } =
       problemEditorStore;
 
     const handleChangeCode = (v: string | undefined) => {
-      /*
-       * При изменении кода в редакторе,
-       * должен запускаться setTimeout ?
-       * Который после некоторой задержки, должен
-       * делать изменения в бд и problem сторе,
-       * 
-       * Задержка должна быть такой, чтобы печатая
-       * новый код, код сохранялся через адекватное
-       * количество времени. Возможно 3-4с, при 
-       * нажатию на любую кнопку таймер должен сбрасываться
-       */
-      if (v) {
-        setCode(v);
+      if (timeoutChangeRef.current !== null) {
+        clearTimeout(timeoutChangeRef.current);
+        timeoutChangeRef.current = null;
+      }
+      const hadContentPreviously = code.trim().length > 0;
+      const isValueHasContent = v && v.trim().length > 0;
+      const delay = 3000;
+      const condition =
+        v !== undefined &&
+        (isValueHasContent ||
+         (!isValueHasContent && hadContentPreviously));
+
+      setCode(v || "");
+
+      if (condition) {
+        timeoutChangeRef.current = setTimeout(() => {
+          /*
+            * 
+            * Сюда добавить функцию сохранения в бд
+            * Также стоит подумать о том, что если
+            * был условно солюшн { 'javascript': '1234'},
+            * а потом пользователь стёр значения до { 'javascript': ''},
+            * то наоборот удалять ключ 'javascript' из solution
+            *
+          */
+          console.log("2sec over. Code to save: ", v);
+        }, delay);
         const newSolution = {
           ...solution,
           [currentLanguage]: v,
@@ -41,21 +57,16 @@ export const EditableCode: React.FC<EditableCodeProps> =
     const handleLanguageChange = (
       v: AvailableProgrammingLanguages,
     ) => {
-      /*
-       * Если менять язык, нужно делать проверку, что если
-       * текст кода не пустой или очень маленький, то
-       * вызывать функцию сохранения изменений в бд.
-       *
-       * При закрытии вкладки, ничего не делать. Но если вдруг
-       * захочется сохранять изменения при закрытии вкладки,
-       * то нужно воспользоваться navigator.sendBeacon
-       *
-       */
-      if (solution[v]) {
-        setCode(solution[v]);
-      } else {
-        setCode("");
+      if (timeoutChangeRef.current) {
+
+        console.log(timeoutChangeRef.current, currentLanguage, code)
+        //сохранить в бд code, что то типа bd.save({...solution, [currentLanguage]: code})
+      
+        clearTimeout(timeoutChangeRef.current);
+        timeoutChangeRef.current = null;
       }
+
+      setCode(solution[v] || "")
       setLanguage(v);
     };
 
@@ -78,12 +89,12 @@ export const EditableCode: React.FC<EditableCodeProps> =
           theme="vs-dark"
           onChange={handleChangeCode}
           options={{
-            lineNumbers: "on", // Включить номера строк
-            minimap: { enabled: false }, // Отключить мини-карту
+            lineNumbers: "on", 
+            minimap: { enabled: false }, 
             fontSize: 14,
-            wordWrap: "on", // Перенос строк
+            wordWrap: "on", 
             scrollBeyondLastLine: false,
-            automaticLayout: true, // Автоматический размер
+            automaticLayout: true, 
           }}
         />
       </div>
