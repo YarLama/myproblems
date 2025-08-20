@@ -1,10 +1,13 @@
 import { useEffect, useRef } from "react";
-import Editor from "@monaco-editor/react";
+import { Editor, type OnMount } from "@monaco-editor/react";
 import { ProgrammingLanguageSelect } from "@ui";
 import { ProblemSolution } from "@entities";
 import { observer } from "mobx-react-lite";
 import { problemEditorStore } from "../../model/problemEditor.store";
 import { AvailableProgrammingLanguages } from "@constants/languages";
+import { problemStore } from "../../model/problems.store";
+
+type IStandaloneCodeEditor = Parameters<OnMount>[0];
 
 interface EditableCodeProps {
   solution: ProblemSolution;
@@ -15,66 +18,95 @@ export const EditableCode: React.FC<EditableCodeProps> =
     const timeoutChangeRef = useRef<NodeJS.Timeout | null>(
       null,
     );
+    const editorRef = useRef<IStandaloneCodeEditor | null>(
+      null,
+    );
+    const { currentProblem, editProblem } = problemStore;
     const { currentLanguage, code, setLanguage, setCode } =
       problemEditorStore;
 
-    const handleChangeCode = (v: string | undefined) => {
-      if (timeoutChangeRef.current !== null) {
+    const saveSolution = (value: string) => {
+      if (currentProblem && currentLanguage) {
+        const newProblem = {
+          ...currentProblem,
+          solution: {
+            ...currentProblem.solution,
+          },
+        };
+
+        if (value.trim() === "") {
+          delete newProblem.solution[currentLanguage];
+          const remainingLanguages = Object.keys(
+            newProblem.solution,
+          );
+          if (remainingLanguages.length === 0) {
+            setLanguage("javascript");
+          }
+        } else {
+          newProblem.solution[currentLanguage] = value;
+        }
+        editProblem(newProblem);
+      }
+    };
+
+    const resetTimer = (
+      callbackBefore?: () => void,
+      callbackAfter?: () => void,
+    ) => {
+      if (timeoutChangeRef.current) {
+        if (callbackBefore) callbackBefore();
         clearTimeout(timeoutChangeRef.current);
         timeoutChangeRef.current = null;
+        if (callbackAfter) callbackAfter();
       }
+    };
+
+    const handleChangeCode = (v: string | undefined) => {
+      resetTimer();
       const hadContentPreviously = code.trim().length > 0;
       const isValueHasContent = v && v.trim().length > 0;
       const delay = 3000;
       const condition =
         v !== undefined &&
         (isValueHasContent ||
-         (!isValueHasContent && hadContentPreviously));
+          (!isValueHasContent && hadContentPreviously));
 
       setCode(v || "");
 
       if (condition) {
         timeoutChangeRef.current = setTimeout(() => {
-          /*
-            * 
-            * Сюда добавить функцию сохранения в бд
-            * Также стоит подумать о том, что если
-            * был условно солюшн { 'javascript': '1234'},
-            * а потом пользователь стёр значения до { 'javascript': ''},
-            * то наоборот удалять ключ 'javascript' из solution
-            *
-          */
-          console.log("2sec over. Code to save: ", v);
+          saveSolution(v);
         }, delay);
-        const newSolution = {
-          ...solution,
-          [currentLanguage]: v,
-        };
-        console.log(newSolution);
       }
     };
 
     const handleLanguageChange = (
       v: AvailableProgrammingLanguages,
     ) => {
-      if (timeoutChangeRef.current) {
-
-        console.log(timeoutChangeRef.current, currentLanguage, code)
-        //сохранить в бд code, что то типа bd.save({...solution, [currentLanguage]: code})
-      
-        clearTimeout(timeoutChangeRef.current);
-        timeoutChangeRef.current = null;
-      }
-
-      setCode(solution[v] || "")
+      resetTimer(() => saveSolution(code));
+      setCode(solution[v] || "");
       setLanguage(v);
+      if (editorRef.current) editorRef.current.focus();
     };
 
     useEffect(() => {
-      if (solution[currentLanguage]) {
-        setCode(solution[currentLanguage]);
+      const availableLanguages = Object.keys(
+        solution || {},
+      );
+      if (availableLanguages.includes(currentLanguage)) {
+        setCode(solution[currentLanguage] || "");
+      } else if (availableLanguages.length > 0) {
+        const firstAvailableLanguage =
+          availableLanguages[0] as AvailableProgrammingLanguages;
+        setLanguage(firstAvailableLanguage);
+        setCode(solution[firstAvailableLanguage] || "");
+      } else {
+        setLanguage("javascript");
+        setCode("");
       }
-    }, []);
+
+      resetTimer();
+    }, [solution]);
 
     return (
       <div>
@@ -88,13 +120,14 @@ export const EditableCode: React.FC<EditableCodeProps> =
           value={code}
           theme="vs-dark"
           onChange={handleChangeCode}
+          onMount={(ed) => (editorRef.current = ed)}
           options={{
-            lineNumbers: "on", 
-            minimap: { enabled: false }, 
+            lineNumbers: "on",
+            minimap: { enabled: false },
             fontSize: 14,
-            wordWrap: "on", 
+            wordWrap: "on",
             scrollBeyondLastLine: false,
-            automaticLayout: true, 
+            automaticLayout: true,
           }}
         />
       </div>
