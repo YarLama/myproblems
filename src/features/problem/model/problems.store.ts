@@ -2,6 +2,7 @@ import { Problem, ProblemList } from "@types";
 import { makeAutoObservable, runInAction } from "mobx";
 import { createLocalDB } from "@lib";
 import { v4 } from "uuid";
+import { problemCategoriesStore } from "./problemCategories.store";
 
 class ProblemStore {
   problemList: ProblemList = {
@@ -116,12 +117,17 @@ class ProblemStore {
 
     runInAction(() => {
       this.problemList.data.push(newProblem);
+      problemCategoriesStore.updateCategories(
+        [],
+        item.category || [],
+      );
       this.isEditing = false;
     });
   };
 
   editProblem = async (newItem: Problem) => {
     this.isEditing = true;
+    const oldItem = this.getProblem(newItem.id);
 
     try {
       this.db.updateProblem(newItem).then(() => {
@@ -132,7 +138,7 @@ class ProblemStore {
           runInAction(() => {
             this.problemList.data[index] = newItem;
             this.currentProblem = newItem;
-          })
+          });
         }
       });
     } catch (e) {
@@ -143,12 +149,17 @@ class ProblemStore {
     }
 
     runInAction(() => {
+      problemCategoriesStore.updateCategories(
+        oldItem?.category || [],
+        newItem.category || [],
+      );
       this.isEditing = false;
     });
   };
 
   deleteProblem = async (id: string) => {
     this.isEditing = true;
+    const problem = this.getProblem(id);
 
     try {
       this.db.deleteProblem(id).then(() => {
@@ -167,6 +178,10 @@ class ProblemStore {
     }
 
     runInAction(() => {
+      problemCategoriesStore.updateCategories(
+        problem?.category || [],
+        [],
+      );
       this.isEditing = false;
     });
   };
@@ -175,9 +190,9 @@ class ProblemStore {
     if (problem) {
       runInAction(() => {
         this.currentProblem = problem;
-      })
+      });
     }
-  }
+  };
 }
 
 export const problemStore = new ProblemStore();
