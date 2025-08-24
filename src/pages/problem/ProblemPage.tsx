@@ -1,5 +1,6 @@
 import { ProblemSolution, useExecuteCode } from "@entities";
 import {
+  EditableCategories,
   EditableCode,
   EditableDescription,
   EditableTest,
@@ -111,7 +112,17 @@ export const ProblemPage = observer(() => {
           }
         />
       </div>
-      <div>{currentProblem.category}</div>
+      <div>
+        <EditableCategories
+          categories={currentProblem.category}
+          onCategoriesChange={(cat) =>
+            setCurrentProblem({
+              ...currentProblem,
+              category: cat,
+            })
+          }
+        />
+      </div>
       <div>
         <EditableCode solution={currentProblem.solution} />
       </div>
@@ -124,7 +135,6 @@ export const ProblemPage = observer(() => {
           onChange={(value) => console.log(value)}
         />
       </div>
-
       <div>
         <button onClick={handleEditClick}>
           TestFullEdit
