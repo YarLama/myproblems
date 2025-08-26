@@ -11,10 +11,12 @@ type IStandaloneCodeEditor = Parameters<OnMount>[0];
 
 interface EditableCodeProps {
   solution: ProblemSolution;
+  autoSave?: boolean;
+  onChangeCode?: (value: string) => void;
 }
 
 export const EditableCode: React.FC<EditableCodeProps> =
-  observer(({ solution }) => {
+  observer(({ solution, autoSave = false, onChangeCode }) => {
     const timeoutChangeRef = useRef<NodeJS.Timeout | null>(
       null,
     );
@@ -62,31 +64,34 @@ export const EditableCode: React.FC<EditableCodeProps> =
     };
 
     const handleChangeCode = (v: string | undefined) => {
-      resetTimer();
-      const hadContentPreviously = code.trim().length > 0;
-      const isValueHasContent = v && v.trim().length > 0;
-      const delay = 3000;
-      const condition =
-        v !== undefined &&
-        (isValueHasContent ||
-          (!isValueHasContent && hadContentPreviously));
+      if (autoSave) {
+        resetTimer();
+        const hadContentPreviously = code.trim().length > 0;
+        const isValueHasContent = v && v.trim().length > 0;
+        const delay = 3000;
+        const condition =
+          v !== undefined &&
+          (isValueHasContent ||
+           (!isValueHasContent && hadContentPreviously));
 
-      setCode(v || "");
+        setCode(v || "");
 
-      if (condition) {
-        timeoutChangeRef.current = setTimeout(() => {
-          saveSolution(v);
-        }, delay);
+        if (condition) {
+          timeoutChangeRef.current = setTimeout(() => {
+            saveSolution(v);
+          }, delay);
+        }
       }
+      if (onChangeCode) onChangeCode(v || "");
     };
 
     const handleLanguageChange = (
       v: AvailableProgrammingLanguages,
     ) => {
-      resetTimer(() => saveSolution(code));
-      setCode(solution[v] || "");
-      setLanguage(v);
-      if (editorRef.current) editorRef.current.focus();
+        if (autoSave) resetTimer(() => saveSolution(code));
+        setCode(solution[v] || "");
+        setLanguage(v);
+        if (editorRef.current) editorRef.current.focus();
     };
 
     useEffect(() => {

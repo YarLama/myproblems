@@ -1,4 +1,4 @@
-import { ProblemSolution, useExecuteCode } from "@entities";
+import { Problem, useExecuteCode } from "@entities";
 import {
   EditableCategories,
   EditableCode,
@@ -8,7 +8,6 @@ import {
 } from "@features";
 import { createLocalDB } from "@lib";
 import { problemStore } from "@features";
-import { Problem } from "@types";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
@@ -21,14 +20,12 @@ export const ProblemPage = observer(() => {
     problemStore;
   const { currentLanguage, code } = problemEditorStore;
   const [output, setOutput] = useState<string>("");
-  const [currentSolution, setCurrentSolution] =
-    useState<ProblemSolution | null>(null);
   const { mutate: execute, isPending: isExecuting } =
     useExecuteCode({
       onSuccess: (result) => {
         setOutput(result.run.stdout);
         if (result.run.stderr) {
-          console.error("Error: ", result.run.stderr);
+          setOutput(result.run.stderr);
         }
       },
       onError: (error) => {
@@ -39,34 +36,23 @@ export const ProblemPage = observer(() => {
       },
     });
 
-  const handleEditClick = async () => {
-    if (currentProblem) {
-      const newTestProblem: Problem<number, number> = {
-        ...currentProblem,
-        title: "test#2",
-        description: {
-          ru: "Описание на русском для test#2",
-          en: "Description on english for test#2",
-        },
-        category: ["trees"],
-        solution: {
-          javascript: `\nfunction add(x,y) {\nreturn x + y;\n}\n\nconsole.log(add(5,4))`,
-        },
-        difficulty: "hard",
-        tests: {
-          input: [3, 4],
-          output: [9, 10],
-        },
-      };
+  const saveData = <K extends keyof Problem>(
+    field: K,
+    value: Problem[K],
+  ) => {
+    if (!currentProblem) return;
 
-      setCurrentSolution(newTestProblem.solution);
-      setCurrentProblem(newTestProblem);
-      editProblem(newTestProblem);
-    }
+    const newProblem = {
+      ...currentProblem,
+      [field]: value,
+    };
+
+    setCurrentProblem(newProblem);
+    editProblem(newProblem);
   };
 
   const handleCheckClick = async () => {
-    if (currentProblem && currentSolution) {
+    if (currentProblem && code.trim()) {
       execute({
         language: currentLanguage,
         version: "*",
@@ -105,10 +91,7 @@ export const ProblemPage = observer(() => {
           label="Описание"
           value={currentProblem.description}
           onChange={(value) =>
-            setCurrentProblem({
-              ...currentProblem,
-              description: value,
-            })
+            saveData("description", value)
           }
         />
       </div>
@@ -116,39 +99,30 @@ export const ProblemPage = observer(() => {
         <EditableCategories
           categories={currentProblem.category}
           onCategoriesChange={(cat) =>
-            setCurrentProblem({
-              ...currentProblem,
-              category: cat,
-            })
+            saveData("category", cat)
           }
         />
       </div>
       <div>
-        <EditableCode solution={currentProblem.solution} />
+        <EditableCode
+          solution={currentProblem.solution}
+          autoSave
+        />
       </div>
-      <div>{`${currentProblem.tests.input} ${currentProblem.tests.output}`}</div>
       <div className="flex justify-center p-4">
         <EditableTest
           label="Тесты"
           key={`${id}-tests`}
           tests={currentProblem.tests}
-          onChange={(value) => console.log(value)}
+          onChange={(value) => saveData('tests',value)}
         />
-      </div>
-      <div>
-        <button onClick={handleEditClick}>
-          TestFullEdit
-        </button>
       </div>
       <div>
         <button onClick={handleDeleteClick}>Delete</button>
       </div>
       <div>
-        <h3>Output: </h3>
-        <button onClick={handleCheckClick}>
-          Send To Check
-        </button>
-        <div>
+        <h3>
+          Output:
           {isExecuting ? (
             <p>Executing...</p>
           ) : (
@@ -156,7 +130,10 @@ export const ProblemPage = observer(() => {
               <pre>{output}</pre>
             </>
           )}
-        </div>
+        </h3>
+        <button onClick={handleCheckClick}>
+          Send To Check
+        </button>
       </div>
     </div>
   );
