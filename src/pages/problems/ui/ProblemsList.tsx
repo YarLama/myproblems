@@ -1,8 +1,10 @@
+import { routePath } from "@constants/routePaths";
 import { problemStore } from "@features";
 import { Problem } from "@types";
 import { IconButton, TaskCard } from "@ui";
 import clsx from "clsx";
 import { observer } from "mobx-react-lite";
+import { useNavigate } from "react-router";
 
 const testProblem: Problem<number, number> = {
   id: "",
@@ -26,9 +28,15 @@ const testProblem: Problem<number, number> = {
 export const ProblemList = observer(() => {
   const { problemList, isLoading, addProblem } =
     problemStore;
+  const navigate = useNavigate();
+
+  const handleTestAddClick = () => {
+    addProblem(testProblem);
+  };
+
 
   const handleAddClick = () => {
-    addProblem(testProblem);
+    navigate(routePath.problems.add);
   };
 
   return (

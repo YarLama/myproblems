@@ -1,5 +1,5 @@
 import { createHashRouter } from "react-router";
-import { ProblemPage, ProblemsPage } from "@pages";
+import { NewProblemPage, ProblemPage, ProblemsPage } from "@pages";
 import { MainLayout, ProblemsLayout } from "@layouts";
 import { routePath } from "@constants/routePaths";
 
@@ -20,11 +20,11 @@ const routes = [
             path: routePath.problems.byIdTemplate,
             element: <ProblemPage />,
           },
+          {
+            path: routePath.problems.add,
+            element: <NewProblemPage />,
+          },
         ],
-      },
-      {
-        path: routePath.add.root,
-        element: <div>add page</div>,
       },
       {
         path: routePath.notFound.root,

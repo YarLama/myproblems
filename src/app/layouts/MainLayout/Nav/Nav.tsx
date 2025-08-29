@@ -26,8 +26,10 @@ export const Nav = () => {
   const getNavContent = (path: string) => {
     if (path === routePath.problems.root)
       return <ProblemsNav />;
+    if (path === routePath.problems.add)
+      return <DefaultNav title="Добавить новую задачу" />;
     if (matchPath({ path }, path)) return <ProblemNav />;
-    return <DefaultNav />;
+    return <DefaultNav title="" />;
   };
 
   return (

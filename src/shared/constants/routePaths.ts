@@ -1,5 +1,5 @@
 const PROBLEMS_BASE = "/problems";
-const ADD_BASE = "/add";
+const ADD_BASE = "add";
 const NOTFOUND_BASE = "*";
 
 export const routePath = {
@@ -8,9 +8,7 @@ export const routePath = {
     root: PROBLEMS_BASE,
     byIdTemplate: `${PROBLEMS_BASE}/:id`,
     byId: (id: string) => `${PROBLEMS_BASE}/${id}`,
-  },
-  add: {
-    root: ADD_BASE,
+    add: `${PROBLEMS_BASE}/${ADD_BASE}`
   },
   notFound: {
     root: NOTFOUND_BASE,
