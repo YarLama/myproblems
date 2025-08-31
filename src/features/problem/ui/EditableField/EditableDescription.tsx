@@ -1,7 +1,4 @@
-import {
-  AvailableLanguages,
-  Languages,
-} from "@constants/languages";
+import { AvailableLanguages } from "@constants/languages";
 import { ProblemDescription } from "@entities";
 import { LanguageSelect } from "@ui";
 import { useEffect, useState } from "react";
@@ -10,6 +7,8 @@ interface EditableDescriptionProps {
   label?: string;
   value: ProblemDescription;
   defaultLanguage?: AvailableLanguages;
+  defaultEditingState?: boolean;
+  isHaveEditControls?: boolean;
   onChange: (value: ProblemDescription) => void;
 }
 
@@ -19,9 +18,13 @@ export const EditableDescription: React.FC<
   label,
   value,
   defaultLanguage = "ru",
+  defaultEditingState = false,
+  isHaveEditControls = true,
   onChange,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(
+    defaultEditingState,
+  );
   const [newValue, setNewValue] = useState<string>(
     value[defaultLanguage],
   );
@@ -33,7 +36,7 @@ export const EditableDescription: React.FC<
       ...value,
       [currentLanguage]: newValue,
     });
-    setCurrentLanguage(defaultLanguage)
+    setCurrentLanguage(defaultLanguage);
     setIsEditing(false);
   };
 
@@ -43,6 +46,16 @@ export const EditableDescription: React.FC<
 
   const handleCancelClick = () => {
     setIsEditing(false);
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLTextAreaElement>,
+  ) => {
+    setNewValue(e.target.value);
+    if (!isHaveEditControls && isEditing) {
+
+      onChange({ ...value, [currentLanguage]: e.target.value });
+    }
   };
 
   useEffect(() => {
@@ -58,31 +71,40 @@ export const EditableDescription: React.FC<
       ) : null}
       {isEditing ? (
         <div className="flex gap-2">
-          <LanguageSelect language={currentLanguage} onChange={(l) => setCurrentLanguage(l)}/>
+          <LanguageSelect
+            language={currentLanguage}
+            onChange={(l) => setCurrentLanguage(l)}
+          />
           <textarea
             className="border p-1 flex-1"
             value={newValue}
-            onChange={(e) => setNewValue(e.target.value)}
+            onChange={(e) => handleChange(e)}
             autoFocus
           />
-          <button onClick={handleSaveClick}>
-            {"save"}
-          </button>
-          <button onClick={handleCancelClick}>
-            {"cancel"}
-          </button>
+          {isHaveEditControls && (
+            <>
+              <button onClick={handleSaveClick}>
+                {"save"}
+              </button>
+              <button onClick={handleCancelClick}>
+                {"cancel"}
+              </button>
+            </>
+          )}
         </div>
       ) : (
         <div className="flex gap-2 items-center">
           <span className="p-1 border-transparent border">
             {value[defaultLanguage]}
           </span>
-          <button
-            onClick={handleEditClick}
-            className="text-gray-700 hover:text-black"
-          >
-            {"edit"}
-          </button>
+          {isHaveEditControls && (
+            <button
+              onClick={handleEditClick}
+              className="text-gray-700 hover:text-black"
+            >
+              {"edit"}
+            </button>
+          )}
         </div>
       )}
     </div>
