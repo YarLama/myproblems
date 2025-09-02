@@ -3,6 +3,7 @@ import {
   EditableCategories,
   EditableCode,
   EditableDescription,
+  EditableDifficulty,
   EditableTest,
   problemEditorStore,
 } from "@features";
@@ -69,6 +70,7 @@ export const ProblemPage = observer(() => {
   };
 
   useEffect(() => {
+    console.log('PAGE id', id)
     if (id) {
       const data = db.current.getProblem(id);
       data.then((res) => {
@@ -104,6 +106,13 @@ export const ProblemPage = observer(() => {
         />
       </div>
       <div>
+        <EditableDifficulty 
+          value={currentProblem.difficulty}
+          onDifficultyChange={(v) => console.log('onChange', v)}
+          onSave={(v) => console.log('onSave', v)}
+        />
+      </div>
+      <div>
         <EditableCode
           solution={currentProblem.solution}
           autoSave
@@ -112,7 +121,6 @@ export const ProblemPage = observer(() => {
       <div className="flex justify-center p-4">
         <EditableTest
           label="Тесты"
-          key={`${id}-tests`}
           tests={currentProblem.tests}
           onChange={(value) => saveData('tests',value)}
         />

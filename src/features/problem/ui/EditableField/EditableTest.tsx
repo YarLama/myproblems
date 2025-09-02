@@ -1,4 +1,5 @@
 import { ProblemTests } from "@entities";
+import { EditControls } from "@ui";
 import { useEffect, useState } from "react";
 
 interface EditableTestProps {
@@ -59,8 +60,6 @@ export const EditableTest: React.FC<EditableTestProps> = ({
         "EditableTest saveChanges error: ",
         (e as Error).message,
       );
-    } finally {
-      setIsEditing(false);
     }
   };
 
@@ -68,7 +67,16 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     if (rows.length === 0) {
       addRow();
     }
-    setIsEditing(true);
+  };
+
+  const handleCancel = () => {
+    setRows(
+      tests.input.map((input, i) => ({
+        input: JSON.stringify(input),
+        output: JSON.stringify(tests.output[i]),
+        id: `row-${i}`,
+      })),
+    );
   };
 
   useEffect(() => {
@@ -156,21 +164,16 @@ export const EditableTest: React.FC<EditableTestProps> = ({
           ))}
         </tbody>
       </table>
-      {isEditing ? (
-        <div className="flex gap-2 justify-center">
-          <button onClick={addRow}>+</button>
-          <button onClick={saveChanges}>save</button>
-          <button onClick={() => setIsEditing(false)}>
-            cancel
-          </button>
-        </div>
-      ) : (
-        <div className="flex gap-2 justify-center">
-          <button onClick={handleEditClick}>
-            {rows.length === 0 ? "add value" : "edit"}
-          </button>
-        </div>
-      )}
+      <div className="flex gap-2 justify-center">
+        {isEditing && <button onClick={addRow}>+</button>}
+        <EditControls
+          isEditing={isEditing}
+          onToggle={setIsEditing}
+          onEdit={handleEditClick}
+          onSave={saveChanges}
+          onCancel={handleCancel}
+        />
+      </div>
     </div>
   );
 };

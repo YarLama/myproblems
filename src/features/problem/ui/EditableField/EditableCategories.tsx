@@ -1,3 +1,4 @@
+import { EditControls, IconButton } from "@ui";
 import { useState } from "react";
 
 interface EditableCategoriesProps {
@@ -17,19 +18,16 @@ export const EditableCategories: React.FC<
 
   const handleEdit = () => {
     setEditCategories([...categories]);
-    setIsEditing(true);
   };
 
   const handleCancel = () => {
     setEditCategories([...categories]);
-    setIsEditing(false);
     setIsAdding(false);
     setNewCategoryName("");
   };
 
   const handleSave = () => {
     onCategoriesChange(editCategories);
-    setIsEditing(false);
     setIsAdding(false);
     setNewCategoryName("");
   };
@@ -59,16 +57,13 @@ export const EditableCategories: React.FC<
   return (
     <div className="p-4">
       <div className="flex justify-between items-center mb-4">
-        {!isEditing ? (
-          <button onClick={handleEdit}>{"edit"}</button>
-        ) : (
-          <div className="flex space-x-2">
-            <button onClick={handleSave}>{"save"}</button>
-            <button onClick={handleCancel}>
-              {"cancel"}
-            </button>
-          </div>
-        )}
+        <EditControls 
+          isEditing={isEditing}
+          onToggle={setIsEditing}
+          onSave={handleSave}
+          onCancel={handleCancel}
+          onEdit={handleEdit}
+        />
       </div>
 
       {!isEditing && (
@@ -100,24 +95,7 @@ export const EditableCategories: React.FC<
                 <span className="text-sm text-gray-300">
                   {category}
                 </span>
-                <button
-                  onClick={() => handleDelete(category)}
-                  className="ml-2 p-1 text-red-500 hover:text-red-700 hover:bg-red-100 rounded"
-                >
-                  <svg
-                    className="w-4 h-4"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth={2}
-                      d="M6 18L18 6M6 6l12 12"
-                    />
-                  </svg>
-                </button>
+                <IconButton icon="delete" size="sm" onClick={() => handleDelete(category)}/>
               </div>
             ))}
           </div>
@@ -134,63 +112,24 @@ export const EditableCategories: React.FC<
                 className="flex-1 px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
                 autoFocus
               />
-              <button
+              <IconButton 
+                icon="ok"
+                size="sm"
                 onClick={handleAdd}
-                disabled={!newCategoryName.trim()}
-                className="p-1 text-green-500 hover:text-green-700 disabled:text-gray-400"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M5 13l4 4L19 7"
-                  />
-                </svg>
-              </button>
-              <button
+                disabled={newCategoryName.trim() === ""}
+              />
+              <IconButton 
+                icon="delete"
+                size="sm"
                 onClick={handleCancelAdd}
-                className="p-1 text-red-500 hover:text-red-700"
-              >
-                <svg
-                  className="w-5 h-5"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M6 18L18 6M6 6l12 12"
-                  />
-                </svg>
-              </button>
+              />
             </div>
           ) : (
-            <button
+            <IconButton 
+              icon="add"
+              size="sm"
               onClick={() => setIsAdding(true)}
-              className="flex items-center space-x-1 px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors text-sm"
-            >
-              <svg
-                className="w-4 h-4"
-                fill="none"
-                stroke="currentColor"
-                viewBox="0 0 24 24"
-              >
-                <path
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                  strokeWidth={2}
-                  d="M12 4v16m8-8H4"
-                />
-              </svg>
-            </button>
+            />
           )}
         </div>
       )}

@@ -1,3 +1,4 @@
+import { EditControls } from "@ui";
 import { useState } from "react";
 
 interface EditableTextProps {
@@ -16,20 +17,15 @@ export const EditableText: React.FC<EditableTextProps> = ({
   const [isEditing, setIsEditing] = useState(false);
   const [newValue, setNewValue] = useState(value);
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
   const handleSaveClick = () => {
     onChange(newValue);
-    setIsEditing(false);
   };
   const handleCancelClick = () => {
     setNewValue(value);
-    setIsEditing(false);
   };
 
   return (
-    <div className="mb-4">
+    <div className="flex items-center mb-4">
       {label ? (
         <label className="block text-gray-700">
           {label}
@@ -52,26 +48,20 @@ export const EditableText: React.FC<EditableTextProps> = ({
               autoFocus
             />
           )}
-          <button onClick={handleSaveClick}>
-            {"save"}
-          </button>
-          <button onClick={handleCancelClick}>
-            {"cancel"}
-          </button>
         </div>
       ) : (
         <div className="flex gap-2 items-center">
           <span className="p-1 border-transparent border">
             {value}
           </span>
-          <button
-            onClick={handleEditClick}
-            className="text-gray-700 hover:text-black"
-          >
-            {"edit"}
-          </button>
         </div>
       )}
+        <EditControls
+          isEditing={isEditing}
+          onToggle={setIsEditing}
+          onSave={handleSaveClick}
+          onCancel={handleCancelClick}
+        />
     </div>
   );
 };

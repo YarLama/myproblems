@@ -1,3 +1,4 @@
+import { DifficultyValues } from "@constants/difficulty";
 import { AvailableLanguages, AvailableProgrammingLanguages } from "@constants/languages.ts";
 
 export type ProblemDescription = Record<
@@ -11,12 +12,14 @@ export type ProblemTests<T = unknown, U = unknown> = {
   output: U[];
 };
 
+export type ProblemDifficulty = typeof DifficultyValues[number];
+
 export type Problem<T = unknown, U = unknown> = {
   id: string;
   title: string;
   description: ProblemDescription;
   category: string[];
-  difficulty: "easy" | "medium" | "hard";
+  difficulty: ProblemDifficulty;
   solution: ProblemSolution;
   tests: ProblemTests<T, U>;
 };

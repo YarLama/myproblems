@@ -9,6 +9,7 @@ export const Icons = {
     class: "material-icons",
   },
   "add": { content: "add", class: "material-icons" },
+  "edit": { content: "edit", class: "material-icons" },
   "delete": { content: "delete", class: "material-icons" },
   "cancel": { content: "close", class: "material-icons" },
   "shuffle": { content: "shuffle", class: "material-icons" },
