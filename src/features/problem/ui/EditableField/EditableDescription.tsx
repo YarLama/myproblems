@@ -1,7 +1,7 @@
 import { AvailableLanguages } from "@constants/languages";
 import { ProblemDescription } from "@entities";
 import { EditControls, LanguageSelect } from "@ui";
-import { useEffect, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 interface EditableDescriptionProps {
   label?: string;
@@ -30,6 +30,7 @@ export const EditableDescription: React.FC<
   );
   const [currentLanguage, setCurrentLanguage] =
     useState<AvailableLanguages>(defaultLanguage);
+  const inputId = useId();
 
   const handleSaveClick = () => {
     onChange({
@@ -55,6 +56,12 @@ export const EditableDescription: React.FC<
     }
   };
 
+  const handleChangeLanguage = (
+    value: AvailableLanguages,
+  ) => {
+    setCurrentLanguage(value);
+  };
+
   useEffect(() => {
     setNewValue(value[currentLanguage]);
   }, [currentLanguage, value]);
@@ -62,14 +69,17 @@ export const EditableDescription: React.FC<
   return (
     <div className="mb-4">
       {label && (
-        <label className="block text-gray-700">
+        <label
+          className="block text-gray-700"
+          htmlFor={isEditing ? inputId : undefined}
+        >
           {label}
         </label>
       )}
       <div className="flex justify-between">
         <LanguageSelect
           language={currentLanguage}
-          onChange={(l) => setCurrentLanguage(l)}
+          onChange={handleChangeLanguage}
         />
         {isHaveEditControls && (
           <div className="">
@@ -85,10 +95,11 @@ export const EditableDescription: React.FC<
       {isEditing ? (
         <div className="flex gap-2">
           <textarea
+            id={inputId}
             className="border p-1 flex-1"
             value={newValue}
             onChange={(e) => handleChange(e)}
-            autoFocus
+            autoFocus={isHaveEditControls}
           />
         </div>
       ) : (

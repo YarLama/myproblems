@@ -1,33 +1,53 @@
 import { EditControls } from "@ui";
-import { useState } from "react";
+import { useId, useState } from "react";
 
 interface EditableTextProps {
   label?: string;
   value: string;
   isMultiline?: boolean;
-  onChange: (value: string) => void;
+  defaultEditingState?: boolean;
+  isHaveEditControls?: boolean;
+  onTextChange?: (value: string) => void;
+  onSave?: (value: string) => void;
 }
 
 export const EditableText: React.FC<EditableTextProps> = ({
   label,
   value,
-  onChange,
+  defaultEditingState = false,
+  isHaveEditControls = true,
+  onTextChange,
+  onSave,
   isMultiline = false,
 }) => {
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(
+    defaultEditingState,
+  );
   const [newValue, setNewValue] = useState(value);
+  const inputId = useId();
 
   const handleSaveClick = () => {
-    onChange(newValue);
+    onSave?.(newValue);
   };
   const handleCancelClick = () => {
     setNewValue(value);
+  };
+  const handleValueChange = (
+    e: React.ChangeEvent<
+      HTMLTextAreaElement | HTMLInputElement
+    >,
+  ) => {
+    setNewValue(e.target.value);
+    onTextChange?.(e.target.value);
   };
 
   return (
     <div className="flex items-center mb-4">
       {label ? (
-        <label className="block text-gray-700">
+        <label
+          className="block text-gray-700"
+          htmlFor={isEditing ? inputId : undefined}
+        >
           {label}
         </label>
       ) : null}
@@ -35,17 +55,19 @@ export const EditableText: React.FC<EditableTextProps> = ({
         <div className="flex gap-2">
           {isMultiline ? (
             <textarea
+              id={inputId}
               className="border p-1 flex-1"
               value={newValue}
-              onChange={(e) => setNewValue(e.target.value)}
-              autoFocus
+              onChange={handleValueChange}
+              autoFocus={isHaveEditControls}
             />
           ) : (
             <input
+              id={inputId}
               className="border p-1 flex-1"
               value={newValue}
-              onChange={(e) => setNewValue(e.target.value)}
-              autoFocus
+              onChange={handleValueChange}
+              autoFocus={isHaveEditControls}
             />
           )}
         </div>
@@ -56,12 +78,14 @@ export const EditableText: React.FC<EditableTextProps> = ({
           </span>
         </div>
       )}
+      {isHaveEditControls && (
         <EditControls
           isEditing={isEditing}
           onToggle={setIsEditing}
           onSave={handleSaveClick}
           onCancel={handleCancelClick}
         />
+      )}
     </div>
   );
 };

@@ -58,7 +58,7 @@ export const ProblemList = observer(() => {
                 key={el.id}
                 title={el.title}
                 description={el.description.ru}
-                tags={el.category}
+                tags={el.category.length > 0 ? el.category : undefined}
               />
             );
           })}

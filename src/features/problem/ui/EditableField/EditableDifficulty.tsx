@@ -5,14 +5,24 @@ import { useState } from "react";
 
 interface EditableDifficultyProps {
   value: ProblemDifficulty;
+  defaultEditingState?: boolean;
+  isHaveEditControls?: boolean;
   onDifficultyChange?: (v: ProblemDifficulty) => void;
   onSave?: (v: ProblemDifficulty) => void;
 }
 
 export const EditableDifficulty: React.FC<
   EditableDifficultyProps
-> = ({ value, onDifficultyChange, onSave }) => {
-  const [isEditing, setIsEditing] = useState(false);
+> = ({
+  value,
+  defaultEditingState = false,
+  isHaveEditControls = true,
+  onDifficultyChange,
+  onSave,
+}) => {
+  const [isEditing, setIsEditing] = useState(
+    defaultEditingState,
+  );
   const [currentValue, setCurrentValue] = useState(value);
 
   const handleSaveClick = () => {
@@ -28,7 +38,7 @@ export const EditableDifficulty: React.FC<
   ) => {
     const newValue = e.target.value as ProblemDifficulty;
     setCurrentValue(newValue);
-    if (onDifficultyChange) onDifficultyChange(newValue);
+    onDifficultyChange?.(newValue);
   };
 
   return (
@@ -51,12 +61,14 @@ export const EditableDifficulty: React.FC<
           </select>
         )}
       </div>
-      <EditControls 
-        isEditing={isEditing}
-        onToggle={setIsEditing}
-        onSave={handleSaveClick}
-        onCancel={handleCancelClick}
-      />
+      {isHaveEditControls && (
+        <EditControls
+          isEditing={isEditing}
+          onToggle={setIsEditing}
+          onSave={handleSaveClick}
+          onCancel={handleCancelClick}
+        />
+      )}
     </div>
   );
 };

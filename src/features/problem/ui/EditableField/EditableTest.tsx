@@ -91,12 +91,12 @@ export const EditableTest: React.FC<EditableTestProps> = ({
 
   return (
     <div className="space-y-3">
-      {label ? (
-        <label className="block text-gray-700">
-          {label}
-        </label>
-      ) : null}
       <table className="w-full border max-w-2xl">
+        {label && (
+          <caption className="caption-top text-left text-gray-700 mb2">
+            {label}
+          </caption>
+        )}
         <thead>
           <tr className="bg-gray-100">
             <th className="w-1/2 p-2 border">Input</th>
@@ -166,13 +166,13 @@ export const EditableTest: React.FC<EditableTestProps> = ({
       </table>
       <div className="flex gap-2 justify-center">
         {isEditing && <button onClick={addRow}>+</button>}
-        <EditControls
-          isEditing={isEditing}
-          onToggle={setIsEditing}
-          onEdit={handleEditClick}
-          onSave={saveChanges}
-          onCancel={handleCancel}
-        />
+          <EditControls
+            isEditing={isEditing}
+            onToggle={setIsEditing}
+            onEdit={handleEditClick}
+            onSave={saveChanges}
+            onCancel={handleCancel}
+          />
       </div>
     </div>
   );

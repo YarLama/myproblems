@@ -115,7 +115,7 @@ export const ProblemPage = observer(() => {
       <div>
         <EditableCode
           solution={currentProblem.solution}
-          autoSave
+          isAutoSave={true}
         />
       </div>
       <div className="flex justify-center p-4">

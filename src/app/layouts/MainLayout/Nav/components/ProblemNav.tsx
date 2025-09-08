@@ -43,7 +43,7 @@ export const ProblemNav = observer(() => {
               value={
                 currentProblem?.title ?? "Problem title"
               }
-              onChange={handleEditTitle}
+              onSave={handleEditTitle}
             />
           </div>
           <ProblemNavigationButtons />

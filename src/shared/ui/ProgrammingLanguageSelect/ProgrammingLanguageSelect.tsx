@@ -2,6 +2,7 @@ import {
   AvailableProgrammingLanguages,
   ProgrammingLanguages,
 } from "@constants/languages";
+import { useId } from "react";
 
 interface ProgrammingLanguageSelectProps {
   onChange: (value: AvailableProgrammingLanguages) => void;
@@ -11,9 +12,11 @@ interface ProgrammingLanguageSelectProps {
 export const ProgrammingLanguageSelect: React.FC<
   ProgrammingLanguageSelectProps
 > = ({ language = "javascript", onChange }) => {
+  const inputId = useId();
   return (
     <select
       value={language}
+      id={inputId}
       onChange={(e) =>
         onChange(
           e.target.value as AvailableProgrammingLanguages,
