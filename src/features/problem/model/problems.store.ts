@@ -123,6 +123,8 @@ class ProblemStore {
       );
       this.isEditing = false;
     });
+
+    return newProblem;
   };
 
   editProblem = async (newItem: Problem) => {

@@ -15,6 +15,7 @@ import { useNavigate, useParams } from "react-router";
 
 export const ProblemPage = observer(() => {
   const db = useRef(createLocalDB());
+  const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const navigate = useRef(useNavigate()).current;
   const { currentProblem, setCurrentProblem, editProblem } =
@@ -70,12 +71,12 @@ export const ProblemPage = observer(() => {
   };
 
   useEffect(() => {
-    console.log('PAGE id', id)
     if (id) {
       const data = db.current.getProblem(id);
       data.then((res) => {
         if (res) {
           setCurrentProblem(res);
+          setIsLoading(false);
         } else {
           navigate(`/problems`);
         }
@@ -83,7 +84,7 @@ export const ProblemPage = observer(() => {
     }
   }, [id, navigate, db, setCurrentProblem]);
 
-  if (!currentProblem) return <div>Loader...</div>;
+  if (!currentProblem || isLoading) return <div>Loader...</div>;
 
   return (
     <div>

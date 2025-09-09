@@ -1,3 +1,4 @@
+import { routePath } from "@constants/routePaths";
 import {
   Problem,
   ProblemDescription,
@@ -16,10 +17,12 @@ import {
 import { toJS } from "mobx";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
+import { useNavigate } from "react-router";
 
 export const NewProblemPage = observer(() => {
-  const { currentProblem, setCurrentProblem } =
+  const { currentProblem, setCurrentProblem, addProblem } =
     problemStore;
+  const navigate = useNavigate();
   const defaultTitle: string = "test title";
   const defaultDescription: ProblemDescription = {
     en: "",
@@ -35,7 +38,11 @@ export const NewProblemPage = observer(() => {
   };
 
   const handleConfirm = () => {
-    console.log(toJS(currentProblem));
+    if (currentProblem)
+      addProblem(currentProblem).then((problem) => {
+        navigate(routePath.problems.byId(problem.id));
+        window.scrollTo(0, 0);
+      });
   };
 
   const saveData = <K extends keyof Problem>(
@@ -67,13 +74,14 @@ export const NewProblemPage = observer(() => {
   return (
     currentProblem && (
       <div>
-        <button onClick={handleConfirm}>TestConfirm</button>
         <div className="flex justify-center p-4">
           <EditableText
             key={`add-title`}
             label="title"
             value={currentProblem.title}
-            onTextChange={(value) => saveData("title", value)}
+            onTextChange={(value) =>
+              saveData("title", value)
+            }
             defaultEditingState={true}
             isHaveEditControls={false}
           />
@@ -111,7 +119,9 @@ export const NewProblemPage = observer(() => {
         <div>
           <EditableCode
             solution={currentProblem.solution}
-            onChangeCode={(value) => saveData('solution', value)}
+            onChangeCode={(value) =>
+              saveData("solution", value)
+            }
             isDebounced={true}
             isAutoSave={false}
           />
@@ -121,10 +131,16 @@ export const NewProblemPage = observer(() => {
             label="Тесты"
             key={`add-tests`}
             tests={currentProblem.tests}
-            onChange={(value) =>
-              saveData("tests", value)
-            }
+            onChange={(value) => saveData("tests", value)}
           />
+        </div>
+        <div>
+          <button
+            className="border border-gray-300 rounded-lg p-2"
+            onClick={handleConfirm}
+          >
+            Add problem
+          </button>
         </div>
       </div>
     )

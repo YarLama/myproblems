@@ -18,6 +18,16 @@ export const ProblemNav = observer(() => {
     navigate(routePath.problems.root);
   };
 
+  const handleDeleteClick = () => {
+    if (currentProblem) {
+      if (window.confirm('Delete problem?')) {
+        problemStore.deleteProblem(currentProblem.id).then(() => {
+          navigate("/problems");
+        });
+      }
+    }
+  }
+
   const handleEditTitle = async (value: string) => {
     if (value && currentProblem) {
       const newProblem = {
@@ -34,6 +44,7 @@ export const ProblemNav = observer(() => {
       <div className={clsx(["flex", "space-x-2"])}>
         <IconButton icon="menu" />
         <IconButton icon="left" onClick={handleBackClick} />
+        <IconButton icon="delete" onClick={handleDeleteClick} />
       </div>
       {currentProblem ? (
         <>
