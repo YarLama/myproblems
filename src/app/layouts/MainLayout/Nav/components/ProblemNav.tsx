@@ -1,6 +1,7 @@
 import { routePath } from "@constants/routePaths";
 import {
   EditableText,
+  MenuButton,
   ProblemNavigationButtons,
 } from "@features";
 import { problemStore } from "@features";
@@ -42,7 +43,7 @@ export const ProblemNav = observer(() => {
   return (
     <>
       <div className={clsx(["flex", "space-x-2"])}>
-        <IconButton icon="menu" />
+        <MenuButton />
         <IconButton icon="left" onClick={handleBackClick} />
         <IconButton icon="delete" onClick={handleDeleteClick} />
       </div>

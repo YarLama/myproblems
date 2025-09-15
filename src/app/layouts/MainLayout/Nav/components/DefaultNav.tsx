@@ -1,4 +1,5 @@
 import { routePath } from "@constants/routePaths";
+import { MenuButton } from "@features";
 import { IconButton } from "@ui";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
@@ -19,7 +20,7 @@ export const DefaultNav: React.FC<DefaultNavProps> = ({
   return (
     <>
       <div className={clsx(["flex", "space-x-2"])}>
-        <IconButton icon="menu" />
+        <MenuButton />
         <IconButton icon="left" onClick={handleBackClick} />
       </div>
       <div className="flex-1 max-w-md mx-4">{title}</div>

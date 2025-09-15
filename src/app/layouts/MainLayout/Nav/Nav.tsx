@@ -4,12 +4,13 @@ import { ProblemsNav } from "./components/ProblemsNav";
 import { ProblemNav } from "./components/ProblemNav";
 import { DefaultNav } from "./components/DefaultNav";
 import { routePath } from "@constants/routePaths";
+import { SlideMenu } from "@features";
 
 const navClasses = clsx([
   "fixed",
   "top-0",
   "inset-x-0",
-  "z-99",
+  "z-40",
   "h-[var(--header-height)]",
   "flex",
   "items-center",
@@ -35,6 +36,7 @@ export const Nav = () => {
   return (
     <nav className={navClasses}>
       {getNavContent(pathname)}
+      <SlideMenu />
     </nav>
   );
 };
