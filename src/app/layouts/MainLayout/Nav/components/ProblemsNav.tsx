@@ -1,5 +1,5 @@
 import { routePath } from "@constants/routePaths";
-import { SearchFeature } from "@features";
+import { Search } from "@features";
 import { IconButton } from "@ui";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
@@ -18,7 +18,7 @@ export const ProblemsNav = () => {
         <IconButton icon="add" onClick={handleAddClick} />
       </div>
       <div className="flex-1 max-w-md mx-4">
-        <SearchFeature />
+        <Search />
       </div>
       <div className="flex space-x-2">
         <IconButton icon="shuffle" />

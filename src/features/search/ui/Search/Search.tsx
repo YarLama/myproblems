@@ -1,8 +1,8 @@
 import { useEffect, useRef, useState } from "react";
-import { SearchInput } from "./ui/SearchInput/SearchInput";
-import { SearchSuggestions } from "./ui/SearchSuggestions/SearchSuggestions";
+import { SearchInput } from "../SearchInput/SearchInput";
+import { SearchSuggestions } from "../SearchSuggestions/SearchSuggestions";
 
-export const SearchFeature = () => {
+export const Search = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [suggestions, setSuggestions] = useState<string[]>(
     [],

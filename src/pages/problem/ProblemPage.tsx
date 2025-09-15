@@ -84,7 +84,8 @@ export const ProblemPage = observer(() => {
     }
   }, [id, navigate, db, setCurrentProblem]);
 
-  if (!currentProblem || isLoading) return <div>Loader...</div>;
+  if (!currentProblem || isLoading)
+    return <div>Loader...</div>;
 
   return (
     <div>
@@ -107,10 +108,12 @@ export const ProblemPage = observer(() => {
         />
       </div>
       <div>
-        <EditableDifficulty 
+        <EditableDifficulty
           value={currentProblem.difficulty}
-          onDifficultyChange={(v) => console.log('onChange', v)}
-          onSave={(v) => console.log('onSave', v)}
+          onDifficultyChange={(v) =>
+            console.log("onChange", v)
+          }
+          onSave={(v) => console.log("onSave", v)}
         />
       </div>
       <div>
@@ -123,7 +126,7 @@ export const ProblemPage = observer(() => {
         <EditableTest
           label="Тесты"
           tests={currentProblem.tests}
-          onChange={(value) => saveData('tests',value)}
+          onChange={(value) => saveData("tests", value)}
         />
       </div>
       <div>

@@ -3,9 +3,8 @@ import { Editor, type OnMount } from "@monaco-editor/react";
 import { ProgrammingLanguageSelect } from "@ui";
 import { ProblemSolution } from "@entities";
 import { observer } from "mobx-react-lite";
-import { problemEditorStore } from "../../model/problemEditor.store";
 import { AvailableProgrammingLanguages } from "@constants/languages";
-import { problemStore } from "../../model/problems.store";
+import { problemEditorStore, problemStore } from "@features";
 
 type IStandaloneCodeEditor = Parameters<OnMount>[0];
 
