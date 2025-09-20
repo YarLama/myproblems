@@ -1,10 +1,10 @@
 import { Problem } from "@types";
-import { LocalDB } from "./constants";
 import {
   executeWriteOperation,
   executeReadOperation,
   clearStore,
 } from "../utils";
+import { LocalDB } from "@constants/db";
 
 interface ProblemListInfo {
   version: number;
