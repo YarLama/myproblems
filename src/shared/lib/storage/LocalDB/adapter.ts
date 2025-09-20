@@ -1,5 +1,10 @@
 import { Problem } from "@types";
 import { LocalDB } from "./constants";
+import {
+  executeWriteOperation,
+  executeReadOperation,
+  clearStore,
+} from "../utils";
 
 interface ProblemListInfo {
   version: number;
@@ -63,44 +68,11 @@ export const createLocalDB = (): LocalDB => {
     });
   };
 
-  const executeWriteOperation = async (
-    storeName: string,
-    operation: (store: IDBObjectStore) => void,
-  ): Promise<void> => {
-    const db = await connect();
-    return new Promise((res, rej) => {
-      const tx = db.transaction(storeName, "readwrite");
-      operation(tx.objectStore(storeName));
-      tx.oncomplete = () => res();
-      tx.onerror = () => rej(tx.error);
-    });
-  };
-
-  const executeReadOperation = async <T>(
-    storeName: string,
-    operation: (store: IDBObjectStore) => IDBRequest<T>,
-  ): Promise<T> => {
-    const db = await connect();
-    return new Promise((res, rej) => {
-      const tx = db.transaction(storeName, "readonly");
-      const request = operation(tx.objectStore(storeName));
-      request.onsuccess = () => res(request.result);
-      request.onerror = () => rej(request.error);
-    });
-  };
-
-  const clearStore = async (
-    storeName: string,
-  ): Promise<void> => {
-    return executeWriteOperation(storeName, (store) => {
-      store.clear();
-    });
-  };
-
   const bulkAddProblems = async (
     problems: Problem[],
   ): Promise<void> => {
     return executeWriteOperation(
+      connect(),
       LocalDB.dbProblemListStore,
       (store) => {
         problems.forEach((problem) => {
@@ -116,6 +88,7 @@ export const createLocalDB = (): LocalDB => {
   return {
     async getProblemListInfo() {
       return executeReadOperation(
+        connect(),
         LocalDB.dbProblemListInfoStore,
         (store) => store.get("info"),
       );
@@ -123,6 +96,7 @@ export const createLocalDB = (): LocalDB => {
 
     async setProblemListInfo(info) {
       return executeWriteOperation(
+        connect(),
         LocalDB.dbProblemListInfoStore,
         (store) => store.put(info, "info"),
       );
@@ -130,6 +104,7 @@ export const createLocalDB = (): LocalDB => {
 
     async getAllProblems() {
       return executeReadOperation(
+        connect(),
         LocalDB.dbProblemListStore,
         (store) => store.getAll(),
       ).then((result) => result || []);
@@ -137,6 +112,7 @@ export const createLocalDB = (): LocalDB => {
 
     async getProblem(id) {
       return executeReadOperation(
+        connect(),
         LocalDB.dbProblemListStore,
         (store) => store.get(id),
       ).then((result) => result || null);
@@ -145,6 +121,7 @@ export const createLocalDB = (): LocalDB => {
     async addProblem(item) {
       const plainItem = JSON.parse(JSON.stringify(item));
       return executeWriteOperation(
+        connect(),
         LocalDB.dbProblemListStore,
         (store) => store.add(plainItem),
       );
@@ -153,6 +130,7 @@ export const createLocalDB = (): LocalDB => {
     async updateProblem(item) {
       const plainItem = JSON.parse(JSON.stringify(item));
       return executeWriteOperation(
+        connect(),
         LocalDB.dbProblemListStore,
         (store) => store.put(plainItem),
       );
@@ -160,13 +138,17 @@ export const createLocalDB = (): LocalDB => {
 
     async deleteProblem(id) {
       return executeWriteOperation(
+        connect(),
         LocalDB.dbProblemListStore,
         (store) => store.delete(id),
       );
     },
 
     async replaceAllProblems(items) {
-      await clearStore(LocalDB.dbProblemListStore);
+      await clearStore(
+        connect(),
+        LocalDB.dbProblemListStore,
+      );
       await bulkAddProblems(items);
     },
 
