@@ -8,12 +8,14 @@ interface ProblemListInfo {
 
 interface LocalDB {
   getProblemListInfo(): Promise<ProblemListInfo>;
-  setProblemListInfo(info: ProblemListInfo): Promise<void>;
   getAllProblems(): Promise<Problem[]>;
   getProblem(id: string): Promise<Problem | null>;
+  setProblemListInfo(info: ProblemListInfo): Promise<void>;
   addProblem(item: Problem): Promise<void>;
   updateProblem(item: Problem): Promise<void>;
   deleteProblem(id: string): Promise<void>;
+  replaceAllProblems(items: Problem[]): Promise<void>;
+  mergeAllProblems(items: Problem[]): Promise<void>;
 }
 
 export const createLocalDB = (): LocalDB => {
@@ -87,6 +89,30 @@ export const createLocalDB = (): LocalDB => {
     });
   };
 
+  const clearStore = async (
+    storeName: string,
+  ): Promise<void> => {
+    return executeWriteOperation(storeName, (store) => {
+      store.clear();
+    });
+  };
+
+  const bulkAddProblems = async (
+    problems: Problem[],
+  ): Promise<void> => {
+    return executeWriteOperation(
+      LocalDB.dbProblemListStore,
+      (store) => {
+        problems.forEach((problem) => {
+          const plainItem = JSON.parse(
+            JSON.stringify(problem),
+          );
+          store.add(plainItem);
+        });
+      },
+    );
+  };
+
   return {
     async getProblemListInfo() {
       return executeReadOperation(
@@ -137,6 +163,29 @@ export const createLocalDB = (): LocalDB => {
         LocalDB.dbProblemListStore,
         (store) => store.delete(id),
       );
+    },
+
+    async replaceAllProblems(items) {
+      await clearStore(LocalDB.dbProblemListStore);
+      await bulkAddProblems(items);
+    },
+
+    async mergeAllProblems(items) {
+      const existingProblems = await this.getAllProblems();
+      const problemMap = new Map<string, Problem>();
+
+      existingProblems.forEach((problem) => {
+        problemMap.set(problem.id, problem);
+      });
+
+      items.forEach((item) => {
+        problemMap.set(item.id, item);
+      });
+
+      const mergedProblems = Array.from(
+        problemMap.values(),
+      );
+      await this.replaceAllProblems(mergedProblems);
     },
   };
 };
