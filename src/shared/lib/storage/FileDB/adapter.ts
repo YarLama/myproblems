@@ -67,7 +67,7 @@ export const createFileDB = (): FileDB => {
       )
     },
 
-    async clearFileHandle() {
+    async clearFileHandle() { 
       return executeWriteOperation(
         connect(),
         FileDB.dbFileStore,

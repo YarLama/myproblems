@@ -1,2 +1,2 @@
 export { createLocalDB } from "./LocalDB/adapter.ts";
-export { LocalDB } from './LocalDB/constants.ts'
+export { createFileDB } from "./FileDB/adapter.ts";
