@@ -1,3 +1,4 @@
+import { fileStore } from "@entities";
 import { makeAutoObservable } from "mobx";
 
 class MenuStore {
@@ -18,6 +19,11 @@ class MenuStore {
   close = () => {
     this.isOpen = false;
   };
+
+  openFile = () => {
+    fileStore.openFile();
+    this.isOpen = false;
+  }
 }
 
 export const menuStore = new MenuStore();

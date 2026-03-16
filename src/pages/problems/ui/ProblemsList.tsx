@@ -30,14 +30,13 @@ export const ProblemList = observer(() => {
     problemStore;
   const navigate = useNavigate();
 
-  const handleTestAddClick = () => {
-    addProblem(testProblem);
-  };
-
-
-  const handleAddClick = () => {
-    navigate(routePath.problems.add);
-  };
+  // const handleTestAddClick = () => {
+  //   addProblem(testProblem);
+  // };
+  //
+  // const handleAddClick = () => {
+  //   navigate(routePath.problems.add);
+  // };
 
   return (
     <div
@@ -62,11 +61,6 @@ export const ProblemList = observer(() => {
               />
             );
           })}
-          <IconButton
-            icon="add"
-            size="lg"
-            onClick={handleAddClick}
-          />
         </>
       )}
     </div>

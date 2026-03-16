@@ -5,7 +5,7 @@ import { useEffect } from "react";
 import { createPortal } from "react-dom";
 
 export const SlideMenu = observer(() => {
-  const { isOpen, close } = menuStore;
+  const { isOpen, close, openFile } = menuStore;
 
   useEffect(() => {
     document.body.style.overflow = isOpen
@@ -38,7 +38,7 @@ export const SlideMenu = observer(() => {
             />
           </div>
           <div className="flex-1 p-4 space-y-2">
-            <button className="w-full text-left p-3 rounded-lg hover:bg-gray-100 text-gray-700 hover:text-gray-900">
+            <button onClick={openFile} className="w-full text-left p-3 rounded-lg hover:bg-gray-100 text-gray-700 hover:text-gray-900">
               Открыть
             </button>
             <button className="w-full text-left p-3 rounded-lg hover:bg-gray-100 text-gray-700 hover:text-gray-900">
