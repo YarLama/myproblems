@@ -1,18 +1,9 @@
 import { FileDB } from "@constants/db";
 import { executeReadOperation, executeWriteOperation } from "../utils";
 
-export interface FileHandleRecord {
-  id?: number;
-  fileName: string;
-  fileHandle: FileSystemFileHandle;
-  lastModified: Date;
-  size: number;
-  path?: string;
-}
-
 interface FileDB {
-  getFileHandle(): Promise<FileHandleRecord | null>;
-  saveFileHandle(record: FileHandleRecord): Promise<void>;
+  getFileHandle(): Promise<FileSystemFileHandle | null>;
+  saveFileHandle(handle: FileSystemFileHandle): Promise<void>;
   clearFileHandle(): Promise<void>;
 }
 
