@@ -25,10 +25,7 @@ export const createFileDB = (): FileDB => {
         if (
           !db.objectStoreNames.contains(FileDB.dbFileStore)
         ) {
-          db.createObjectStore(FileDB.dbFileStore, {
-            keyPath: "id",
-            autoIncrement: false,
-          });
+          db.createObjectStore(FileDB.dbFileStore);
         }
       };
 
