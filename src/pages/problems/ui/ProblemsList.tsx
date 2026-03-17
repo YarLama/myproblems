@@ -1,5 +1,5 @@
 import { routePath } from "@constants/routePaths";
-import { problemStore } from "@features";
+import { problemStore } from "@entities";
 import { Problem } from "@types";
 import { IconButton, TaskCard } from "@ui";
 import clsx from "clsx";

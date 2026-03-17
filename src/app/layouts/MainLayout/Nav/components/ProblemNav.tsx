@@ -4,7 +4,7 @@ import {
   MenuButton,
   ProblemNavigationButtons,
 } from "@features";
-import { problemStore } from "@features";
+import { problemStore } from "@entities";
 import { IconButton } from "@ui";
 import clsx from "clsx";
 import { observer } from "mobx-react-lite";

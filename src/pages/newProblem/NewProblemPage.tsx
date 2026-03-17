@@ -3,6 +3,7 @@ import {
   Problem,
   ProblemDescription,
   ProblemSolution,
+  problemStore,
   ProblemTests,
 } from "@entities";
 import {
@@ -12,7 +13,6 @@ import {
   EditableDifficulty,
   EditableTest,
   EditableText,
-  problemStore,
 } from "@features";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";

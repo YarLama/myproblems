@@ -1,10 +1,10 @@
 import { useEffect, useRef } from "react";
 import { Editor, type OnMount } from "@monaco-editor/react";
 import { ProgrammingLanguageSelect } from "@ui";
-import { ProblemSolution } from "@entities";
+import { ProblemSolution, problemStore } from "@entities";
 import { observer } from "mobx-react-lite";
 import { AvailableProgrammingLanguages } from "@constants/languages";
-import { problemEditorStore, problemStore } from "@features";
+import { problemEditorStore } from "@features";
 
 type IStandaloneCodeEditor = Parameters<OnMount>[0];
 

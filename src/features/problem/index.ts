@@ -5,5 +5,4 @@ export { EditableCode } from "./ui/EditableField/EditableCode.tsx";
 export { EditableDescription } from "./ui/EditableField/EditableDescription.tsx";
 export { EditableCategories } from "./ui/EditableField/EditableCategories.tsx";
 export { EditableDifficulty } from "./ui/EditableField/EditableDifficulty.tsx";
-export { problemStore } from "./model/problems.store.ts";
 export { problemEditorStore } from "./model/problemEditor.store.ts";

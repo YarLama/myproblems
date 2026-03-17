@@ -8,7 +8,7 @@ import {
   problemEditorStore,
 } from "@features";
 import { createLocalDB } from "@lib";
-import { problemStore } from "@features";
+import { problemStore } from "@entities";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
