@@ -65,8 +65,7 @@ class ProblemStore {
         this.isLoading = false;
       });
     }
-
-  }
+  };
 
   private init = async () => {
     await this.refreshFromDB();

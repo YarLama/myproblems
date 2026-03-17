@@ -1,4 +1,6 @@
-import { fileStore, problemStore } from "@entities";
+import { fileStore, ProblemList, problemStore } from "@entities";
+import { createLocalDB } from "@lib";
+import { validateProblemList } from "@root/src/shared/verify";
 import { makeAutoObservable, runInAction } from "mobx";
 
 class MenuStore {
@@ -21,10 +23,32 @@ class MenuStore {
   };
 
   openFile = async () => {
-    await fileStore.openFile();
     runInAction(() => {
       this.isOpen = false;
     })
+    try {
+      const handle = await fileStore.openFile();
+      const file = await handle?.getFile();
+      const content = await file?.text();
+      if (content) {
+        const json: ProblemList = JSON.parse(content);
+        const validateResult = validateProblemList(json)
+
+        if (validateResult.isValid) {
+          const localDB = createLocalDB();
+          await localDB.setProblemListInfo({
+            version: json.version,
+            format: json.format,
+          });
+          await localDB.replaceAllProblems(json.data)
+          await problemStore.refreshFromDB();
+        } else {
+          throw new Error(validateResult.error)
+        }
+      }
+    } catch (e) {
+      console.log(e)
+    }
   }
 
   saveFile = async () => {

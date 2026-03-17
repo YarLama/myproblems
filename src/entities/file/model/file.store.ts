@@ -7,8 +7,14 @@ class FileStore {
   fileHandler: FileSystemFileHandle | null = null;
   isLoading: boolean = true;
   private db = createFileDB();
-  private filePickerOption: OpenFilePickerOptions &
-    SaveFilePickerOptions = {};
+  private commonPickerOption: OpenFilePickerOptions &
+    SaveFilePickerOptions = {
+      types: [
+        {
+          accept: { "application/json": [".json"] },
+        },
+      ],
+    };
 
   constructor() {
     makeAutoObservable(this);
@@ -64,24 +70,29 @@ class FileStore {
     }
   }
 
-  async openFile() {
+  async openFile(): Promise<FileSystemFileHandle | null> {
     try {
-      const [handler] = await window.showOpenFilePicker(
-        this.filePickerOption,
-      );
+      const [handler] = await window.showOpenFilePicker({
+        ...this.commonPickerOption,
+        excludeAcceptAllOption: true,
+        multiple: false,
+      });
       await this.setupNewHandler(handler);
+      return handler;
     } catch (e) {
       console.log("Open File error: ", e);
+      return null;
     }
   }
 
   async saveFileAs(data: ProblemList) {
     try {
-      const handler = await window.showSaveFilePicker(
-        this.filePickerOption,
-      );
+      const handler = await window.showSaveFilePicker({
+        ...this.commonPickerOption,
+        suggestedName: "my problem list.json",
+      });
       await this.setupNewHandler(handler);
-      await this.writeData(JSON.stringify(data));
+      await this.writeData(JSON.stringify(data, null, 2));
     } catch (e) {
       console.log("Save As... error: ", e);
     }
@@ -97,7 +108,7 @@ class FileStore {
       if (!granted) return;
     }
 
-    await this.writeData(JSON.stringify(data));
+    await this.writeData(JSON.stringify(data, null, 2));
   }
 
   private async setupNewHandler(
