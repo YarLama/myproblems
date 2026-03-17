@@ -27,6 +27,7 @@ class FileStore {
       if (fileHandler) {
         this.fileHandler = fileHandler;
       }
+      await this.checkPermissions();
     } catch (e) {
       console.log(e);
     } finally {
@@ -34,7 +35,7 @@ class FileStore {
     }
   };
 
-  async checkPermissions() {
+  checkPermissions = async () => {
     if (!this.fileHandler) {
       runInAction(() => (this.hasPermission = false));
       return;
@@ -47,9 +48,9 @@ class FileStore {
     runInAction(() => {
       this.hasPermission = state === "granted";
     });
-  }
+  };
 
-  async requestPermission(): Promise<boolean> {
+  requestPermission = async (): Promise<boolean> => {
     if (!this.fileHandler) return false;
 
     try {
@@ -68,24 +69,26 @@ class FileStore {
       console.log("requerstPermission error: ", e);
       return false;
     }
-  }
+  };
 
-  async openFile(): Promise<FileSystemFileHandle | null> {
-    try {
-      const [handler] = await window.showOpenFilePicker({
-        ...this.commonPickerOption,
-        excludeAcceptAllOption: true,
-        multiple: false,
-      });
-      await this.setupNewHandler(handler);
-      return handler;
-    } catch (e) {
-      console.log("Open File error: ", e);
-      return null;
-    }
-  }
+  openFile =
+    async (): Promise<FileSystemFileHandle | null> => {
+      try {
+        const [handler] = await window.showOpenFilePicker({
+          ...this.commonPickerOption,
+          excludeAcceptAllOption: true,
+          multiple: false,
+        });
+        await this.setupNewHandler(handler);
 
-  async saveFileAs(data: ProblemList) {
+        return handler;
+      } catch (e) {
+        console.log("Open File error: ", e);
+        return null;
+      }
+    };
+
+  saveFileAs = async (data: ProblemList) => {
     try {
       const handler = await window.showSaveFilePicker({
         ...this.commonPickerOption,
@@ -96,9 +99,9 @@ class FileStore {
     } catch (e) {
       console.log("Save As... error: ", e);
     }
-  }
+  };
 
-  async saveFile(data: ProblemList) {
+  saveFile = async (data: ProblemList) => {
     if (!this.fileHandler) {
       return this.saveFileAs(data);
     }
@@ -109,19 +112,19 @@ class FileStore {
     }
 
     await this.writeData(JSON.stringify(data, null, 2));
-  }
+  };
 
-  private async setupNewHandler(
+  private setupNewHandler = async (
     handler: FileSystemFileHandle,
-  ) {
+  ) => {
     await this.db.saveFileHandle(handler);
     runInAction(() => {
       this.fileHandler = handler;
       this.hasPermission = true;
     });
-  }
+  };
 
-  private async writeData(data: string) {
+  private writeData = async (data: string) => {
     if (!this.fileHandler) return;
     try {
       const writable =
@@ -131,7 +134,7 @@ class FileStore {
     } catch (e) {
       console.log("Write data error: ", e);
     }
-  }
+  };
 }
 
 export const fileStore = new FileStore();
