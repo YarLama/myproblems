@@ -29,7 +29,7 @@ class ProblemStore {
     return { version: 1, format: "list" };
   };
 
-  private init = async () => {
+  refreshFromDB = async () => {
     try {
       runInAction(() => {
         this.isLoading = true;
@@ -65,6 +65,11 @@ class ProblemStore {
         this.isLoading = false;
       });
     }
+
+  }
+
+  private init = async () => {
+    await this.refreshFromDB();
   };
 
   getPrevProblemId = (currentId: string): string => {

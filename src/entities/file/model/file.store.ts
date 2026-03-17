@@ -77,15 +77,11 @@ class FileStore {
 
   async saveFileAs(data: ProblemList) {
     try {
-      console.log(data, JSON.stringify(data));
       const handler = await window.showSaveFilePicker(
         this.filePickerOption,
       );
-      console.log(handler);
       await this.setupNewHandler(handler);
-      console.log('after setup');
       await this.writeData(JSON.stringify(data));
-      console.log('after write');
     } catch (e) {
       console.log("Save As... error: ", e);
     }
