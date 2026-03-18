@@ -4,26 +4,13 @@ import { SearchSuggestions } from "../SearchSuggestions/SearchSuggestions";
 
 export const Search = () => {
   const [inputValue, setInputValue] = useState<string>("");
-  const [suggestions, setSuggestions] = useState<string[]>(
-    [],
-  );
   const [isSuggestionsVisible, setIsSuggestionsVisible] =
     useState<boolean>(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
 
   const handleInputChange = (value: string) => {
     setInputValue(value);
-
-    //call API mb and suggestions
-    const testSug = [
-      "test1",
-      "test2",
-      "test3",
-      "test4",
-      "test5",
-      "test6",
-    ];
-    setSuggestions(testSug);
+    console.log(value)
     setIsSuggestionsVisible(true);
   };
 
@@ -70,7 +57,7 @@ export const Search = () => {
       />
       <SearchSuggestions
         visible={isSuggestionsVisible}
-        suggestions={suggestions}
+        value={inputValue}
         onSelect={handleSuggestionSelect}
       />
     </div>

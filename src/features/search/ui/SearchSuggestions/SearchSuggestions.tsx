@@ -1,13 +1,32 @@
+import { problemCategoriesStore } from "@root/src/entities/problem/model/problemCategories.store";
+
 interface SearchSuggestionsProps {
-  suggestions: string[];
+  value: string;
   onSelect: (value: string) => void;
   visible: boolean;
 }
 
 export const SearchSuggestions: React.FC<
   SearchSuggestionsProps
-> = ({ suggestions, onSelect, visible = false }) => {
-  if (!visible || !suggestions.length) return null;
+> = ({ value, onSelect, visible = false }) => {
+  if (!visible || !value) return null;
+
+  console.log(
+    problemCategoriesStore.categories.get("hash"),
+  );
+
+  const getFilteredCategories = (keyName: string) => {
+    const categories = problemCategoriesStore.categories;
+    if (!categories) return [];
+    const searchKey = keyName.trim().toLowerCase();
+    const filteredCategories = Array.from(
+      categories.keys(),
+    ).filter((key) => {
+      return key.trim().toLowerCase().includes(searchKey);
+    });
+
+    return filteredCategories;
+  };
 
   return (
     <div
@@ -15,16 +34,13 @@ export const SearchSuggestions: React.FC<
       role="listbox"
       aria-label="Search suggestions"
     >
-      {suggestions.map((item) => (
-        <div
-          className="px-4 py-2 hover:bg-gray-600 cursor-pointer"
-          onClick={() => onSelect(item)}
-          key={item}
-          role="option"
-        >
-          {item}
-        </div>
-      ))}
+      <div>
+        {`Title: ${value}`}
+        <br />
+        {getFilteredCategories(value).length
+          ? `Category: ${getFilteredCategories(value).join(" ")}`
+          : ""}
+      </div>
     </div>
   );
 };

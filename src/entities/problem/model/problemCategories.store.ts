@@ -3,7 +3,7 @@ import { createLocalDB } from "@lib";
 import { makeAutoObservable, runInAction } from "mobx";
 
 class ProblemCategories {
-  private categories: Map<string, number> = new Map();
+  categories: Map<string, number> = new Map();
   isInitialized = false;
   isLoading = false;
   private db = createLocalDB();
