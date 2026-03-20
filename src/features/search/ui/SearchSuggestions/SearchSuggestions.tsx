@@ -1,9 +1,16 @@
 import { problemCategoriesStore } from "@root/src/entities/problem/model/problemCategories.store";
 
+type SearchScopeVariants =
+  | "all"
+  | "categories"
+  | "difficulty"
+  | "title";
+
 interface SearchSuggestionsProps {
   value: string;
   onSelect: (value: string) => void;
   visible: boolean;
+  searchScope: SearchScopeVariants;
 }
 
 export const SearchSuggestions: React.FC<
