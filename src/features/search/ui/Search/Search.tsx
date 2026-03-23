@@ -1,6 +1,10 @@
 import { useEffect, useRef, useState } from "react";
 import { SearchInput } from "../SearchInput/SearchInput";
 import { SearchSuggestions } from "../SearchSuggestions/SearchSuggestions";
+import { TitleSuggestion } from "@root/src/entities/suggestion/TitleSuggestion";
+import { SuggestionGroup } from "@ui";
+import { CategorySuggestion } from "@root/src/entities/suggestion/CategorySuggestion";
+import { DifficultySuggestion } from "@root/src/entities/suggestion/DifficultySuggestion";
 
 export const Search = () => {
   const [inputValue, setInputValue] = useState<string>("");
@@ -10,7 +14,7 @@ export const Search = () => {
 
   const handleInputChange = (value: string) => {
     setInputValue(value);
-    console.log(value)
+    console.log(value);
     setIsSuggestionsVisible(true);
   };
 
@@ -55,11 +59,17 @@ export const Search = () => {
         onInputChange={handleInputChange}
         placeholder="Test search..."
       />
-      <SearchSuggestions
-        visible={isSuggestionsVisible}
-        value={inputValue}
-        onSelect={handleSuggestionSelect}
-      />
+      <SuggestionGroup
+        visible={isSuggestionsVisible && inputValue != ""}
+      >
+        <TitleSuggestion value={inputValue} />
+        <DifficultySuggestion value={inputValue}/>
+        <CategorySuggestion
+          value={inputValue}
+          visible={isSuggestionsVisible}
+        />
+        
+      </SuggestionGroup>
     </div>
   );
 };
