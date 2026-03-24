@@ -1,53 +1,47 @@
-import { problemCategoriesStore } from "@root/src/entities/problem/model/problemCategories.store";
-
-type SearchScopeVariants =
-  | "all"
-  | "categories"
-  | "difficulty"
-  | "title";
+import {
+  problemStore,
+  ProblemSuggestion,
+} from "@entities";
+import { SuggestionGroup } from "@ui";
 
 interface SearchSuggestionsProps {
   value: string;
-  onSelect: (value: string) => void;
-  visible: boolean;
-  searchScope: SearchScopeVariants;
+  onTitleTagClick?: (value: string) => void;
+  onDifficultyTagClick?: (value: string) => void;
+  onCategoryTagClick?: (value: string) => void;
 }
 
 export const SearchSuggestions: React.FC<
   SearchSuggestionsProps
-> = ({ value, onSelect, visible = false }) => {
-  if (!visible || !value) return null;
+> = ({
+  value,
+  onTitleTagClick,
+  onCategoryTagClick,
+  onDifficultyTagClick,
+}) => {
 
-  console.log(
-    problemCategoriesStore.categories.get("hash"),
-  );
+    const filteredCategory = problemStore.getFilteredCategories(value);
+    const filteredDifficulty = problemStore.getFilteredDifficulty(value);
 
-  const getFilteredCategories = (keyName: string) => {
-    const categories = problemCategoriesStore.categories;
-    if (!categories) return [];
-    const searchKey = keyName.trim().toLowerCase();
-    const filteredCategories = Array.from(
-      categories.keys(),
-    ).filter((key) => {
-      return key.trim().toLowerCase().includes(searchKey);
-    });
+    if (value === "") return null;
 
-    return filteredCategories;
+    return (
+      <SuggestionGroup>
+        <ProblemSuggestion 
+          title="Title"
+          tags={value}
+          onTagClick={onTitleTagClick}
+        />
+        <ProblemSuggestion
+          title="Difficulty"
+          tags={filteredDifficulty}
+          onTagClick={onDifficultyTagClick}
+        />
+        <ProblemSuggestion
+          title="Categories"
+          tags={filteredCategory}
+          onTagClick={onCategoryTagClick}
+        />
+      </SuggestionGroup>
+    );
   };
-
-  return (
-    <div
-      className="-mt-2 rounded-b-lg shadow-lg bg-gray-300 z-10 absolute w-full"
-      role="listbox"
-      aria-label="Search suggestions"
-    >
-      <div>
-        {`Title: ${value}`}
-        <br />
-        {getFilteredCategories(value).length
-          ? `Category: ${getFilteredCategories(value).join(" ")}`
-          : ""}
-      </div>
-    </div>
-  );
-};

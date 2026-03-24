@@ -1,4 +1,5 @@
 import { IconButton } from "@ui";
+import { EditableCategorySuggestions } from "./EditableCategorySuggestion";
 
 interface CategoryEditorProps {
   categories: string[];
@@ -43,17 +44,23 @@ export const CategoryEditor: React.FC<
 
         {isAdding ? (
           <div className="flex items-center space-x-2 p-2 rounded-md">
-            <input
-              type="text"
-              value={newName}
-              onChange={(e) => setNewName(e.target.value)}
-              placeholder="Введите название категории"
-              className="flex-1 px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-              autoFocus
-              onKeyDown={(e) =>
-                e.key === "Enter" && onAdd(newName)
-              }
-            />
+            <div className="relative w-full">
+              <input
+                type="text"
+                value={newName}
+                onChange={(e) => setNewName(e.target.value)}
+                placeholder="Введите название категории"
+                className="flex-1 w-full px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                autoFocus
+                onKeyDown={(e) =>
+                  e.key === "Enter" && onAdd(newName)
+                }
+              />
+              <EditableCategorySuggestions
+                value={newName}
+                onCategoryTagClick={onAdd}
+              />
+            </div>
             <IconButton
               icon="ok"
               size="sm"

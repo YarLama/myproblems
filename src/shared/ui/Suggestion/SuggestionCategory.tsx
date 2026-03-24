@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 
 interface SuggestionCategoryProps {
-  title: string;
+  title?: string;
   children: ReactNode;
   className?: string;
 }
@@ -9,9 +9,11 @@ interface SuggestionCategoryProps {
 export const SuggestionCategory = ({ title, children, className = '' }: SuggestionCategoryProps) => {
   return (
     <div className={`flex flex-col gap-2 ${className}`}>
-      <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 px-1">
+      {title && (
+        <span className="text-xs font-semibold uppercase tracking-wider text-slate-500 px-1">
         {title}
-      </span>
+        </span>
+      )}
       <div className="flex flex-wrap gap-1.5">
         {children}
       </div>

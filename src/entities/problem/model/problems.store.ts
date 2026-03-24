@@ -3,6 +3,7 @@ import { makeAutoObservable, runInAction } from "mobx";
 import { createLocalDB } from "@lib";
 import { v4 } from "uuid";
 import { problemCategoriesStore } from "./problemCategories.store";
+import { DifficultyValues } from "@constants/difficulty";
 
 class ProblemStore {
   problemList: ProblemList = {
@@ -101,6 +102,34 @@ class ProblemStore {
       (el) => el.id === id,
     );
     return problem ? problem : null;
+  };
+
+  getFilteredCategories = (searchName: string) => {
+    const categories = problemCategoriesStore.categories;
+    const searchKey = searchName.trim().toLowerCase();
+
+    if (!categories) return [];
+
+    const filteredCategories = Array.from(
+      categories.keys(),
+    ).filter((key) =>
+      key.trim().toLowerCase().includes(searchKey),
+    );
+
+    return filteredCategories;
+  };
+
+  getFilteredDifficulty = (searchName: string) => {
+    const difficulty = DifficultyValues;
+    const searchKey = searchName.trim().toLowerCase();
+
+    if (!difficulty) return [];
+
+    const filteredDifficulty = difficulty.filter((diff) =>
+      diff.includes(searchKey),
+    );
+
+    return filteredDifficulty;
   };
 
   addProblem = async (item: Problem) => {
