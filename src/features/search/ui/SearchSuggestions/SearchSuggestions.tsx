@@ -1,4 +1,5 @@
 import {
+  ProblemDifficulty,
   problemStore,
   ProblemSuggestion,
 } from "@entities";
@@ -7,7 +8,7 @@ import { SuggestionGroup } from "@ui";
 interface SearchSuggestionsProps {
   value: string;
   onTitleTagClick?: (value: string) => void;
-  onDifficultyTagClick?: (value: string) => void;
+  onDifficultyTagClick?: (value: ProblemDifficulty) => void;
   onCategoryTagClick?: (value: string) => void;
 }
 
@@ -19,15 +20,16 @@ export const SearchSuggestions: React.FC<
   onCategoryTagClick,
   onDifficultyTagClick,
 }) => {
-
-    const filteredCategory = problemStore.getFilteredCategories(value);
-    const filteredDifficulty = problemStore.getFilteredDifficulty(value);
+    const filteredCategory =
+      problemStore.getFilteredCategories(value);
+    const filteredDifficulty =
+      problemStore.getFilteredDifficulty(value);
 
     if (value === "") return null;
 
     return (
       <SuggestionGroup>
-        <ProblemSuggestion 
+        <ProblemSuggestion
           title="Title"
           tags={value}
           onTagClick={onTitleTagClick}
@@ -35,7 +37,9 @@ export const SearchSuggestions: React.FC<
         <ProblemSuggestion
           title="Difficulty"
           tags={filteredDifficulty}
-          onTagClick={onDifficultyTagClick}
+          onTagClick={
+            onDifficultyTagClick as (v: string) => void
+          }
         />
         <ProblemSuggestion
           title="Categories"

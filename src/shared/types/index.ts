@@ -4,6 +4,7 @@ export type {
   ProblemTests,
   ProblemSolution,
   ProblemDescription,
+  ProblemDifficulty,
   PistonRuntimesResponse,
   PistonExecuteRequest,
   PistonRuntime,
