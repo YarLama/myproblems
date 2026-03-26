@@ -1,76 +1,88 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import { SearchInput } from "../SearchInput/SearchInput";
 import { SearchSuggestions } from "../SearchSuggestions/SearchSuggestions";
 import { ProblemDifficulty } from "@types";
 import { problemFilterStore } from "@entities";
+import { observer } from "mobx-react-lite";
 
-export const Search = () => {
+export const Search = observer(() => {
   const [inputValue, setInputValue] = useState<string>("");
+  const [isSuggestionVisible, setIsSuggestionVisible] =
+    useState<boolean>(false);
   const searchContainerRef = useRef<HTMLDivElement>(null);
-  const { setTitle, toogleCategory, toogleDifficulty } =
-    problemFilterStore;
+  const {
+    setTitle,
+    toogleCategory,
+    toogleDifficulty,
+    isFilterEmpty,
+    filterCount,
+  } = problemFilterStore;
 
   const handleInputChange = (value: string) => {
     setInputValue(value);
   };
 
+  const reset = () => {
+    setIsSuggestionVisible(false);
+    setInputValue("");
+  };
+
   const handleTitleSuggestionSelect = (title: string) => {
     setTitle(title);
-    setInputValue("");
+    reset();
   };
 
   const handleCategorySuggestionSelect = (
     category: string,
   ) => {
     toogleCategory(category);
-    setInputValue("");
+    reset();
   };
   const handleDifficultySuggestionSelect = (
     difficulty: ProblemDifficulty,
   ) => {
     toogleDifficulty(difficulty);
-    setInputValue("");
+    reset();
   };
-  useEffect(() => {
-    const handleClickOutside = (e: MouseEvent) => {
-      if (
-        searchContainerRef.current &&
-        !searchContainerRef.current?.contains(
-          e.target as Node,
-        )
-      ) {
-        setInputValue("");
-      }
-    };
 
-    document.addEventListener(
-      "mousedown",
-      handleClickOutside,
-    );
-
-    return () =>
-      document.removeEventListener(
-        "mousedown",
-        handleClickOutside,
-      );
-  }, []);
+  const handleSearchBlur = (e: React.FocusEvent) => {
+    if (
+      e.relatedTarget &&
+      e.currentTarget.contains(e.relatedTarget as Node)
+    ) {
+      return;
+    }
+    reset();
+  };
+  const handleSearchFocus = () => {
+    setIsSuggestionVisible(true);
+  };
 
   return (
     <div
       className="relative w-full max-w-md"
       ref={searchContainerRef}
+      onBlur={handleSearchBlur}
     >
       <SearchInput
         value={inputValue}
         onInputChange={handleInputChange}
-        placeholder="Test search..."
+        placeholder={
+          isFilterEmpty
+            ? "Test search..."
+            : `Apply (${filterCount}) filters. Click for show or continue search`
+        }
+        onFocus={handleSearchFocus}
       />
       <SearchSuggestions
         value={inputValue}
+        visible={isSuggestionVisible}
         onTitleTagClick={handleTitleSuggestionSelect}
-        onDifficultyTagClick={handleDifficultySuggestionSelect}
+        onDifficultyTagClick={
+          handleDifficultySuggestionSelect
+        }
         onCategoryTagClick={handleCategorySuggestionSelect}
       />
     </div>
   );
-};
+});

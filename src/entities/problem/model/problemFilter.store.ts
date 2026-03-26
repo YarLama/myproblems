@@ -58,6 +58,16 @@ class ProblemFilter {
     };
   };
 
+  get filterCount(): number {
+    const titleCount = this.filter.title !== "" ? 1 : 0;
+    const categoryCount = this.filter.categories.length;
+    const difficultyCount = this.filter.difficulty.length;
+    const count =
+      titleCount + categoryCount + difficultyCount;
+
+    return count;
+  }
+
   get filteredProblems(): Problem[] {
     const { data } = problemStore.problemList;
 
@@ -66,7 +76,7 @@ class ProblemFilter {
     const filteredProblems = data.filter((problem) => {
       const matchTitle = problem.title
         .toLowerCase()
-        .includes(this.filter.title);
+        .includes(this.filter.title.toLowerCase());
 
       const matchCategories =
         this.filter.categories.length === 0 ||

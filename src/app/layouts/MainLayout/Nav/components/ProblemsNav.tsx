@@ -17,8 +17,10 @@ export const ProblemsNav = () => {
         <MenuButton />
         <IconButton icon="add" onClick={handleAddClick} />
       </div>
-      <div className="flex-1 max-w-md mx-4">
-        <Search />
+      <div className="flex-1 max-w-md mx-4 flex items-center gap-2">
+        <div className="grow">
+          <Search />
+        </div>
       </div>
       <div className="flex space-x-2">
         <IconButton icon="shuffle" />
