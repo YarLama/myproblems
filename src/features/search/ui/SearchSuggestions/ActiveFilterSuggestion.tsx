@@ -19,11 +19,13 @@ export const ActiveFilterSuggestions = observer(() => {
   const handleTitleTagClick = () => {
     setTitle("");
   };
-  const handleCategoryTagClick = (v: string) => { 
+  const handleCategoryTagClick = (v: string) => {
     toogleCategory(v);
   };
-  const handleDifficultyTagClick = (v: ProblemDifficulty) => { 
-    toogleDifficulty(v)
+  const handleDifficultyTagClick = (
+    v: ProblemDifficulty,
+  ) => {
+    toogleDifficulty(v);
   };
 
   return (
@@ -32,21 +34,28 @@ export const ActiveFilterSuggestions = observer(() => {
         <SuggestionTag
           tagText={titleTag}
           onClick={handleTitleTagClick}
+          color="indigo"
         />
       )}
-      {difficultyTags.map(diff => {
-        return <SuggestionTag 
-          key={`diff-${diff}`}
-          tagText={diff}
-          onClick={() => handleDifficultyTagClick(diff)}
-        />
+      {difficultyTags.map((diff) => {
+        return (
+          <SuggestionTag
+            key={`diff-${diff}`}
+            tagText={diff}
+            onClick={() => handleDifficultyTagClick(diff)}
+            color="amber"
+          />
+        );
       })}
-      {categoryTags.map(cat => {
-        return <SuggestionTag 
-          key={`cat-${cat}`}
-          tagText={cat}
-          onClick={() => handleCategoryTagClick(cat)}
-        />
+      {categoryTags.map((cat) => {
+        return (
+          <SuggestionTag
+            key={`cat-${cat}`}
+            tagText={cat}
+            onClick={() => handleCategoryTagClick(cat)}
+            color="emerald"
+          />
+        );
       })}
     </SuggestionCategory>
   );
