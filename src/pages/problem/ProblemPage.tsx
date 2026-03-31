@@ -124,7 +124,7 @@ export const ProblemPage = observer(() => {
       </div>
       <div className="flex justify-center p-4">
         <EditableTest
-          label="Тесты"
+          label="Примеры"
           tests={currentProblem.tests}
           onChange={(value) => saveData("tests", value)}
         />

@@ -2,6 +2,12 @@ import { ProblemTests } from "@entities";
 import { EditControls } from "@ui";
 import { useEffect, useState } from "react";
 
+const baseTdClasses = "w-full bg-white p-2";
+const errorClasses =
+  "border-red-500 text-red-500 ring-1 ring-red-500 bg-red-50";
+const defaultClasses =
+  "border-gray-300 focus:border-blue-500";
+
 interface EditableTestProps {
   tests: ProblemTests;
   onChange: (newTests: ProblemTests) => void;
@@ -20,7 +26,10 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   label,
 }) => {
   const [rows, setRows] = useState<TestRow[]>([]);
-
+  const [errorId, setErrorId] = useState<{
+    id: string;
+    field: "input" | "output";
+  } | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 
   const addRow = () => {
@@ -32,6 +41,15 @@ export const EditableTest: React.FC<EditableTestProps> = ({
 
   const deleteRow = (id: string) => {
     setRows(rows.filter((row) => row.id !== id));
+  };
+
+  const hasError = (
+    id: string,
+    field: "input" | "output",
+  ): boolean => {
+    const errorCondition =
+      errorId?.id === id && errorId.field === field;
+    return errorCondition;
   };
 
   const updateRow = (
@@ -46,9 +64,22 @@ export const EditableTest: React.FC<EditableTestProps> = ({
           : row;
       }),
     );
+
+    try {
+      if (value.trim() !== "") {
+        JSON.parse(value);
+      }
+
+      if (hasError(id, field)) {
+        setErrorId(null);
+      }
+    } catch {
+      setErrorId({ id, field });
+    }
   };
 
   const saveChanges = () => {
+    setErrorId(null);
     try {
       const newTests: ProblemTests = {
         input: rows.map((row) => JSON.parse(row.input)),
@@ -114,7 +145,13 @@ export const EditableTest: React.FC<EditableTestProps> = ({
                   <td className="w-1/2">
                     <input
                       value={row.input}
-                      className="w-full bg-white p-2"
+                      className={`
+                        ${baseTdClasses} 
+                        ${hasError(row.id, "input")
+                          ? errorClasses
+                          : defaultClasses
+                        }
+                      `}
                       onChange={(e) =>
                         updateRow(
                           row.id,
@@ -131,7 +168,13 @@ export const EditableTest: React.FC<EditableTestProps> = ({
                   <td className="w-1/2">
                     <input
                       value={row.output}
-                      className="w-full bg-white p-2"
+                      className={`
+                        ${baseTdClasses} 
+                        ${hasError(row.id, "output")
+                          ? errorClasses
+                          : defaultClasses
+                        }
+                      `}
                       onChange={(e) =>
                         updateRow(
                           row.id,
@@ -166,13 +209,13 @@ export const EditableTest: React.FC<EditableTestProps> = ({
       </table>
       <div className="flex gap-2 justify-center">
         {isEditing && <button onClick={addRow}>+</button>}
-          <EditControls
-            isEditing={isEditing}
-            onToggle={setIsEditing}
-            onEdit={handleEditClick}
-            onSave={saveChanges}
-            onCancel={handleCancel}
-          />
+        <EditControls
+          isEditing={isEditing}
+          onToggle={setIsEditing}
+          onEdit={handleEditClick}
+          onSave={saveChanges}
+          onCancel={handleCancel}
+        />
       </div>
     </div>
   );
