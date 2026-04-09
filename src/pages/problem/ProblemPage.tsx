@@ -20,7 +20,7 @@ export const ProblemPage = observer(() => {
   const navigate = useRef(useNavigate()).current;
   const { currentProblem, setCurrentProblem, editProblem } =
     problemStore;
-  const { currentLanguage, code } = problemEditorStore;
+  const { code } = problemEditorStore;
   const [output, setOutput] = useState<string>("");
   const { mutate: execute, isPending: isExecuting } =
     useExecuteCode({
@@ -55,11 +55,7 @@ export const ProblemPage = observer(() => {
 
   const handleCheckClick = async () => {
     if (currentProblem && code.trim()) {
-      execute({
-        language: currentLanguage,
-        version: "*",
-        files: [{ content: code }],
-      });
+      execute(code);
     }
   };
 
