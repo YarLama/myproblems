@@ -1,54 +1,50 @@
-# React + TypeScript + Vite
+# MyProblems 🚀
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**MyProblems** — это персональный трекер и интерактивная среда для решения задач по программированию. Приложение позволяет не только вести базу своих задач, но и писать, тестировать и запускать код прямо в браузере.
 
-Currently, two official plugins are available:
+## ✨ Основные возможности
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- **Управление базой задач**: Создание, редактирование и систематизация задач. Для каждой задачи можно указать заголовок, детальное описание, категорию и уровень сложности.
+- **Интерактивный редактор**: Полноценная поддержка написания кода с подсветкой синтаксиса (на базе Monaco/Ace Editor).
+- **Запуск кода в реальном времени**: Интеграция с Piston API позволяет выполнять код на различных языках программирования и мгновенно получать результат.
+- **Умный поиск и фильтрация**: Быстрый поиск по задачам и удобная навигация с помощью фильтров по категориям и сложности.
+- **Гибкое хранение данных**: Поддержка локального хранилища и возможность работы с файлами напрямую через File System Access API.
 
-## Expanding the ESLint configuration
+## 🛠 Технологический стек
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+- **Ядро**: [React 19](https://react.dev/) + [TypeScript](https://www.typescriptlang.org/)
+- **Сборка**: [Vite](https://vitejs.dev/)
+- **Управление состоянием**: [MobX](https://mobx.js.org/)
+- **Стилизация**: [Tailwind CSS](https://tailwindcss.com/)
+- **Выполнение кода**: [Piston API](https://piston.sh/)
+- **Редакторы**: Monaco Editor / React Ace
 
-```js
-export default tseslint.config({
-  extends: [
-    // Remove ...tseslint.configs.recommended and replace with this
-    ...tseslint.configs.recommendedTypeChecked,
-    // Alternatively, use this for stricter rules
-    ...tseslint.configs.strictTypeChecked,
-    // Optionally, add this for stylistic rules
-    ...tseslint.configs.stylisticTypeChecked,
-  ],
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+## 🚀 Быстрый старт
 
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
+1. **Клонируйте репозиторий:**
 
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
+   ```bash
+   git clone <url-вашего-репозитория>
+   cd myproblems
+   ```
 
-export default tseslint.config({
-  plugins: {
-    // Add the react-x and react-dom plugins
-    'react-x': reactX,
-    'react-dom': reactDom,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended typescript rules
-    ...reactX.configs['recommended-typescript'].rules,
-    ...reactDom.configs.recommended.rules,
-  },
-})
-```
+2. **Установите зависимости:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Запустите проект в режиме разработки:**
+   ```bash
+   npm run dev
+   ```
+
+## 📂 Структура проекта
+
+Проект организован по принципам модульности (близко к FSD):
+
+- `src/app` — глобальные настройки, роутинг и макеты.
+- `src/pages` — основные страницы приложения.
+- `src/features` — функциональные модули (поиск, редактор, уведомления).
+- `src/entities` — бизнес-сущности и их логика (задачи, файлы, рантайм).
+- `src/shared` — переиспользуемые UI-компоненты, утилиты и константы.
