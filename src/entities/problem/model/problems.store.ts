@@ -132,6 +132,34 @@ class ProblemStore {
     return filteredDifficulty;
   };
 
+  importProblems = async (newList: ProblemList) => {
+    this.isEditing = true;
+    try {
+      await Promise.all(
+        newList.data.map(problem => this.db.addProblem(problem))
+      );
+
+      const allCategories = new Set<string>();
+      newList.data.forEach(p => {
+        p.category?.forEach(cat => allCategories.add(cat))
+      });
+
+      runInAction(() => {
+        this.problemList = { ...newList };
+        problemCategoriesStore.updateCategories([], Array.from(allCategories));
+        this.isInitialized = true;       
+      })
+    } catch(e) {
+      runInAction(() => {
+        this.error = e instanceof Error ? e.message : "Import Problems Error";
+      })
+    } finally {
+      runInAction(() => {
+        this.isEditing = false;
+      })
+    }
+  }
+
   addProblem = async (item: Problem) => {
     this.isEditing = true;
 
