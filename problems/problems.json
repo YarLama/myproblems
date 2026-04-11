@@ -1,0 +1,29 @@
+{
+  "version": 1,
+  "format": "list",
+  "data": [
+    {
+      "id": "3ec684e6-534b-4369-b1f1-293807c27318",
+      "title": "sum two numbers",
+      "description": {
+        "en": "",
+        "ru": "Нужно создать функцию, которая складывает 2 числа"
+      },
+      "difficulty": "easy",
+      "category": [],
+      "solution": {
+        "javascript": "function sum(a, b) {\n    return a + b;\n}\n\nconsole.log(sum(1,4));\nconsole.log(sum(5,2));"
+      },
+      "tests": {
+        "input": [
+          "sum(1,4)",
+          "sum(5,2)"
+        ],
+        "output": [
+          5,
+          7
+        ]
+      }
+    }
+  ]
+}
