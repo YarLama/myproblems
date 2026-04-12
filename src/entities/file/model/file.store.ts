@@ -35,6 +35,16 @@ class FileStore {
     }
   };
 
+  clear = async () => {
+    if (this.fileHandler) {
+      runInAction(() => {
+        this.fileHandler = null;
+        this.hasPermission = false;
+      });
+    }
+    this.db.clearFileHandle();
+  };
+
   checkPermissions = async () => {
     if (!this.fileHandler) {
       runInAction(() => (this.hasPermission = false));
