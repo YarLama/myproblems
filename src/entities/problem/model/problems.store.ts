@@ -89,6 +89,12 @@ class ProblemStore {
     return this.problemList.data[currentIndex + 1].id;
   };
 
+  getRandomProblemId = ():string => {
+    const length = this.problemList.data.length;
+    const randomIndex = Math.floor(Math.random() * length);
+    return this.problemList.data[randomIndex].id;
+  }
+
   getProblemTitle = (currentId: string): string => {
     const currentIndex = this.problemList.data.findIndex(
       (el) => el.id === currentId,

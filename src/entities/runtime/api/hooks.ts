@@ -27,6 +27,7 @@ export const useExecuteCode = (options: {
 }) => {
   return useMutation({
     mutationFn: (code: string) => localExecuteAdapter(code),
+    networkMode: 'always',
     onSuccess: (data) => {
       options.onSuccess?.(data);
     },

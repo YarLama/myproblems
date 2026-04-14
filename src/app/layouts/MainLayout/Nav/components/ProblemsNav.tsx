@@ -1,4 +1,5 @@
 import { routePath } from "@constants/routePaths";
+import { problemStore } from "@entities";
 import { MenuButton, Search } from "@features";
 import { IconButton } from "@ui";
 import clsx from "clsx";
@@ -6,9 +7,14 @@ import { useNavigate } from "react-router";
 
 export const ProblemsNav = () => {
   const navigate = useNavigate();
+  const { getRandomProblemId } = problemStore;
 
   const handleAddClick = () => {
     navigate(routePath.problems.add);
+  };
+
+  const handleShuffleClick = () => {
+    navigate(routePath.problems.byId(getRandomProblemId()));
   };
 
   return (
@@ -23,7 +29,7 @@ export const ProblemsNav = () => {
         </div>
       </div>
       <div className="flex space-x-2">
-        <IconButton icon="shuffle" />
+        <IconButton icon="shuffle" onClick={handleShuffleClick}/>
       </div>
     </>
   );

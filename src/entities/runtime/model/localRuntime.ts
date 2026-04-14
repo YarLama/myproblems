@@ -24,7 +24,7 @@ export const localRuntime = {
         clearTimeout(timeoutId);
         worker.terminate();
         URL.revokeObjectURL(workerUrl);
-      }
+      };
 
       worker.onmessage = (e) => {
         if (e.data.type === "result") {
@@ -39,24 +39,24 @@ export const localRuntime = {
       };
 
       worker.onerror = (e) => {
-          const endTime = performance.now();
-          cleanup();
-          res({
-            stdout: "",
-            stderr: `Worker error: ${e.message}`,
-            executionTime: Math.round(endTime - startTime),
-          });
+        const endTime = performance.now();
+        cleanup();
+        res({
+          stdout: "",
+          stderr: `Worker error: ${e.message}`,
+          executionTime: Math.round(endTime - startTime),
+        });
       };
 
       timeoutId = window.setTimeout(() => {
-          const endTime = performance.now();
-          cleanup();
-          res({
-            stdout: "",
-            stderr: `Error: Execution timeout after ${timeoutMs}ms`,
-            executionTime: Math.round(endTime - startTime),
-          });
-      }, timeoutMs)
+        const endTime = performance.now();
+        cleanup();
+        res({
+          stdout: "",
+          stderr: `Error: Execution timeout after ${timeoutMs}ms`,
+          executionTime: Math.round(endTime - startTime),
+        });
+      }, timeoutMs);
 
       worker.postMessage(code);
     });
