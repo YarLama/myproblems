@@ -23,7 +23,7 @@ export const ProblemNav = observer(() => {
     if (currentProblem) {
       if (window.confirm('Delete problem?')) {
         problemStore.deleteProblem(currentProblem.id).then(() => {
-          navigate("/problems");
+          navigate(routePath.problems.root);
         });
       }
     }

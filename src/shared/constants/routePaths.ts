@@ -7,7 +7,7 @@ export const routePath = {
   problems: {
     root: PROBLEMS_BASE,
     byIdTemplate: `${PROBLEMS_BASE}/:id`,
-    byId: (id: string) => `${PROBLEMS_BASE}/${id}`,
+    byId: (id: string) => `${PROBLEMS_BASE}/${id.trim()}`,
     add: `${PROBLEMS_BASE}/${ADD_BASE}`
   },
   notFound: {

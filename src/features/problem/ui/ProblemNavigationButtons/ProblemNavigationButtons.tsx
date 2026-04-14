@@ -17,7 +17,7 @@ export const ProblemNavigationButtons = observer(() => {
 
   const handleNavigateClick = (id: string) => {
     if (id) {
-      navigate(routePath.problems.byId(id.trim()));
+      navigate(routePath.problems.byId(id));
     }
   };
 

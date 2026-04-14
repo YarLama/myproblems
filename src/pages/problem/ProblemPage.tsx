@@ -13,6 +13,7 @@ import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Loader } from "@ui";
+import { routePath } from "@constants/routePaths";
 
 export const ProblemPage = observer(() => {
   const db = useRef(createLocalDB());
@@ -63,7 +64,7 @@ export const ProblemPage = observer(() => {
   const handleDeleteClick = async () => {
     if (currentProblem) {
       await problemStore.deleteProblem(currentProblem.id);
-      navigate("/problems");
+      navigate(routePath.problems.root);
     }
   };
 
@@ -75,7 +76,7 @@ export const ProblemPage = observer(() => {
           setCurrentProblem(res);
           setIsLoading(false);
         } else {
-          navigate(`/problems`);
+          navigate(routePath.problems.root);
         }
       });
     }

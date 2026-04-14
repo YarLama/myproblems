@@ -1,3 +1,4 @@
+import { routePath } from "@constants/routePaths";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
 
@@ -30,7 +31,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
 
   const handleClick = () => {
     if (!clickable) return;
-    navigate(`/problems/${id}`);
+    navigate(routePath.problems.byId(id));
   };
 
   return (
