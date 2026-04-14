@@ -5,3 +5,4 @@ export { TaskCard } from "./TaskCard/TaskCard.tsx";
 export { LanguageSelect } from "./LanguageSelect/LanguageSelect.tsx";
 export * from "./Suggestion/index.ts";
 export { ProgrammingLanguageSelect } from "./ProgrammingLanguageSelect/ProgrammingLanguageSelect.tsx";
+export { Loader } from "./Loader/Loader.tsx";

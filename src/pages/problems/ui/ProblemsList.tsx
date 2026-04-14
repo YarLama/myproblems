@@ -2,7 +2,7 @@ import {
   problemFilterStore,
   problemStore,
 } from "@entities";
-import { TaskCard } from "@ui";
+import { Loader, TaskCard } from "@ui";
 import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import { ProblemsOnboarding } from "./ProblemsOnboarding";
@@ -12,7 +12,7 @@ export const ProblemList = observer(() => {
   const { filteredProblems } = problemFilterStore;
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <Loader />;
   }
 
   if (filteredProblems.length === 0) {

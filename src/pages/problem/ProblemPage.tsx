@@ -12,6 +12,7 @@ import { problemStore } from "@entities";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
+import { Loader } from "@ui";
 
 export const ProblemPage = observer(() => {
   const db = useRef(createLocalDB());
@@ -81,7 +82,7 @@ export const ProblemPage = observer(() => {
   }, [id, navigate, db, setCurrentProblem]);
 
   if (!currentProblem || isLoading)
-    return <div>Loader...</div>;
+    return <Loader />;
 
   return (
     <div>
