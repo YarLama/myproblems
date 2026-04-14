@@ -49,11 +49,6 @@ export const ProblemsOnboarding = () => {
   return (
     <div className={containerClasses}>
       <h1 className={titleClasses}>Welcome!</h1>
-      {isPending && (
-        <div className="mb-6 flex justify-center">
-          <Loader />
-        </div>
-      )}
       {error && (
         <div className={errorClasses}>
           Ошибка: {error.message}
@@ -76,7 +71,13 @@ export const ProblemsOnboarding = () => {
           onClick={handleImport}
           className={buttonClasses}
         >
-          Use author Problem List
+          {isPending ? (
+            <div className="flex justify-center">
+              <Loader />
+            </div>
+          ) : (
+            "Use author Problem List"
+          )}
         </button>
       </div>
     </div>

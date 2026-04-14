@@ -12,11 +12,15 @@ export const ProblemList = observer(() => {
   const { filteredProblems } = problemFilterStore;
 
   if (isLoading) {
-    return <Loader />;
+    return (
+      <div className="mb-6 flex justify-center">
+        <Loader />
+      </div>
+    );
   }
 
   if (filteredProblems.length === 0) {
-    return <ProblemsOnboarding />
+    return <ProblemsOnboarding />;
   }
 
   return (
