@@ -25,7 +25,7 @@ class FileStore {
     try {
       const fileHandler = await this.db.getFileHandle();
       if (fileHandler) {
-        this.fileHandler = fileHandler;
+        runInAction(() => (this.fileHandler = fileHandler));
       }
       await this.checkPermissions();
     } catch (e) {

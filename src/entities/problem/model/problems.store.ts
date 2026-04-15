@@ -89,11 +89,15 @@ class ProblemStore {
     return this.problemList.data[currentIndex + 1].id;
   };
 
-  getRandomProblemId = ():string => {
+  getRandomProblemId = (): string | null => {
     const length = this.problemList.data.length;
-    const randomIndex = Math.floor(Math.random() * length);
-    return this.problemList.data[randomIndex].id;
-  }
+    if (length > 0) {
+      const randomIndex = Math.floor(
+        Math.random() * length,
+      );
+      return this.problemList.data[randomIndex].id;
+    } else return null;
+  };
 
   getProblemTitle = (currentId: string): string => {
     const currentIndex = this.problemList.data.findIndex(
@@ -138,33 +142,51 @@ class ProblemStore {
     return filteredDifficulty;
   };
 
+  get isProblemsEmpty(): boolean {
+    const memoryCondition =
+      this.problemList.data.length === 0;
+    const localCondition =
+      this.db.getAllProblems.length === 0;
+    return memoryCondition && localCondition;
+  };
+
   importProblems = async (newList: ProblemList) => {
     this.isEditing = true;
     try {
       await Promise.all(
-        newList.data.map(problem => this.db.addProblem(problem))
+        newList.data.map((problem) =>
+          this.db.addProblem(problem),
+        ),
       );
 
       const allCategories = new Set<string>();
-      newList.data.forEach(p => {
-        p.category?.forEach(cat => allCategories.add(cat))
+      newList.data.forEach((p) => {
+        p.category?.forEach((cat) =>
+          allCategories.add(cat),
+        );
       });
 
       runInAction(() => {
         this.problemList = { ...newList };
-        problemCategoriesStore.updateCategories([], Array.from(allCategories));
-        this.isInitialized = true;       
-      })
-    } catch(e) {
+        problemCategoriesStore.updateCategories(
+          [],
+          Array.from(allCategories),
+        );
+        this.isInitialized = true;
+      });
+    } catch (e) {
       runInAction(() => {
-        this.error = e instanceof Error ? e.message : "Import Problems Error";
-      })
+        this.error =
+          e instanceof Error
+            ? e.message
+            : "Import Problems Error";
+      });
     } finally {
       runInAction(() => {
         this.isEditing = false;
-      })
+      });
     }
-  }
+  };
 
   addProblem = async (item: Problem) => {
     this.isEditing = true;
