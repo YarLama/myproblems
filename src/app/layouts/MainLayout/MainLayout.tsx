@@ -6,7 +6,7 @@ export const MainLayout = () => {
   return (
     <div className="flex flex-col">
       <Nav />
-      <main className="pt-[var(--header-height)] bg-primary text-fonts min-h-screen">
+      <main className="pt-[var(--header-height)] m:pt-[calc(var(--header-height)*1.5)] bg-primary text-fonts min-h-screen">
         <Outlet />
       </main>
       <FileAccessNotification />

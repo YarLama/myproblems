@@ -37,7 +37,7 @@ export const ProblemList = observer(() => {
             id={el.id}
             key={el.id}
             title={el.title}
-            description={el.description.ru}
+            difficulty={el.difficulty}
             tags={
               el.category.length > 0
                 ? el.category

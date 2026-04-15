@@ -1,4 +1,5 @@
 import { routePath } from "@constants/routePaths";
+import { ProblemDifficulty } from "@types";
 import clsx from "clsx";
 import { useNavigate } from "react-router";
 
@@ -7,6 +8,7 @@ interface TaskCardProps {
   title?: string;
   description?: string;
   size?: "sm" | "md" | "lg";
+  difficulty?: ProblemDifficulty;
   tags?: string[];
   clickable?: boolean;
 }
@@ -24,6 +26,7 @@ export const TaskCard: React.FC<TaskCardProps> = ({
   title,
   description,
   size = "md",
+  difficulty,
   tags,
   clickable = true,
 }) => {
@@ -44,23 +47,46 @@ export const TaskCard: React.FC<TaskCardProps> = ({
           "flex",
           "flex-col",
           "p-2",
+          "overflow-hidden",
         ],
-        ["w-48", "m-2", "cursor-pointer"],
+        ["w-48", "min-w-0", "m-2", "cursor-pointer"],
       ])}
       data-id={id}
       onClick={handleClick}
     >
-      {title && <h3>{title}</h3>}
+      {title && (
+        <h3 className="truncate max-w-full font-medium">
+          {title}
+        </h3>
+      )}
       {description && (
         <p className={clsx(["truncate"])}>{description}</p>
       )}
-      {tags?.length && (
-        <div>
-          {tags.map((tag) => (
-            <span key={tag}>{tag}</span>
-          ))}
+      {difficulty && (
+        <div className="flex flex-row flex-wrap gap-1 mt-2">
+          <span className="block truncate max-w-full px-1 rounded bg-gray-900 text-xs opacity-60">
+            {difficulty}
+          </span>
         </div>
       )}
+      <div className="flex flex-row flex-wrap gap-1 mt-2">
+        {tags?.length ? (
+          <>
+            {tags.map((tag) => (
+              <span
+                key={tag}
+                className="block truncate max-w-full px-1 rounded bg-gray-700 text-xs opacity-60"
+              >
+                {tag}
+              </span>
+            ))}
+          </>
+        ) : (
+          <span className="block truncate max-w-full px-1 rounded bg-gray-700 text-xs opacity-60">
+            no tags
+          </span>
+        )}
+      </div>
     </article>
   );
 };
