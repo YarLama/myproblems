@@ -7,18 +7,10 @@ import { routePath } from "@constants/routePaths";
 import { SlideMenu } from "@features";
 
 const navClasses = clsx([
-  "fixed",
-  "top-0",
-  "inset-x-0",
-  "z-40",
-  "h-[var(--header-height)]",
-  "flex",
-  "items-center",
-  "justify-between",
-  "p-4",
-  "bg-gray-600",
-  "border-b",
-  "border-b-gray-700",
+  "fixed top-0 inset-x-0 z-40 h-[var(--header-height)]",
+  "bg-gray-600 border-b border-b-gray-700",
+  "grid grid-cols-[1fr_auto_1fr] items-center",
+  "m:grid-cols-2 m:h-auto m:py-2",
 ]);
 
 export const Nav = () => {
@@ -28,15 +20,17 @@ export const Nav = () => {
     if (path === routePath.problems.root)
       return <ProblemsNav />;
     if (path === routePath.problems.add)
-      return <DefaultNav title="Добавить новую задачу" />;
+      return <DefaultNav title="Add new Problem" />;
     if (matchPath({ path }, path)) return <ProblemNav />;
     return <DefaultNav title="" />;
   };
 
   return (
-    <nav className={navClasses}>
-      {getNavContent(pathname)}
+    <>
+      <nav className={navClasses}>
+        {getNavContent(pathname)}
+      </nav>
       <SlideMenu />
-    </nav>
+    </>
   );
 };

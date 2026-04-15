@@ -6,9 +6,9 @@ import {
 } from "@features";
 import { problemStore } from "@entities";
 import { IconButton } from "@ui";
-import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router";
+import { NavLayout } from "./NavLayout";
 
 export const ProblemNav = observer(() => {
   const navigate = useNavigate();
@@ -21,13 +21,15 @@ export const ProblemNav = observer(() => {
 
   const handleDeleteClick = () => {
     if (currentProblem) {
-      if (window.confirm('Delete problem?')) {
-        problemStore.deleteProblem(currentProblem.id).then(() => {
-          navigate(routePath.problems.root);
-        });
+      if (window.confirm("Delete problem?")) {
+        problemStore
+          .deleteProblem(currentProblem.id)
+          .then(() => {
+            navigate(routePath.problems.root);
+          });
       }
     }
-  }
+  };
 
   const handleEditTitle = async (value: string) => {
     if (value && currentProblem) {
@@ -41,15 +43,23 @@ export const ProblemNav = observer(() => {
   };
 
   return (
-    <>
-      <div className={clsx(["flex", "space-x-2"])}>
-        <MenuButton />
-        <IconButton icon="left" onClick={handleBackClick} />
-        <IconButton icon="delete" onClick={handleDeleteClick} />
-      </div>
-      {currentProblem ? (
+    <NavLayout
+      left={
         <>
-          <div className="flex-1 max-w-md mx-4">
+          <MenuButton />
+          <IconButton
+            icon="left"
+            onClick={handleBackClick}
+          />
+          <IconButton
+            icon="delete"
+            onClick={handleDeleteClick}
+          />
+        </>
+      }
+      center={
+        currentProblem && (
+          <>
             <EditableText
               key={currentProblem.id}
               value={
@@ -57,10 +67,10 @@ export const ProblemNav = observer(() => {
               }
               onSave={handleEditTitle}
             />
-          </div>
-          <ProblemNavigationButtons />
-        </>
-      ) : null}
-    </>
+          </>
+        )
+      }
+      right={currentProblem && <ProblemNavigationButtons />}
+    />
   );
 });
