@@ -12,6 +12,7 @@
       "@model": ["./src/shared/model/index.ts"],
       "@api": ["./src/shared/api/index.ts"],
       "@constants/*": ["./src/shared/constants/*"],
+      "@utils/*": ["./src/shared/utils/*"],
       "@root/*": ["./*"]
     },
     "types": [

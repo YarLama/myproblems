@@ -1,6 +1,6 @@
 import { githubRawClient } from "@api";
-import { validateProblemList } from "@root/src/shared/verify";
 import { ProblemList } from "@types";
+import { validateProblemList } from "@utils/verify";
 
 export const fetchAndValidateProblems =
   async (): Promise<ProblemList> => {

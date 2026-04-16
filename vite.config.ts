@@ -55,6 +55,10 @@ export default defineConfig(({ mode }) => {
           __dirname,
           "./src/shared/constants",
         ),
+        "@utils": path.resolve(
+          __dirname,
+          "./src/shared/utils",
+        ),
         "@fonts": path.resolve(
           __dirname,
           "./src/shared/styles/fonts",

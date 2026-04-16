@@ -4,7 +4,7 @@ import {
   problemStore,
 } from "@entities";
 import { createLocalDB } from "@lib";
-import { validateProblemList } from "@root/src/shared/verify";
+import { validateProblemList } from "@utils/verify";
 import { makeAutoObservable, runInAction } from "mobx";
 
 class MenuStore {

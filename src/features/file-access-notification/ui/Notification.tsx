@@ -39,7 +39,7 @@ export const Notification = observer(() => {
         onClick={handleRestore}
         className="px-4 py-2 bg-amber-600 hover:bg-amber-700 text-white text-sm font-semibold rounded-md transition-colors"
       >
-        Confirm
+        Restore
       </button>
     </div>
   );
