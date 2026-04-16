@@ -42,7 +42,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
   };
 
   return (
-    <div className="flex items-center min-w-0 max-w-full">
+    <div className="flex items-center min-w-0">
       {label ? (
         <label
           className="block text-gray-700"
@@ -72,7 +72,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
           )}
         </div>
       ) : (
-        <div className="flex gap-2 items-center min-w-0">
+        <div className="flex gap-2 items-center min-w-0 max-w-sm">
           <span className="p-1 border-transparent border truncate max-w-full">
             {value}
           </span>

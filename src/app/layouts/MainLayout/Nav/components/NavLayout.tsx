@@ -1,3 +1,4 @@
+import clsx from "clsx";
 import { ReactNode } from "react";
 
 interface NavLayoutProps {
@@ -6,6 +7,23 @@ interface NavLayoutProps {
   right?: ReactNode | ReactNode[];
 }
 
+const leftClasses = clsx([
+  "flex items-center",
+  "px-4",
+  "gap-2 m:order-1",
+]);
+const centerClasses = clsx([
+  "flex justify-center items-center",
+  "m:max-w-3xs",
+  "mx-auto m:px-4 m:pt-1",
+  "m:order-3 m:col-span-2",
+]);
+const rightClasses = clsx([
+  "flex justify-end items-center",
+  "px-4",
+  "m:order-2",
+]);
+
 export const NavLayout: React.FC<NavLayoutProps> = ({
   left,
   center,
@@ -13,15 +31,9 @@ export const NavLayout: React.FC<NavLayoutProps> = ({
 }) => {
   return (
     <>
-      <div className="flex items-center gap-2 px-4 m:order-1">
-        {left}
-      </div>
-      <div className="flex justify-center items-center w-full mx-auto max-w-2xl m:max-w-md m:order-3 m:col-span-2 m:px-4 m:pt-1">
-        {center}
-      </div>
-      <div className="flex justify-end items-center px-4 m:order-2">
-        {right}
-      </div>
+      <div className={leftClasses}>{left}</div>
+      <div className={centerClasses}>{center}</div>
+      <div className={rightClasses}>{right}</div>
     </>
   );
 };
