@@ -17,7 +17,7 @@ export const CategoryViewList: React.FC<
       ))}
       {categories.length === 0 && (
         <p className="text-gray-500 text-sm">
-          Без категорий
+          No tags
         </p>
       )}
     </div>

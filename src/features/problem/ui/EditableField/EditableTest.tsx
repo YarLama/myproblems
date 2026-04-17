@@ -87,7 +87,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
       };
       onChange(newTests);
     } catch (e) {
-      console.log(
+      console.error(
         "EditableTest saveChanges error: ",
         (e as Error).message,
       );

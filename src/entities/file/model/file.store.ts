@@ -29,7 +29,7 @@ class FileStore {
       }
       await this.checkPermissions();
     } catch (e) {
-      console.log(e);
+      console.error(e);
     } finally {
       runInAction(() => (this.isLoading = false));
     }
@@ -76,7 +76,7 @@ class FileStore {
 
       return isGranted;
     } catch (e) {
-      console.log("requerstPermission error: ", e);
+      console.error("requerstPermission error: ", e);
       return false;
     }
   };
@@ -93,7 +93,7 @@ class FileStore {
 
         return handler;
       } catch (e) {
-        console.log("Open File error: ", e);
+        console.error("Open File error: ", e);
         return null;
       }
     };
@@ -107,7 +107,7 @@ class FileStore {
       await this.setupNewHandler(handler);
       await this.writeData(JSON.stringify(data, null, 2));
     } catch (e) {
-      console.log("Save As... error: ", e);
+      console.error("Save As... error: ", e);
     }
   };
 
@@ -142,7 +142,7 @@ class FileStore {
       await writable.write(data);
       await writable.close();
     } catch (e) {
-      console.log("Write data error: ", e);
+      console.error("Write data error: ", e);
     }
   };
 }

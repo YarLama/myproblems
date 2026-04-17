@@ -1,11 +1,5 @@
 import { routePath } from "@constants/routePaths";
-import {
-  Problem,
-  ProblemDescription,
-  ProblemSolution,
-  problemStore,
-  ProblemTests,
-} from "@entities";
+import { Problem, problemStore } from "@entities";
 import {
   EditableCategories,
   EditableCode,
@@ -22,19 +16,7 @@ export const NewProblemPage = observer(() => {
   const { currentProblem, setCurrentProblem, addProblem } =
     problemStore;
   const navigate = useNavigate();
-  const defaultTitle: string = "test title";
-  const defaultDescription: ProblemDescription = {
-    en: "",
-    ru: "Test ru description",
-  };
-  const defaultCategories: string[] = ["test"];
-  const defaultSolution: ProblemSolution = {
-    javascript: "test code text",
-  };
-  const defaultTests: ProblemTests = {
-    input: ["test"],
-    output: ["test"],
-  };
+  const defaultTitle: string = "New Problem";
 
   const handleConfirm = () => {
     if (currentProblem)
@@ -61,11 +43,11 @@ export const NewProblemPage = observer(() => {
     const defaultProblem: Problem = {
       id: "",
       title: defaultTitle,
-      description: defaultDescription,
+      description: { en: "", ru: "" },
       difficulty: "easy",
-      category: defaultCategories,
-      solution: defaultSolution,
-      tests: defaultTests,
+      category: [],
+      solution: {},
+      tests: { input: [], output: [] },
     };
     setCurrentProblem(defaultProblem);
   }, []);
