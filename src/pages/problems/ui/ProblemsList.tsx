@@ -6,10 +6,11 @@ import { Loader, TaskCard } from "@ui";
 import clsx from "clsx";
 import { observer } from "mobx-react-lite";
 import { ProblemsOnboarding } from "./ProblemsOnboarding";
+import { ProblemsEmpty } from "./ProblemsEmpty";
 
 export const ProblemList = observer(() => {
   const { isLoading } = problemStore;
-  const { filteredProblems } = problemFilterStore;
+  const { filteredProblems, isFilterEmpty } = problemFilterStore;
 
   if (isLoading) {
     return (
@@ -19,8 +20,12 @@ export const ProblemList = observer(() => {
     );
   }
 
-  if (filteredProblems.length === 0) {
+  if (filteredProblems.length === 0 && isFilterEmpty) {
     return <ProblemsOnboarding />;
+  }
+
+  if (filteredProblems.length === 0 && !isFilterEmpty) {
+    return <ProblemsEmpty />
   }
 
   return (
