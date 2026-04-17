@@ -86,7 +86,12 @@ export const ProblemPage = observer(() => {
     };
   }, [id]);
 
-  if (!currentProblem || isLoading) return <Loader />;
+  if (!currentProblem || isLoading)
+    return (
+      <div className="mb-6 flex justify-center">
+        <Loader />
+      </div>
+    );
 
   return (
     <div>
