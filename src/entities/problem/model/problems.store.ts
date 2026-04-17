@@ -148,7 +148,7 @@ class ProblemStore {
     const localCondition =
       this.db.getAllProblems.length === 0;
     return memoryCondition && localCondition;
-  };
+  }
 
   importProblems = async (newList: ProblemList) => {
     this.isEditing = true;
@@ -278,11 +278,9 @@ class ProblemStore {
   };
 
   setCurrentProblem = (problem: Problem | null) => {
-    if (problem) {
-      runInAction(() => {
-        this.currentProblem = problem;
-      });
-    }
+    runInAction(() => {
+      this.currentProblem = problem;
+    });
   };
 }
 

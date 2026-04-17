@@ -80,7 +80,11 @@ export const ProblemPage = observer(() => {
         }
       });
     }
-  }, [id, navigate, db, setCurrentProblem]);
+
+    return () => {
+      setCurrentProblem(null);
+    };
+  }, [id]);
 
   if (!currentProblem || isLoading) return <Loader />;
 

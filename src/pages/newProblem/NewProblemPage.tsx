@@ -37,6 +37,10 @@ export const NewProblemPage = observer(() => {
     };
 
     setCurrentProblem(newProblem);
+
+    return () => {
+      setCurrentProblem(null);
+    };
   };
 
   useEffect(() => {
@@ -50,6 +54,10 @@ export const NewProblemPage = observer(() => {
       tests: { input: [], output: [] },
     };
     setCurrentProblem(defaultProblem);
+
+    return () => {
+      setCurrentProblem(null);
+    };
   }, []);
 
   return (
