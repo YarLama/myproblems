@@ -11,7 +11,6 @@ const titleClasses = clsx(
 );
 
 export const ProblemsEmpty = () => {
-
   return (
     <div className={containerClasses}>
       <h1 className={titleClasses}>No problems match</h1>

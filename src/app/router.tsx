@@ -1,5 +1,9 @@
-import { createHashRouter } from "react-router";
-import { NewProblemPage, ProblemPage, ProblemsPage } from "@pages";
+import { createHashRouter, Navigate } from "react-router";
+import {
+  NewProblemPage,
+  ProblemPage,
+  ProblemsPage,
+} from "@pages";
 import { MainLayout, ProblemsLayout } from "@layouts";
 import { routePath } from "@constants/routePaths";
 
@@ -8,6 +12,12 @@ const routes = [
     path: routePath.root,
     element: <MainLayout />,
     children: [
+      {
+        index: true,
+        element: (
+          <Navigate to={routePath.problems.root} replace />
+        ),
+      },
       {
         path: routePath.problems.root,
         element: <ProblemsLayout />,
@@ -28,7 +38,9 @@ const routes = [
       },
       {
         path: routePath.notFound.root,
-        element: <div>404 Page</div>,
+        element: (
+          <Navigate to={routePath.problems.root} replace />
+        ),
       },
     ],
   },
