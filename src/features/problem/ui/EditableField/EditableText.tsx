@@ -52,11 +52,11 @@ export const EditableText: React.FC<EditableTextProps> = ({
         </label>
       ) : null}
       {isEditing ? (
-        <div className="flex gap-2 min-w-0">
+        <div className="flex gap-2 min-w-0 text-[var(--color-text)]">
           {isMultiline ? (
             <textarea
               id={inputId}
-              className="border p-1 flex-1 min-w-0"
+              className="border p-1 flex-1 min-w-0 bg-[var(--color-primary)]" 
               value={newValue}
               onChange={handleValueChange}
               autoFocus={isHaveEditControls}
@@ -64,7 +64,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
           ) : (
             <input
               id={inputId}
-              className="border p-1 flex-1 min-w-0"
+              className="border p-1 flex-1 min-w-0 bg-[var(--color-primary)]"
               value={newValue}
               onChange={handleValueChange}
               autoFocus={isHaveEditControls}
@@ -73,7 +73,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
         </div>
       ) : (
         <div className="flex gap-2 items-center min-w-0 max-w-sm">
-          <span className="p-1 border-transparent border truncate max-w-full">
+          <span className="p-1 text-[var(--color-text)] border-transparent border truncate max-w-full">
             {value}
           </span>
         </div>

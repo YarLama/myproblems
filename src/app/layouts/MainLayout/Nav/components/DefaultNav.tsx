@@ -28,7 +28,7 @@ export const DefaultNav: React.FC<DefaultNavProps> = ({
           />
         </>
       }
-      center={<div>{title}</div>}
+      center={<div className="text-[var(--color-text)]">{title}</div>}
     />
   );
 };
