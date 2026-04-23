@@ -1,12 +1,12 @@
 import { Problem } from "@entities";
-import { createLocalDB } from "@lib";
+import { localDB } from "@lib";
 import { makeAutoObservable, runInAction } from "mobx";
 
 class ProblemCategories {
   categories: Map<string, number> = new Map();
   isInitialized = false;
   isLoading = false;
-  private db = createLocalDB();
+  private db = localDB;
 
   constructor() {
     makeAutoObservable(this);

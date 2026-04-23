@@ -3,7 +3,7 @@ import {
   ProblemList,
   problemStore,
 } from "@entities";
-import { createLocalDB } from "@lib";
+import { localDB } from "@lib";
 import { validateProblemList } from "@utils/verify";
 import { makeAutoObservable, runInAction } from "mobx";
 
@@ -39,7 +39,6 @@ class MenuStore {
         const validateResult = validateProblemList(json);
 
         if (validateResult.isValid) {
-          const localDB = createLocalDB();
           await localDB.setProblemListInfo({
             version: json.version,
             format: json.format,

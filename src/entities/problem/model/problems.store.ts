@@ -1,6 +1,6 @@
 import { Problem, ProblemList } from "@types";
 import { makeAutoObservable, runInAction } from "mobx";
-import { createLocalDB } from "@lib";
+import { localDB } from "@lib";
 import { v4 } from "uuid";
 import { problemCategoriesStore } from "./problemCategories.store";
 import { DifficultyValues } from "@constants/difficulty";
@@ -16,7 +16,7 @@ class ProblemStore {
   isLoading = false;
   isEditing = false;
   error: string | null = null;
-  private db = createLocalDB();
+  private db = localDB;
 
   constructor() {
     makeAutoObservable(this);

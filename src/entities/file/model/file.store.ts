@@ -1,12 +1,12 @@
 import { ProblemList } from "@entities";
-import { createFileDB } from "@lib";
+import { fileDB } from "@lib";
 import { makeAutoObservable, runInAction } from "mobx";
 
 class FileStore {
   hasPermission: boolean = false;
   fileHandler: FileSystemFileHandle | null = null;
   isLoading: boolean = true;
-  private db = createFileDB();
+  private db = fileDB;
   private commonPickerOption: OpenFilePickerOptions &
     SaveFilePickerOptions = {
       types: [

@@ -7,16 +7,15 @@ import {
   EditableTest,
   problemEditorStore,
 } from "@features";
-import { createLocalDB } from "@lib";
 import { problemStore } from "@entities";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
 import { Loader } from "@ui";
 import { routePath } from "@constants/routePaths";
+import { localDB } from "@lib";
 
 export const ProblemPage = observer(() => {
-  const db = useRef(createLocalDB());
   const [isLoading, setIsLoading] = useState(true);
   const { id } = useParams();
   const navigate = useRef(useNavigate()).current;
@@ -70,7 +69,7 @@ export const ProblemPage = observer(() => {
 
   useEffect(() => {
     if (id) {
-      const data = db.current.getProblem(id);
+      const data = localDB.getProblem(id);
       data.then((res) => {
         if (res) {
           setCurrentProblem(res);
