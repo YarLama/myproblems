@@ -282,6 +282,15 @@ class ProblemStore {
       this.currentProblem = problem;
     });
   };
+
+  editProblemField = <K extends keyof Problem>(
+    field: K,
+    value: Problem[K],
+  ) => {
+    if (this.currentProblem) {
+      this.currentProblem[field] = value;
+    }
+  };
 }
 
 export const problemStore = new ProblemStore();

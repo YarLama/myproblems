@@ -1,4 +1,3 @@
-import { routePath } from "@constants/routePaths";
 import { Problem, problemStore } from "@entities";
 import {
   EditableCategories,
@@ -10,128 +9,97 @@ import {
 } from "@features";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
-import { useNavigate } from "react-router";
+
+const defaultProblem: Problem = {
+  id: "",
+  title: "New Problem",
+  description: { en: "", ru: "" },
+  difficulty: "easy",
+  category: [],
+  solution: {},
+  tests: { input: [], output: [] },
+};
 
 export const NewProblemPage = observer(() => {
-  const { currentProblem, setCurrentProblem, addProblem } =
-    problemStore;
-  const navigate = useNavigate();
-  const defaultTitle: string = "New Problem";
-
-  const handleConfirm = () => {
-    if (currentProblem)
-      addProblem(currentProblem).then((problem) => {
-        navigate(routePath.problems.byId(problem.id));
-        window.scrollTo(0, 0);
-      });
-  };
-
-  const saveData = <K extends keyof Problem>(
-    field: K,
-    value: Problem[K],
-  ) => {
-    if (!currentProblem) return;
-    const newProblem = {
-      ...currentProblem,
-      [field]: value,
-    };
-
-    setCurrentProblem(newProblem);
-
-    return () => {
-      setCurrentProblem(null);
-    };
-  };
+  const {
+    currentProblem,
+    setCurrentProblem,
+    editProblemField,
+  } = problemStore;
 
   useEffect(() => {
-    const defaultProblem: Problem = {
-      id: "",
-      title: defaultTitle,
-      description: { en: "", ru: "" },
-      difficulty: "easy",
-      category: [],
-      solution: {},
-      tests: { input: [], output: [] },
-    };
-    setCurrentProblem(defaultProblem);
+    setCurrentProblem({ ...defaultProblem });
 
     return () => {
       setCurrentProblem(null);
     };
   }, []);
 
+  console.log(currentProblem);
+
+  if (!currentProblem) return null;
+
   return (
-    currentProblem && (
-      <div>
-        <div className="flex justify-center p-4">
-          <EditableText
-            key={`add-title`}
-            label="title"
-            value={currentProblem.title}
-            onTextChange={(value) =>
-              saveData("title", value)
-            }
-            defaultEditingState={true}
-            isHaveEditControls={false}
-          />
-        </div>
-        <div className="flex justify-center p-4">
-          <EditableDescription
-            key={`add-description`}
-            label="Описание"
-            value={currentProblem.description}
-            onChange={(value) =>
-              saveData("description", value)
-            }
-            defaultEditingState={true}
-            isHaveEditControls={false}
-          />
-        </div>
-        <div>
-          <EditableDifficulty
-            value={currentProblem.difficulty}
-            onDifficultyChange={(value) =>
-              saveData("difficulty", value)
-            }
-            defaultEditingState={true}
-            isHaveEditControls={false}
-          />
-        </div>
-        <div>
-          <EditableCategories
-            categories={currentProblem.category}
-            onCategoriesChange={(cat) =>
-              saveData("category", cat)
-            }
-          />
-        </div>
-        <div>
-          <EditableCode
-            solution={currentProblem.solution}
-            onChangeCode={(value) =>
-              saveData("solution", value)
-            }
-            isDebounced={true}
-            isAutoSave={false}
-          />
-        </div>
-        <div className="flex justify-center p-4">
-          <EditableTest
-            label="Тесты"
-            key={`add-tests`}
-            tests={currentProblem.tests}
-            onChange={(value) => saveData("tests", value)}
-          />
-        </div>
-        <div>
-          <button
-            className="border border-gray-300 rounded-lg p-2"
-            onClick={handleConfirm}
-          >
-            Add problem
-          </button>
-        </div>
+    <div>
+      <div className="flex justify-center p-4">
+        <EditableText
+          label="title"
+          value={currentProblem.title}
+          onTextChange={(value) =>
+            editProblemField("title", value)
+          }
+          defaultEditingState={true}
+          isHaveEditControls={false}
+        />
       </div>
-    )
+      <div className="flex justify-center p-4">
+        <EditableDescription
+          label="Description"
+          value={currentProblem.description}
+          onChange={(value) =>
+            editProblemField("description", value)
+          }
+          defaultEditingState={true}
+          isHaveEditControls={false}
+        />
+      </div>
+      <div>
+        <EditableDifficulty
+          value={currentProblem.difficulty}
+          onDifficultyChange={(value) =>
+            editProblemField("difficulty", value)
+          }
+          defaultEditingState={true}
+          isHaveEditControls={false}
+        />
+      </div>
+      <div>
+        <EditableCategories
+          categories={currentProblem.category}
+          onCategoriesChange={(cat) =>
+            editProblemField("category", cat)
+          }
+        />
+      </div>
+      <div>
+        <EditableCode
+          solution={currentProblem.solution}
+          onChangeCode={(value) =>
+            editProblemField("solution", value)
+          }
+          isDebounced={true}
+          isAutoSave={false}
+        />
+      </div>
+      <div className="flex justify-center p-4">
+        <EditableTest
+          label="Тесты"
+          tests={currentProblem.tests}
+          onChange={(value) =>
+            editProblemField("tests", value)
+          }
+        />
+      </div>
+    </div>
   );
 });

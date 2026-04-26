@@ -5,6 +5,7 @@ import { ProblemNav } from "./components/ProblemNav";
 import { DefaultNav } from "./components/DefaultNav";
 import { routePath } from "@constants/routePaths";
 import { SlideMenu } from "@features";
+import { NewProblemNav } from "./components/NewProblemNav";
 
 const navClasses = clsx([
   "fixed top-0 inset-x-0 z-40 h-[var(--header-height)]",
@@ -20,7 +21,7 @@ export const Nav = () => {
     if (path === routePath.problems.root)
       return <ProblemsNav />;
     if (path === routePath.problems.add)
-      return <DefaultNav title="Add new Problem" />;
+      return <NewProblemNav />;
     if (matchPath({ path }, path)) return <ProblemNav />;
     return <DefaultNav title="" />;
   };
