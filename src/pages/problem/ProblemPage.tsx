@@ -11,7 +11,7 @@ import { problemStore } from "@entities";
 import { observer } from "mobx-react-lite";
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useParams } from "react-router";
-import { Loader } from "@ui";
+import { LayoutGrid, LayoutItem, Loader } from "@ui";
 import { routePath } from "@constants/routePaths";
 import { localDB } from "@lib";
 
@@ -93,8 +93,8 @@ export const ProblemPage = observer(() => {
     );
 
   return (
-    <div>
-      <div className="flex justify-center p-4">
+    <LayoutGrid>
+      <LayoutItem>
         <EditableDescription
           key={id}
           label="Описание"
@@ -103,37 +103,37 @@ export const ProblemPage = observer(() => {
             saveData("description", value)
           }
         />
-      </div>
-      <div>
+      </LayoutItem>
+      <LayoutItem>
         <EditableCategories
           categories={currentProblem.category}
           onCategoriesChange={(cat) =>
             saveData("category", cat)
           }
         />
-      </div>
-      <div>
+      </LayoutItem>
+      <LayoutItem>
         <EditableDifficulty
           value={currentProblem.difficulty}
         />
-      </div>
-      <div>
+      </LayoutItem>
+      <LayoutItem>
         <EditableCode
           solution={currentProblem.solution}
           isAutoSave={true}
         />
-      </div>
-      <div className="flex justify-center p-4">
+      </LayoutItem>
+      <LayoutItem>
         <EditableTest
           label="Примеры"
           tests={currentProblem.tests}
           onChange={(value) => saveData("tests", value)}
         />
-      </div>
-      <div>
+      </LayoutItem>
+      <LayoutItem>
         <button onClick={handleDeleteClick}>Delete</button>
-      </div>
-      <div>
+      </LayoutItem>
+      <LayoutItem>
         <h3>
           Output:
           {isExecuting ? (
@@ -147,7 +147,7 @@ export const ProblemPage = observer(() => {
         <button onClick={handleCheckClick}>
           Send To Check
         </button>
-      </div>
-    </div>
+      </LayoutItem>
+    </LayoutGrid>
   );
 });

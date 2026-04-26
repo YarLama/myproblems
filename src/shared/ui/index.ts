@@ -6,3 +6,5 @@ export { LanguageSelect } from "./LanguageSelect/LanguageSelect.tsx";
 export * from "./Suggestion/index.ts";
 export { ProgrammingLanguageSelect } from "./ProgrammingLanguageSelect/ProgrammingLanguageSelect.tsx";
 export { Loader } from "./Loader/Loader.tsx";
+export { LayoutGrid } from "./Layout/LayoutGrid.tsx";
+export { LayoutItem } from "./Layout/LayoutItem.tsx";
