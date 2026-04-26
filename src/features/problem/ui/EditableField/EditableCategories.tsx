@@ -52,7 +52,7 @@ export const EditableCategories: React.FC<
   };
 
   return (
-    <div className="p-4">
+    <div>
       <div className="flex justify-between items-center mb-4">
         <EditControls
           isEditing={isEditing}

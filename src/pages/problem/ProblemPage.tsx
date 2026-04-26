@@ -125,7 +125,7 @@ export const ProblemPage = observer(() => {
       </LayoutItem>
       <LayoutItem>
         <EditableTest
-          label="Примеры"
+          label="Examples"
           tests={currentProblem.tests}
           onChange={(value) => saveData("tests", value)}
         />
