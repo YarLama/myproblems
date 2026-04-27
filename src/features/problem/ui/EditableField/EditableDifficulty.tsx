@@ -20,55 +20,55 @@ export const EditableDifficulty: React.FC<
   onDifficultyChange,
   onSave,
 }) => {
-  const [isEditing, setIsEditing] = useState(
-    defaultEditingState,
-  );
-  const [currentValue, setCurrentValue] = useState(value);
+    const [isEditing, setIsEditing] = useState(
+      defaultEditingState,
+    );
+    const [currentValue, setCurrentValue] = useState(value);
 
-  const handleSaveClick = () => {
-    onSave?.(currentValue);
-  };
+    const handleSaveClick = () => {
+      onSave?.(currentValue);
+    };
 
-  const handleCancelClick = () => {
-    setCurrentValue(value);
-  };
+    const handleCancelClick = () => {
+      setCurrentValue(value);
+    };
 
-  const handleChange = (
-    e: React.ChangeEvent<HTMLSelectElement>,
-  ) => {
-    const newValue = e.target.value as ProblemDifficulty;
-    setCurrentValue(newValue);
-    onDifficultyChange?.(newValue);
-  };
+    const handleChange = (
+      e: React.ChangeEvent<HTMLSelectElement>,
+    ) => {
+      const newValue = e.target.value as ProblemDifficulty;
+      setCurrentValue(newValue);
+      onDifficultyChange?.(newValue);
+    };
 
-  return (
-    <div className="flex gap-2">
-      <div>
-        {!isEditing ? (
-          <span className="px-3 py-1 bg-gray-300 text-gray-800 rounded-full text-sm font-medium">
-            {currentValue}
-          </span>
-        ) : (
-          <select
-            value={currentValue}
-            onChange={(e) => handleChange(e)}
-          >
-            {DifficultyValues.map((dif) => (
-              <option key={dif} value={dif}>
-                {dif}
-              </option>
-            ))}
-          </select>
+    return (
+      <div className="flex gap-2">
+        <div>
+          {!isEditing ? (
+            <span className="px-3 py-1 bg-gray-300 text-gray-800 rounded-full text-sm font-medium">
+              {currentValue}
+            </span>
+          ) : (
+            <select
+              value={currentValue}
+              onChange={(e) => handleChange(e)}
+            >
+              {DifficultyValues.map((dif) => (
+                <option key={dif} value={dif}>
+                  {dif}
+                </option>
+              ))}
+            </select>
+          )}
+        </div>
+        {isHaveEditControls && (
+          <EditControls
+            isEditing={isEditing}
+            onToggle={setIsEditing}
+            onSave={handleSaveClick}
+            onCancel={handleCancelClick}
+          />
         )}
       </div>
-      {isHaveEditControls && (
-        <EditControls
-          isEditing={isEditing}
-          onToggle={setIsEditing}
-          onSave={handleSaveClick}
-          onCancel={handleCancelClick}
-        />
-      )}
-    </div>
-  );
-};
+    );
+  };

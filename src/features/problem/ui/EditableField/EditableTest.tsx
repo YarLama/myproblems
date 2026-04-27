@@ -11,7 +11,6 @@ const defaultClasses =
 interface EditableTestProps {
   tests: ProblemTests;
   onChange: (newTests: ProblemTests) => void;
-  label?: string;
 }
 
 type TestRow = {
@@ -23,7 +22,6 @@ type TestRow = {
 export const EditableTest: React.FC<EditableTestProps> = ({
   tests,
   onChange,
-  label,
 }) => {
   const [rows, setRows] = useState<TestRow[]>([]);
   const [errorId, setErrorId] = useState<{
@@ -123,11 +121,6 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   return (
     <div className="space-y-3">
       <table className="w-full border max-w-2xl">
-        {label && (
-          <caption className="caption-top text-left text-gray-700 mb2">
-            {label}
-          </caption>
-        )}
         <thead>
           <tr className="bg-gray-100">
             <th className="w-1/2 p-2 border">Input</th>

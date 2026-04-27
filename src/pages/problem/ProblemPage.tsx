@@ -94,17 +94,16 @@ export const ProblemPage = observer(() => {
 
   return (
     <LayoutGrid>
-      <LayoutItem>
+      <LayoutItem label="Description">
         <EditableDescription
           key={id}
-          label="Описание"
           value={currentProblem.description}
           onChange={(value) =>
             saveData("description", value)
           }
         />
       </LayoutItem>
-      <LayoutItem>
+      <LayoutItem label="Categories">
         <EditableCategories
           categories={currentProblem.category}
           onCategoriesChange={(cat) =>
@@ -112,18 +111,18 @@ export const ProblemPage = observer(() => {
           }
         />
       </LayoutItem>
-      <LayoutItem>
+      <LayoutItem label="Difficulty">
         <EditableDifficulty
           value={currentProblem.difficulty}
         />
       </LayoutItem>
-      <LayoutItem>
+      <LayoutItem label="Solution">
         <EditableCode
           solution={currentProblem.solution}
           isAutoSave={true}
         />
       </LayoutItem>
-      <LayoutItem>
+      <LayoutItem label="Examples">
         <EditableTest
           label="Examples"
           tests={currentProblem.tests}

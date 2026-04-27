@@ -5,6 +5,7 @@ interface CategoryEditorProps {
   categories: string[];
   onDelete: (name: string) => void;
   onAdd: (name: string) => void;
+  autoFocus?: boolean;
   isAdding: boolean;
   setIsAdding: (val: boolean) => void;
   newName: string;
@@ -18,6 +19,7 @@ export const CategoryEditor: React.FC<
   onDelete,
   onAdd,
   isAdding,
+  autoFocus = true,
   setIsAdding,
   newName,
   setNewName,
@@ -51,7 +53,7 @@ export const CategoryEditor: React.FC<
                 onChange={(e) => setNewName(e.target.value)}
                 placeholder="Введите название категории"
                 className="flex-1 w-full px-3 py-1 border border-gray-300 rounded-md text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
-                autoFocus
+                autoFocus={autoFocus}
                 onKeyDown={(e) =>
                   e.key === "Enter" && onAdd(newName)
                 }

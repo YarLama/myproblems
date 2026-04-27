@@ -4,12 +4,14 @@ import { HTMLAttributes, ReactNode } from "react";
 interface LayoutItemProps
   extends HTMLAttributes<HTMLDivElement> {
   children: ReactNode;
+  label?: string;
   align?: "left" | "center" | "right";
   fullWidth?: boolean;
 }
 
 export const LayoutItem: React.FC<LayoutItemProps> = ({
   children,
+  label,
   fullWidth = false,
   align = "center",
   className,
@@ -33,6 +35,11 @@ export const LayoutItem: React.FC<LayoutItemProps> = ({
       )}
       {...props}
     >
+      {label && (
+        <div className="block text-gray-700 p-2">
+          {label}
+        </div>
+      )}
       {children}
     </div>
   );

@@ -7,6 +7,7 @@ import {
   EditableTest,
   EditableText,
 } from "@features";
+import { LayoutGrid, LayoutItem } from "@ui";
 import { observer } from "mobx-react-lite";
 import { useEffect } from "react";
 
@@ -35,15 +36,13 @@ export const NewProblemPage = observer(() => {
     };
   }, []);
 
-  console.log(currentProblem);
-
   if (!currentProblem) return null;
 
   return (
-    <div>
-      <div className="flex justify-center p-4">
+    <LayoutGrid>
+      <LayoutItem>
         <EditableText
-          label="title"
+          label="Problem Name"
           value={currentProblem.title}
           onTextChange={(value) =>
             editProblemField("title", value)
@@ -51,8 +50,8 @@ export const NewProblemPage = observer(() => {
           defaultEditingState={true}
           isHaveEditControls={false}
         />
-      </div>
-      <div className="flex justify-center p-4">
+      </LayoutItem>
+      <LayoutItem>
         <EditableDescription
           label="Description"
           value={currentProblem.description}
@@ -62,26 +61,30 @@ export const NewProblemPage = observer(() => {
           defaultEditingState={true}
           isHaveEditControls={false}
         />
-      </div>
-      <div>
+      </LayoutItem>
+      <LayoutItem>
         <EditableDifficulty
           value={currentProblem.difficulty}
+          label="Difficulty"
           onDifficultyChange={(value) =>
             editProblemField("difficulty", value)
           }
           defaultEditingState={true}
           isHaveEditControls={false}
         />
-      </div>
-      <div>
+      </LayoutItem>
+      <LayoutItem>
         <EditableCategories
           categories={currentProblem.category}
           onCategoriesChange={(cat) =>
             editProblemField("category", cat)
           }
+          defaultEditingState={true}
+          isHaveEditControls={false}
+          isHaveAutoFocus={false}
         />
-      </div>
-      <div>
+      </LayoutItem>
+      <LayoutItem>
         <EditableCode
           solution={currentProblem.solution}
           onChangeCode={(value) =>
@@ -90,8 +93,8 @@ export const NewProblemPage = observer(() => {
           isDebounced={true}
           isAutoSave={false}
         />
-      </div>
-      <div className="flex justify-center p-4">
+      </LayoutItem>
+      <LayoutItem className="flex justify-center p-4">
         <EditableTest
           label="Тесты"
           tests={currentProblem.tests}
@@ -99,7 +102,7 @@ export const NewProblemPage = observer(() => {
             editProblemField("tests", value)
           }
         />
-      </div>
-    </div>
+      </LayoutItem>
+    </LayoutGrid>
   );
 });

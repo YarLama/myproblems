@@ -1,8 +1,8 @@
 import { EditControls } from "@ui";
+import clsx from "clsx";
 import { useId, useState } from "react";
 
 interface EditableTextProps {
-  label?: string;
   value: string;
   isMultiline?: boolean;
   defaultEditingState?: boolean;
@@ -11,8 +11,21 @@ interface EditableTextProps {
   onSave?: (value: string) => void;
 }
 
+const inputClasses = clsx([
+  "border",
+  "p-1",
+  "text-[var(--color-text)]",
+  "bg-[var(--color-primary)]",
+]);
+
+const spanClasses = clsx([
+  "border-transparent border",
+  "truncate",
+  "p-1",
+  "text-[var(--color-text)]",
+]);
+
 export const EditableText: React.FC<EditableTextProps> = ({
-  label,
   value,
   defaultEditingState = false,
   isHaveEditControls = true,
@@ -42,42 +55,29 @@ export const EditableText: React.FC<EditableTextProps> = ({
   };
 
   return (
-    <div className="flex items-center min-w-0">
-      {label ? (
-        <label
-          className="block text-gray-700"
-          htmlFor={isEditing ? inputId : undefined}
-        >
-          {label}
-        </label>
-      ) : null}
+    <div className="flex items-center min-w-0 max-w-sm">
       {isEditing ? (
-        <div className="flex gap-2 min-w-0 text-[var(--color-text)]">
-          {isMultiline ? (
-            <textarea
-              id={inputId}
-              className="border p-1 flex-1 min-w-0 bg-[var(--color-primary)]" 
-              value={newValue}
-              onChange={handleValueChange}
-              autoFocus={isHaveEditControls}
-            />
-          ) : (
-            <input
-              id={inputId}
-              className="border p-1 flex-1 min-w-0 bg-[var(--color-primary)]"
-              value={newValue}
-              onChange={handleValueChange}
-              autoFocus={isHaveEditControls}
-            />
-          )}
-        </div>
+        isMultiline ? (
+          <textarea
+            id={inputId}
+            className={inputClasses}
+            value={newValue}
+            onChange={handleValueChange}
+            autoFocus={isHaveEditControls}
+          />
+        ) : (
+          <input
+            id={inputId}
+            className={inputClasses}
+            value={newValue}
+            onChange={handleValueChange}
+            autoFocus={isHaveEditControls}
+          />
+        )
       ) : (
-        <div className="flex gap-2 items-center min-w-0 max-w-sm">
-          <span className="p-1 text-[var(--color-text)] border-transparent border truncate max-w-full">
-            {value}
-          </span>
-        </div>
+        <span className={spanClasses}>{value}</span>
       )}
+
       {isHaveEditControls && (
         <EditControls
           isEditing={isEditing}
