@@ -25,7 +25,9 @@ export const EditableCategories: React.FC<
     );
     const [editCategories, setEditCategories] =
       useState<string[]>(categories);
-    const [isAdding, setIsAdding] = useState(defaultEditingState);
+    const [isAdding, setIsAdding] = useState(
+      defaultEditingState,
+    );
     const [newCategoryName, setNewCategoryName] =
       useState("");
 
@@ -63,19 +65,7 @@ export const EditableCategories: React.FC<
     };
 
     return (
-      <div>
-        {isHaveEditControls && (
-          <div className="flex justify-between items-center mb-4">
-            <EditControls
-              isEditing={isEditing}
-              onToggle={setIsEditing}
-              onSave={handleSave}
-              onCancel={handleCancel}
-              onEdit={handleEdit}
-            />
-          </div>
-        )}
-
+      <div className="grid grid-cols-[1fr_auto] gap-4">
         {isEditing ? (
           <CategoryEditor
             categories={editCategories}
@@ -89,6 +79,19 @@ export const EditableCategories: React.FC<
           />
         ) : (
           <CategoryViewList categories={categories} />
+        )}
+
+        {isHaveEditControls && (
+          <div className="flex items-start ">
+            <EditControls
+              vertical
+              isEditing={isEditing}
+              onToggle={setIsEditing}
+              onSave={handleSave}
+              onCancel={handleCancel}
+              onEdit={handleEdit}
+            />
+          </div>
         )}
       </div>
     );

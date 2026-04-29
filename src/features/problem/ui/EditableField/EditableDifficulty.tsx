@@ -42,7 +42,7 @@ export const EditableDifficulty: React.FC<
     };
 
     return (
-      <div className="flex gap-2">
+      <div className="flex gap-2 justify-between">
         <div>
           {!isEditing ? (
             <span className="px-3 py-1 bg-gray-300 text-gray-800 rounded-full text-sm font-medium">
