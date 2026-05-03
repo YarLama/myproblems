@@ -41,6 +41,14 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     setRows(rows.filter((row) => row.id !== id));
   };
 
+  const displayValue = (value: string) => {
+    const condition =
+      value.trim().startsWith("[") &&
+      value.trim().endsWith("]");
+
+    return condition ? value.slice(1, -1) : value;
+  };
+
   const hasError = (
     id: string,
     field: "input" | "output",
@@ -65,7 +73,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
 
     try {
       if (value.trim() !== "") {
-        JSON.parse(value);
+        JSON.parse(`[${value}]`);
       }
 
       if (hasError(id, field)) {
@@ -80,8 +88,12 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     setErrorId(null);
     try {
       const newTests: ProblemTests = {
-        input: rows.map((row) => JSON.parse(row.input)),
-        output: rows.map((row) => JSON.parse(row.output)),
+        input: rows.map((row) =>
+          JSON.parse(`[${row.input}]`),
+        ),
+        output: rows.map((row) =>
+          JSON.parse(`${row.output}`),
+        ),
       };
       onChange(newTests);
     } catch (e) {
@@ -101,7 +113,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   const handleCancel = () => {
     setRows(
       tests.input.map((input, i) => ({
-        input: JSON.stringify(input),
+        input: displayValue(JSON.stringify(input)),
         output: JSON.stringify(tests.output[i]),
         id: `row-${i}`,
       })),
@@ -111,8 +123,10 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   useEffect(() => {
     setRows(
       tests.input.map((input, i) => ({
-        input: JSON.stringify(input),
-        output: JSON.stringify(tests.output[i]),
+        input: displayValue(JSON.stringify(input)),
+        output: displayValue(
+          JSON.stringify(tests.output[i]),
+        ),
         id: `row-${i}`,
       })),
     );

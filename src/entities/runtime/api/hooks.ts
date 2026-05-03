@@ -1,33 +1,35 @@
 import { useMutation } from "@tanstack/react-query";
-import { PistonExecuteResponse } from "./types";
-import { localRuntime } from "../model/localRuntime";
+import {
+  ExecutionResult,
+  localRuntime,
+} from "../model/localRuntime";
+import { ProblemTests } from "@types";
 
-const localExecuteAdapter = async (
-  code: string,
-): Promise<PistonExecuteResponse> => {
-  const result = await localRuntime.execute(code);
+type ExecuteRequestArguments = {
+  code: string;
+  tests: ProblemTests;
+};
 
-  return {
-    language: "javascript",
-    version: "browser",
-    run: {
-      stdout: result.stdout,
-      stderr: result.stderr,
-      code: result.stderr ? 1 : 0,
-      signal: null,
-      output: result.stdout + result.stderr,
-    },
-  };
+const localExecuteAdapter = async ({
+  code,
+  tests,
+}: ExecuteRequestArguments): Promise<ExecutionResult> => {
+  const result = await localRuntime.execute(code, tests);
+  return result;
 };
 
 export const useExecuteCode = (options: {
-  onSuccess?: (result: PistonExecuteResponse) => void;
+  onSuccess?: (result: ExecutionResult) => void;
   onError?: (error: Error) => void;
   onSettled?: () => void;
 }) => {
   return useMutation({
-    mutationFn: (code: string) => localExecuteAdapter(code),
-    networkMode: 'always',
+    mutationFn: ({
+      code,
+      tests,
+    }: ExecuteRequestArguments) =>
+      localExecuteAdapter({ code, tests }),
+    networkMode: "always",
     onSuccess: (data) => {
       options.onSuccess?.(data);
     },

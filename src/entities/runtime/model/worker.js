@@ -1,42 +1,68 @@
-self.onmessage = function(e) {
-  const code = e.data;
-  const logs = [];
+self.onmessage = async function(e) {
+  const data = e.data;
+  const { code, tests: userTests } = data;
+  const { input: userInput, output: userExpectedOutput } =
+    userTests;
+  const result = [];
 
-  const logHandler = (...args) => {
-    logs.push(
-      args
-        .map((arg) => {
-          return typeof arg === "object"
-            ? JSON.stringify(arg, null, 2)
-            : String(arg);
-        })
-        .join(" "),
+  function compareResult(actual, expected) {
+    return (
+      JSON.stringify(actual) === JSON.stringify(expected)
     );
-  };
-
-  Object.defineProperty(console, "log", {
-    value: logHandler,
-    writable: false,
-    configurable: false,
-  });
+  }
 
   try {
-    const userFn = new Function(code);
-    userFn();
+    const userFn = new Function('...args', `
+      ${code}
+      if (typeof solution !== 'function') {
+        throw new Error("The 'solution' function is missing. Please make sure the 'solution' function is defined and returns your solution.")
+      }
+      return solution(...args);
+    `);
+    for (const [index, args] of userInput.entries()) {
+      try {
+        const start = performance.now();
+        const value = await userFn(...args);
+        const end = performance.now();
+        const compareStatus = compareResult(
+          value,
+          userExpectedOutput[index],
+        )
+          ? "success"
+          : "failed";
+
+        result.push({
+          status: "success",
+          testIndex: index,
+          testStatus: compareStatus,
+          testExpected: userExpectedOutput[index],
+          input: args,
+          output: value,
+          time: end - start,
+        });
+      } catch (testErr) {
+        result.push({
+          status: "error",
+          testIndex: index,
+          input: args,
+          error: testErr.message,
+        });
+      }
+    }
 
     self.postMessage({
-      type: "result",
-      stdout: logs.join("\n"),
+      type: "RESULT",
+      stdout: result,
       stderr: "",
     });
-  } catch (err) {
+  } catch (compileErr) {
     self.postMessage({
-      type: "result",
-      stdout: logs.join("\n"),
+      type: "COMPILE_ERROR",
+      stdout: [],
       stderr:
-        err instanceof Error
-          ? err.stack || err.message
-          : String(err),
+        compileErr instanceof Error
+          ? compileErr.stack || compileErr.message
+          : String(compileErr),
     });
   }
 };

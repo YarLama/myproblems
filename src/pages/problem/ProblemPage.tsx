@@ -14,6 +14,7 @@ import { useNavigate, useParams } from "react-router";
 import { LayoutGrid, LayoutItem, Loader } from "@ui";
 import { routePath } from "@constants/routePaths";
 import { localDB } from "@lib";
+import { toJS } from "mobx";
 
 export const ProblemPage = observer(() => {
   const [isLoading, setIsLoading] = useState(true);
@@ -26,16 +27,29 @@ export const ProblemPage = observer(() => {
   const { mutate: execute, isPending: isExecuting } =
     useExecuteCode({
       onSuccess: (result) => {
-        setOutput(result.run.stdout);
-        if (result.run.stderr) {
-          setOutput(result.run.stderr);
+        const outputString = result.stdout
+          .map((res) => {
+            if (res.status === "success") {
+              if (res.testStatus === "success") {
+                return `${res.testIndex}:${res.testStatus}. ${res.output}`;
+              }
+              if (res.testStatus === "failed") {
+                return `${res.testIndex}:${res.testStatus}. Expected ${res.testExpected}, and return ${res.output}`;
+              }
+            }
+            if (res.status === "error") {
+              return `${res.testIndex}:error runtime: ${res.error}`;
+            }
+          })
+          .join("\n");
+        setOutput(outputString);
+
+        if (result.stderr) {
+          setOutput(result.stderr);
         }
       },
       onError: (error) => {
         setOutput(`Error: ${error.message}`);
-      },
-      onSettled: () => {
-        console.log("Execute code completed");
       },
     });
 
@@ -55,8 +69,16 @@ export const ProblemPage = observer(() => {
   };
 
   const handleCheckClick = async () => {
-    if (currentProblem && code.trim()) {
-      execute(code);
+    if (
+      currentProblem &&
+      currentProblem.tests.input &&
+      currentProblem.tests.output &&
+      code.trim()
+    ) {
+      execute({
+        code: code,
+        tests: toJS(currentProblem.tests),
+      });
     }
   };
 
@@ -124,7 +146,6 @@ export const ProblemPage = observer(() => {
       </LayoutItem>
       <LayoutItem label="Examples">
         <EditableTest
-          label="Examples"
           tests={currentProblem.tests}
           onChange={(value) => saveData("tests", value)}
         />

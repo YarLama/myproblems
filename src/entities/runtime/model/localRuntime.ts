@@ -1,18 +1,38 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { ProblemTests } from "@types";
 import workerCode from "./worker.js?raw";
 
-export interface ExecutionResult {
-  stdout: string;
+type SuccessResult = {
+  status: "success";
+  testIndex: number;
+  testStatus: "success" | "failed";
+  testExpected: any;
+  input: any[];
+  output: any;
+  time: number;
+};
+
+type ErrorResult = {
+  status: "error";
+  testIndex: number;
+  input: any[];
+  error: string;
+};
+
+type Result = SuccessResult | ErrorResult;
+
+export type ExecutionResult = {
+  stdout: Result[];
   stderr: string;
-  executionTime: number;
-}
+};
 
 export const localRuntime = {
   async execute(
     code: string,
+    tests: ProblemTests,
     timeoutMs = 5000,
   ): Promise<ExecutionResult> {
     return new Promise((res) => {
-      const startTime = performance.now();
       const blob = new Blob([workerCode], {
         type: "application/javascript",
       });
@@ -27,38 +47,27 @@ export const localRuntime = {
       };
 
       worker.onmessage = (e) => {
-        if (e.data.type === "result") {
-          const endTime = performance.now();
+        if (
+          e.data.type === "RESULT" ||
+          e.data.type === "COMPILE_ERROR"
+        ) {
           cleanup();
           res({
             stdout: e.data.stdout,
             stderr: e.data.stderr,
-            executionTime: Math.round(endTime - startTime),
           });
         }
       };
 
-      worker.onerror = (e) => {
-        const endTime = performance.now();
-        cleanup();
-        res({
-          stdout: "",
-          stderr: `Worker error: ${e.message}`,
-          executionTime: Math.round(endTime - startTime),
-        });
-      };
-
       timeoutId = window.setTimeout(() => {
-        const endTime = performance.now();
         cleanup();
         res({
-          stdout: "",
+          stdout: [],
           stderr: `Error: Execution timeout after ${timeoutMs}ms`,
-          executionTime: Math.round(endTime - startTime),
         });
       }, timeoutMs);
 
-      worker.postMessage(code);
+      worker.postMessage({ code: code, tests: tests });
     });
   },
 };
