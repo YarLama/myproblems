@@ -1,12 +1,24 @@
 import { ProblemTests } from "@entities";
-import { EditControls } from "@ui";
+import { EditControls, IconButton } from "@ui";
+import clsx from "clsx";
 import { useEffect, useState } from "react";
 
-const baseTdClasses = "w-full bg-white p-2";
-const errorClasses =
-  "border-red-500 text-red-500 ring-1 ring-red-500 bg-red-50";
-const defaultClasses =
-  "border-gray-300 focus:border-blue-500";
+const cellClasses = clsx([
+  "flex items-center gap-2 transition-colors",
+  "h-full",
+  "p-2",
+  "border border-[var(--color-secondary)]",
+  "focus-within:bg-[var(--color-secondary)] focus-within:border-[var(--color-text)]",
+]);
+const errorCellClasses = clsx([
+  "border-red-500",
+  "text-red-500",
+  "ring-1",
+  "ring-red-500",
+  "bg-red-50",
+]);
+const inputFieldClasses =
+  "flex-1 min-w-0 bg-transparent border-none outline-none p-0 focus:ring-0";
 
 interface EditableTestProps {
   tests: ProblemTests;
@@ -91,9 +103,10 @@ export const EditableTest: React.FC<EditableTestProps> = ({
         input: rows.map((row) =>
           JSON.parse(`[${row.input}]`),
         ),
-        output: rows.map((row) =>
-          JSON.parse(`${row.output}`),
-        ),
+        output: rows.map((row) => {
+          const value = `${row.output.trim() !== "" ? row.output : "[]"}`;
+          return JSON.parse(value);
+        }),
       };
       onChange(newTests);
     } catch (e) {
@@ -124,24 +137,19 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     setRows(
       tests.input.map((input, i) => ({
         input: displayValue(JSON.stringify(input)),
-        output: displayValue(
-          JSON.stringify(tests.output[i]),
-        ),
+        output: JSON.stringify(tests.output[i]),
         id: `row-${i}`,
       })),
     );
   }, [tests]);
 
   return (
-    <div className="space-y-3">
-      <table className="w-full border max-w-2xl">
+    <div className="space-y-3 grid grid-cols-[1fr_auto] gap-4">
+      <table className="w-full max-w-2xl table-fixed border-collapse">
         <thead>
-          <tr className="bg-gray-100">
-            <th className="w-1/2 p-2 border">Input</th>
-            <th className="w-1/2 p-2 border">
-              Expected Output
-            </th>
-            {isEditing ? <th></th> : null}
+          <tr className="bg-[var(--color-secondary)] border border-[var(--color-secondary)]">
+            <th className="w-1/2 p-2 ">Input</th>
+            <th className="w-1/2 p-2 ">Expected Output</th>
           </tr>
         </thead>
         <tbody>
@@ -149,63 +157,68 @@ export const EditableTest: React.FC<EditableTestProps> = ({
             <tr key={row.id}>
               {isEditing ? (
                 <>
-                  <td className="w-1/2">
-                    <input
-                      value={row.input}
-                      className={`
-                        ${baseTdClasses} 
-                        ${hasError(row.id, "input")
-                          ? errorClasses
-                          : defaultClasses
-                        }
-                      `}
-                      onChange={(e) =>
-                        updateRow(
-                          row.id,
-                          "input",
-                          e.target.value,
-                        )
-                      }
-                      autoFocus={
-                        index + 1 === rows.length &&
-                        row.input === ""
-                      }
-                    />
-                  </td>
-                  <td className="w-1/2">
-                    <input
-                      value={row.output}
-                      className={`
-                        ${baseTdClasses} 
-                        ${hasError(row.id, "output")
-                          ? errorClasses
-                          : defaultClasses
-                        }
-                      `}
-                      onChange={(e) =>
-                        updateRow(
-                          row.id,
-                          "output",
-                          e.target.value,
-                        )
-                      }
-                    />
-                  </td>
-                  <td>
-                    <button
-                      onClick={() => deleteRow(row.id)}
-                      className="text-red-500"
+                  <td className="w-1/2 h-px">
+                    <div
+                      className={clsx([
+                        cellClasses,
+                        hasError(row.id, "input")
+                          ? errorCellClasses
+                          : "",
+                      ])}
                     >
-                      X
-                    </button>
+                      <input
+                        value={row.input}
+                        className={inputFieldClasses}
+                        onChange={(e) =>
+                          updateRow(
+                            row.id,
+                            "input",
+                            e.target.value,
+                          )
+                        }
+                        autoFocus={
+                          index + 1 === rows.length &&
+                          row.input === ""
+                        }
+                      />
+                    </div>
+                  </td>
+                  <td className="w-1/2 h-px">
+                    <div
+                      className={clsx([
+                        cellClasses,
+                        hasError(row.id, "output")
+                          ? errorCellClasses
+                          : "",
+                      ])}
+                    >
+                      <input
+                        value={row.output}
+                        className={inputFieldClasses}
+                        onChange={(e) =>
+                          updateRow(
+                            row.id,
+                            "output",
+                            e.target.value,
+                          )
+                        }
+                      />
+                      <div className="shrink-0">
+                        <IconButton
+                          icon="delete"
+                          size="sm"
+                          onClick={() => deleteRow(row.id)}
+                        />
+                      </div>
+                    </div>
                   </td>
                 </>
               ) : (
                 <>
-                  <td className="w-1/2 p-2 border break-all whitespace-pre-wrap">
+                  <td className="w-1/2 p-2 border border-[var(--color-secondary)] break-all whitespace-pre-wrap">
                     {row.input}
                   </td>
-                  <td className="w-1/2 p-2 border break-all whitespace-pre-wrap">
+                  <td className="w-1/2 p-2 border border-[var(--color-secondary)] break-all whitespace-pre-wrap">
                     {row.output}
                   </td>
                 </>
@@ -214,9 +227,16 @@ export const EditableTest: React.FC<EditableTestProps> = ({
           ))}
         </tbody>
       </table>
-      <div className="flex gap-2 justify-center">
-        {isEditing && <button onClick={addRow}>+</button>}
+      <div className="flex gap-4 items-start flex-col">
+        {isEditing && (
+          <IconButton
+            icon="add"
+            size="sm"
+            onClick={addRow}
+          />
+        )}
         <EditControls
+          vertical
           isEditing={isEditing}
           onToggle={setIsEditing}
           onEdit={handleEditClick}

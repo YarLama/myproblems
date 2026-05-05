@@ -82,13 +82,6 @@ export const ProblemPage = observer(() => {
     }
   };
 
-  const handleDeleteClick = async () => {
-    if (currentProblem) {
-      await problemStore.deleteProblem(currentProblem.id);
-      navigate(routePath.problems.root);
-    }
-  };
-
   useEffect(() => {
     if (id) {
       const data = localDB.getProblem(id);
@@ -144,14 +137,11 @@ export const ProblemPage = observer(() => {
           isAutoSave={true}
         />
       </LayoutItem>
-      <LayoutItem label="Examples">
+      <LayoutItem label="Tests">
         <EditableTest
           tests={currentProblem.tests}
           onChange={(value) => saveData("tests", value)}
         />
-      </LayoutItem>
-      <LayoutItem>
-        <button onClick={handleDeleteClick}>Delete</button>
       </LayoutItem>
       <LayoutItem>
         <h3>
