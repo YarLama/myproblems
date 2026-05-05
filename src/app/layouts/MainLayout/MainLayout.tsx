@@ -1,6 +1,7 @@
 import { Outlet } from "react-router";
 import { Nav } from "./Nav/Nav";
 import { FileAccessNotification } from "@root/src/features/file-access-notification";
+import { ScrollToTop } from "@ui";
 
 export const MainLayout = () => {
   return (
@@ -10,6 +11,7 @@ export const MainLayout = () => {
         <Outlet />
       </main>
       <FileAccessNotification />
+      <ScrollToTop thresholdY={200}/>
     </div>
   );
 };
