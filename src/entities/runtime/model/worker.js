@@ -1,7 +1,6 @@
 self.onmessage = async function(e) {
   const data = e.data;
   const { code, tests: userTests } = data;
-  console.log(code, userTests)
   const { input: userInput, output: userExpectedOutput } =
     userTests;
   const result = [];

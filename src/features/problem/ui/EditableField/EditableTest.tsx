@@ -22,6 +22,9 @@ const inputFieldClasses =
 
 interface EditableTestProps {
   tests: ProblemTests;
+  defaultEditingState?: boolean;
+  isHaveEditControls?: boolean;
+  isHaveAutoFocus?: boolean;
   onChange: (newTests: ProblemTests) => void;
 }
 
@@ -33,6 +36,9 @@ type TestRow = {
 
 export const EditableTest: React.FC<EditableTestProps> = ({
   tests,
+  defaultEditingState = false,
+  isHaveEditControls = true,
+  isHaveAutoFocus = true,
   onChange,
 }) => {
   const [rows, setRows] = useState<TestRow[]>([]);
@@ -40,17 +46,55 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     id: string;
     field: "input" | "output";
   } | null>(null);
-  const [isEditing, setIsEditing] = useState(false);
+  const [isEditing, setIsEditing] = useState(
+    defaultEditingState,
+  );
+
+  const getUpdatedTests = (
+    currentRows: TestRow[],
+  ): ProblemTests | undefined => {
+    try {
+      return {
+        input: currentRows.map((row) =>
+          JSON.parse(`[${row.input}]`),
+        ),
+        output: currentRows.map((row) => {
+          const value = `${row.output.trim() !== "" ? row.output : "[]"}`;
+          return JSON.parse(value);
+        }),
+      };
+    } catch (e) {
+      console.error(
+        "EditableTest saveChanges error: ",
+        (e as Error).message,
+      );
+    }
+  };
 
   const addRow = () => {
-    setRows([
+    const lastEl = rows.at(-1);
+    if (lastEl?.input === "" && lastEl?.output === "")
+      return;
+    const updatedRows = [
       ...rows,
       { input: "", output: "", id: `${Date.now()}` },
-    ]);
+    ];
+    setRows(updatedRows);
+
+    if (defaultEditingState && !isHaveEditControls) {
+      const newTests = getUpdatedTests(updatedRows);
+      if (newTests) onChange(newTests);
+    }
   };
 
   const deleteRow = (id: string) => {
-    setRows(rows.filter((row) => row.id !== id));
+    const updatedRows = rows.filter((row) => row.id !== id);
+    setRows(updatedRows);
+
+    if (defaultEditingState && !isHaveEditControls) {
+      const newTests = getUpdatedTests(updatedRows);
+      if (newTests) onChange(newTests);
+    }
   };
 
   const displayValue = (value: string) => {
@@ -75,17 +119,21 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     field: "input" | "output",
     value: string,
   ) => {
-    setRows(
-      rows.map((row) => {
-        return row.id === id
-          ? { ...row, [field]: value }
-          : row;
-      }),
-    );
+    const updatedRows = rows.map((row) => {
+      return row.id === id
+        ? { ...row, [field]: value }
+        : row;
+    });
+    setRows(updatedRows);
 
     try {
       if (value.trim() !== "") {
         JSON.parse(`[${value}]`);
+      }
+
+      if (defaultEditingState && !isHaveEditControls) {
+        const newTests = getUpdatedTests(updatedRows);
+        if (newTests) onChange(newTests);
       }
 
       if (hasError(id, field)) {
@@ -99,16 +147,8 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   const saveChanges = () => {
     setErrorId(null);
     try {
-      const newTests: ProblemTests = {
-        input: rows.map((row) =>
-          JSON.parse(`[${row.input}]`),
-        ),
-        output: rows.map((row) => {
-          const value = `${row.output.trim() !== "" ? row.output : "[]"}`;
-          return JSON.parse(value);
-        }),
-      };
-      onChange(newTests);
+      const newTests = getUpdatedTests(rows);
+      if (newTests) onChange(newTests);
     } catch (e) {
       console.error(
         "EditableTest saveChanges error: ",
@@ -124,23 +164,32 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   };
 
   const handleCancel = () => {
-    setRows(
-      tests.input.map((input, i) => ({
-        input: displayValue(JSON.stringify(input)),
-        output: JSON.stringify(tests.output[i]),
-        id: `row-${i}`,
-      })),
-    );
+    const updatedRows = tests.input.map((input, i) => ({
+      input: displayValue(JSON.stringify(input)),
+      output: JSON.stringify(tests.output[i]),
+      id: `row-${i}`,
+    }));
+    setRows(updatedRows);
   };
 
   useEffect(() => {
-    setRows(
-      tests.input.map((input, i) => ({
-        input: displayValue(JSON.stringify(input)),
-        output: JSON.stringify(tests.output[i]),
-        id: `row-${i}`,
-      })),
-    );
+    const { input, output } = tests;
+
+    if (input.length === 1 && output.length === 0) {
+      setRows([{ input: "", output: "", id: `row-0` }]);
+    } else {
+      setRows(
+        input.map((input, i) => ({
+          input: displayValue(JSON.stringify(input)),
+          output:
+            Array.isArray(output[i]) &&
+              output[i].length === 0
+              ? ""
+              : JSON.stringify(output[i]),
+          id: `row-${i}`,
+        })),
+      );
+    }
   }, [tests]);
 
   return (
@@ -177,6 +226,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
                           )
                         }
                         autoFocus={
+                          isHaveAutoFocus &&
                           index + 1 === rows.length &&
                           row.input === ""
                         }
@@ -235,14 +285,16 @@ export const EditableTest: React.FC<EditableTestProps> = ({
             onClick={addRow}
           />
         )}
-        <EditControls
-          vertical
-          isEditing={isEditing}
-          onToggle={setIsEditing}
-          onEdit={handleEditClick}
-          onSave={saveChanges}
-          onCancel={handleCancel}
-        />
+        {isHaveEditControls && (
+          <EditControls
+            vertical
+            isEditing={isEditing}
+            onToggle={setIsEditing}
+            onEdit={handleEditClick}
+            onSave={saveChanges}
+            onCancel={handleCancel}
+          />
+        )}
       </div>
     </div>
   );

@@ -40,7 +40,7 @@ export const EditableDifficulty: React.FC<
       setCurrentValue(newValue);
       onDifficultyChange?.(newValue);
     };
-
+    
     return (
       <div className="flex gap-2 justify-between">
         <div>

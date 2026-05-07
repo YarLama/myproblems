@@ -31,36 +31,47 @@ export const EditableCategories: React.FC<
     const [newCategoryName, setNewCategoryName] =
       useState("");
 
+    const clear = () => {
+      setNewCategoryName("");
+      setIsAdding(false);
+    };
+
     const handleEdit = () => {
       setEditCategories([...categories]);
     };
 
     const handleCancel = () => {
       setEditCategories([...categories]);
-      setIsAdding(false);
-      setNewCategoryName("");
+      clear();
     };
 
     const handleSave = () => {
       onCategoriesChange(editCategories);
-      setIsAdding(false);
-      setNewCategoryName("");
+      clear();
     };
 
     const handleDelete = (categoryName: string) => {
-      setEditCategories(
-        editCategories.filter((cat) => cat !== categoryName),
+      const updatedCategories = editCategories.filter(
+        (cat) => cat !== categoryName,
       );
+      setEditCategories(updatedCategories);
+      if (defaultEditingState && !isHaveEditControls) {
+        onCategoriesChange(updatedCategories);
+      }
     };
 
     const handleAdd = (name: string) => {
       const newName = name.trim();
-      if (newName) {
-        if (!editCategories.includes(newName)) {
-          setEditCategories((prev) => [...prev, newName]);
+      if (newName && !editCategories.includes(newName)) {
+        const updatedCategories = [
+          ...editCategories,
+          newName,
+        ];
+        setEditCategories(updatedCategories);
+        if (defaultEditingState && !isHaveEditControls) {
+          onCategoriesChange(updatedCategories);
         }
-        setNewCategoryName("");
-        setIsAdding(false);
+        clear();
       }
     };
 

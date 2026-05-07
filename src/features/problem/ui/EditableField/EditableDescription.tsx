@@ -96,13 +96,13 @@ export const EditableDescription: React.FC<
           <textarea
             id={inputId}
             ref={textareaRef}
-            className="border p-1 w-full max-h-[300px]"
+            className="border rounded-sm p-1 w-full max-h-[300px]"
             value={newValue}
             onChange={(e) => handleChange(e)}
             autoFocus={isHaveEditControls}
           />
         ) : (
-          <span className="p-1 border-transparent border text-justify">
+          <span className="p-1 border-transparent border">
             {value[currentLanguage]}
           </span>
         )}
