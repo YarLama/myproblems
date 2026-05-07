@@ -1,29 +1,16 @@
 import { EditControls } from "@ui";
 import clsx from "clsx";
-import { useId, useState } from "react";
+import { useEffect, useId, useState } from "react";
 
 interface EditableTextProps {
   value: string;
   isMultiline?: boolean;
   defaultEditingState?: boolean;
   isHaveEditControls?: boolean;
+  disabled?: boolean;
   onTextChange?: (value: string) => void;
   onSave?: (value: string) => void;
 }
-
-const inputClasses = clsx([
-  "border",
-  "p-1",
-  "text-[var(--color-text)]",
-  "bg-[var(--color-primary)]",
-]);
-
-const spanClasses = clsx([
-  "border-transparent border",
-  "truncate",
-  "p-1",
-  "text-[var(--color-text)]",
-]);
 
 export const EditableText: React.FC<EditableTextProps> = ({
   value,
@@ -32,13 +19,29 @@ export const EditableText: React.FC<EditableTextProps> = ({
   onTextChange,
   onSave,
   isMultiline = false,
+  disabled = false,
 }) => {
   const [isEditing, setIsEditing] = useState(
     defaultEditingState,
   );
   const [newValue, setNewValue] = useState(value);
   const inputId = useId();
+  const inputClasses = clsx([
+    "border rounded-sm",
+    "p-1",
+    "text-[var(--color-text)]",
+    "bg-[var(--color-primary)]",
+    "w-full",
+    isMultiline ? "h-full" : "h-auto",
+  ]);
 
+  const spanClasses = clsx([
+    "border-transparent border",
+    !isMultiline && "truncate",
+    "max-w-sm",
+    "p-1",
+    "text-[var(--color-text)]",
+  ]);
   const handleSaveClick = () => {
     onSave?.(newValue);
   };
@@ -54,8 +57,12 @@ export const EditableText: React.FC<EditableTextProps> = ({
     onTextChange?.(e.target.value);
   };
 
+  useEffect(() => {
+    setNewValue(value);
+  }, [value]);
+
   return (
-    <div className="flex items-center min-w-0 max-w-sm">
+    <div className="flex items-start min-w-0 w-full h-full">
       {isEditing ? (
         isMultiline ? (
           <textarea
@@ -64,6 +71,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
             value={newValue}
             onChange={handleValueChange}
             autoFocus={isHaveEditControls}
+            disabled={disabled}
           />
         ) : (
           <input
@@ -72,6 +80,7 @@ export const EditableText: React.FC<EditableTextProps> = ({
             value={newValue}
             onChange={handleValueChange}
             autoFocus={isHaveEditControls}
+            disabled={disabled}
           />
         )
       ) : (

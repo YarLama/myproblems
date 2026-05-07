@@ -1,4 +1,5 @@
 export { ProblemNavigationButtons } from "./ui/ProblemNavigationButtons/ProblemNavigationButtons.tsx";
+export { ProblemOutput } from "./ui/ProblemOutput/ProblemOutput.tsx";
 export { EditableText } from "./ui/EditableField/EditableText.tsx";
 export { EditableTest } from "./ui/EditableField/EditableTest.tsx";
 export { EditableCode } from "./ui/EditableField/EditableCode.tsx";

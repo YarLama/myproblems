@@ -1,7 +1,7 @@
 import { AvailableLanguages } from "@constants/languages";
 import { ProblemDescription } from "@entities";
 import { EditControls, LanguageSelect } from "@ui";
-import { useEffect, useId, useState } from "react";
+import { useEffect, useId, useRef, useState } from "react";
 
 interface EditableDescriptionProps {
   value: ProblemDescription;
@@ -29,13 +29,21 @@ export const EditableDescription: React.FC<
     const [currentLanguage, setCurrentLanguage] =
       useState<AvailableLanguages>(defaultLanguage);
     const inputId = useId();
+    const textareaRef = useRef<HTMLTextAreaElement>(null);
 
+    const adjustHeight = () => {
+      const textarea = textareaRef.current;
+      if (textarea) {
+        textarea.style.height = "auto";
+        textarea.style.height = `${textarea.scrollHeight}px`;
+      }
+    };
     const handleSaveClick = () => {
       onChange({
         ...value,
         [currentLanguage]: newValue,
       });
-      setCurrentLanguage(defaultLanguage);
+      setCurrentLanguage(currentLanguage);
     };
 
     const handleCancelClick = () => {
@@ -64,8 +72,12 @@ export const EditableDescription: React.FC<
       setNewValue(value[currentLanguage]);
     }, [currentLanguage, value]);
 
+    useEffect(() => {
+      if (isEditing) adjustHeight();
+    }, [newValue, isEditing]);
+
     return (
-      <div>
+      <div className="flex flex-col">
         <div className="flex justify-between">
           <LanguageSelect
             language={currentLanguage}
@@ -81,21 +93,18 @@ export const EditableDescription: React.FC<
           )}
         </div>
         {isEditing ? (
-          <div className="flex gap-2">
-            <textarea
-              id={inputId}
-              className="border p-1 flex-1"
-              value={newValue}
-              onChange={(e) => handleChange(e)}
-              autoFocus={isHaveEditControls}
-            />
-          </div>
+          <textarea
+            id={inputId}
+            ref={textareaRef}
+            className="border p-1 w-full max-h-[300px]"
+            value={newValue}
+            onChange={(e) => handleChange(e)}
+            autoFocus={isHaveEditControls}
+          />
         ) : (
-          <div className="flex gap-2 items-center">
-            <span className="p-1 border-transparent border">
-              {value[currentLanguage]}
-            </span>
-          </div>
+          <span className="p-1 border-transparent border text-justify">
+            {value[currentLanguage]}
+          </span>
         )}
       </div>
     );

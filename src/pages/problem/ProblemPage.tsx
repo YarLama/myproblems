@@ -1,4 +1,4 @@
-import { Problem, useExecuteCode } from "@entities";
+import { Problem } from "@entities";
 import {
   EditableCategories,
   EditableCode,
@@ -6,6 +6,7 @@ import {
   EditableDifficulty,
   EditableTest,
   problemEditorStore,
+  ProblemOutput,
 } from "@features";
 import { problemStore } from "@entities";
 import { observer } from "mobx-react-lite";
@@ -14,7 +15,6 @@ import { useNavigate, useParams } from "react-router";
 import { LayoutGrid, LayoutItem, Loader } from "@ui";
 import { routePath } from "@constants/routePaths";
 import { localDB } from "@lib";
-import { toJS } from "mobx";
 
 export const ProblemPage = observer(() => {
   const [isLoading, setIsLoading] = useState(true);
@@ -23,35 +23,6 @@ export const ProblemPage = observer(() => {
   const { currentProblem, setCurrentProblem, editProblem } =
     problemStore;
   const { code } = problemEditorStore;
-  const [output, setOutput] = useState<string>("");
-  const { mutate: execute, isPending: isExecuting } =
-    useExecuteCode({
-      onSuccess: (result) => {
-        const outputString = result.stdout
-          .map((res) => {
-            if (res.status === "success") {
-              if (res.testStatus === "success") {
-                return `${res.testIndex}:${res.testStatus}. ${res.output}`;
-              }
-              if (res.testStatus === "failed") {
-                return `${res.testIndex}:${res.testStatus}. Expected ${res.testExpected}, and return ${res.output}`;
-              }
-            }
-            if (res.status === "error") {
-              return `${res.testIndex}:error runtime: ${res.error}`;
-            }
-          })
-          .join("\n");
-        setOutput(outputString);
-
-        if (result.stderr) {
-          setOutput(result.stderr);
-        }
-      },
-      onError: (error) => {
-        setOutput(`Error: ${error.message}`);
-      },
-    });
 
   const saveData = <K extends keyof Problem>(
     field: K,
@@ -66,20 +37,6 @@ export const ProblemPage = observer(() => {
 
     setCurrentProblem(newProblem);
     editProblem(newProblem);
-  };
-
-  const handleCheckClick = async () => {
-    if (
-      currentProblem &&
-      currentProblem.tests.input &&
-      currentProblem.tests.output &&
-      code.trim()
-    ) {
-      execute({
-        code: code,
-        tests: toJS(currentProblem.tests),
-      });
-    }
   };
 
   useEffect(() => {
@@ -143,20 +100,11 @@ export const ProblemPage = observer(() => {
           onChange={(value) => saveData("tests", value)}
         />
       </LayoutItem>
-      <LayoutItem>
-        <h3>
-          Output:
-          {isExecuting ? (
-            <p>Executing...</p>
-          ) : (
-            <>
-              <pre>{output}</pre>
-            </>
-          )}
-        </h3>
-        <button onClick={handleCheckClick}>
-          Send To Check
-        </button>
+      <LayoutItem label="Output">
+        <ProblemOutput
+          tests={currentProblem.tests}
+          code={code}
+        />
       </LayoutItem>
     </LayoutGrid>
   );
