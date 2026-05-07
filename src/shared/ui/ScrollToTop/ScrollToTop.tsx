@@ -1,6 +1,6 @@
-import { Icons } from "@constants/icons";
 import clsx from "clsx";
 import { useEffect, useState } from "react";
+import { IconButton } from "../IconButton/IconButton";
 
 export interface ScrollToTopProps {
   thresholdY?: number;
@@ -13,20 +13,10 @@ export const ScrollToTop: React.FC<ScrollToTopProps> = ({
 }) => {
   const [isVisible, setIsVisible] = useState(false);
 
-  const getDivClasses = () =>
-    clsx([
-      containerRef ? ["sticky ml-auto "] : "fixed",
-      "bottom-3",
-      "right-6",
-      "flex",
-      "items-center",
-      "justify-center",
-      "rounded-full",
-      ["bg-gray-300", "text-gray-600", "border-gray-600"],
-      "w-8",
-      "h-8",
-      "cursor-pointer",
-    ]);
+  const divClasses = clsx([
+    containerRef ? "sticky ml-auto" : "fixed",
+    "bottom-3 right-6 m:right-2",
+  ]);
 
   const doScrollToTop = () => {
     const container = containerRef?.current;
@@ -57,14 +47,8 @@ export const ScrollToTop: React.FC<ScrollToTopProps> = ({
   if (!isVisible) return null;
 
   return (
-    <div
-      className={getDivClasses()}
-      onClick={doScrollToTop}
-      role="button"
-    >
-      <span className={Icons.up.class}>
-        {Icons.up.content}
-      </span>
+    <div className={divClasses} onClick={doScrollToTop}>
+      <IconButton size="sm" icon="up" />
     </div>
   );
 };
