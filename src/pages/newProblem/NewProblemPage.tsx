@@ -17,8 +17,23 @@ const defaultProblem: Problem = {
   description: { en: "", ru: "" },
   difficulty: "easy",
   category: [],
-  solution: {},
-  tests: { input: [], output: [] },
+  solution: {
+    javascript: `/**
+* The 'solution' function is the entry point for your code.
+* 
+* @param {...any} args — The arguments passed for each test case.
+* @returns {any} — The result that will be compared with the expected output.
+*/
+
+function solution(...args) {
+
+  //Your code goes here
+
+  return null;
+}
+    `,
+  },
+  tests: { input: [[]], output: [] },
 };
 
 export const NewProblemPage = observer(() => {
@@ -39,10 +54,9 @@ export const NewProblemPage = observer(() => {
   if (!currentProblem) return null;
 
   return (
-    <LayoutGrid>
-      <LayoutItem>
+    <LayoutGrid className="py-8 m:py-0">
+      <LayoutItem label="Name">
         <EditableText
-          label="Problem Name"
           value={currentProblem.title}
           onTextChange={(value) =>
             editProblemField("title", value)
@@ -51,9 +65,8 @@ export const NewProblemPage = observer(() => {
           isHaveEditControls={false}
         />
       </LayoutItem>
-      <LayoutItem>
+      <LayoutItem label="Description">
         <EditableDescription
-          label="Description"
           value={currentProblem.description}
           onChange={(value) =>
             editProblemField("description", value)
@@ -62,10 +75,9 @@ export const NewProblemPage = observer(() => {
           isHaveEditControls={false}
         />
       </LayoutItem>
-      <LayoutItem>
+      <LayoutItem label="Difficulty">
         <EditableDifficulty
           value={currentProblem.difficulty}
-          label="Difficulty"
           onDifficultyChange={(value) =>
             editProblemField("difficulty", value)
           }
@@ -73,7 +85,7 @@ export const NewProblemPage = observer(() => {
           isHaveEditControls={false}
         />
       </LayoutItem>
-      <LayoutItem>
+      <LayoutItem label="Categories">
         <EditableCategories
           categories={currentProblem.category}
           onCategoriesChange={(cat) =>
@@ -84,7 +96,7 @@ export const NewProblemPage = observer(() => {
           isHaveAutoFocus={false}
         />
       </LayoutItem>
-      <LayoutItem>
+      <LayoutItem label="Solution">
         <EditableCode
           solution={currentProblem.solution}
           onChangeCode={(value) =>
@@ -94,10 +106,12 @@ export const NewProblemPage = observer(() => {
           isAutoSave={false}
         />
       </LayoutItem>
-      <LayoutItem className="flex justify-center p-4">
+      <LayoutItem label="Tests">
         <EditableTest
-          label="Тесты"
           tests={currentProblem.tests}
+          defaultEditingState={true}
+          isHaveEditControls={false}
+          isHaveAutoFocus={false}
           onChange={(value) =>
             editProblemField("tests", value)
           }

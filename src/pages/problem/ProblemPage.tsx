@@ -65,7 +65,7 @@ export const ProblemPage = observer(() => {
     );
 
   return (
-    <LayoutGrid>
+    <LayoutGrid className="py-8 m:py-0">
       <LayoutItem label="Description">
         <EditableDescription
           key={id}
