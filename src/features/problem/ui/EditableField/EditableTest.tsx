@@ -171,6 +171,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     }));
     setRows(updatedRows);
     setIsEditing(false);
+    setErrorId(null);
   };
 
   useEffect(() => {
