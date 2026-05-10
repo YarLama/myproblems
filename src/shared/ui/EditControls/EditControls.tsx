@@ -5,7 +5,7 @@ interface EditControlsProps {
   onSave?: () => void;
   onCancel?: () => void;
   onEdit?: () => void;
-  onToggle: (editing: boolean) => void;
+  onToggle?: (editing: boolean) => void;
   vertical?: boolean;
   isEditing: boolean;
 }
@@ -25,17 +25,17 @@ export const EditControls: React.FC<EditControlsProps> = ({
 
   const handleSave = () => {
     onSave?.();
-    onToggle(false);
+    onToggle?.(false);
   };
 
   const handleCancel = () => {
     onCancel?.();
-    onToggle(false);
+    onToggle?.(false);
   };
 
   const handleEdit = () => {
     onEdit?.();
-    onToggle(true);
+    onToggle?.(true);
   };
 
   return isEditing ? (

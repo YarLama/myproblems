@@ -53,22 +53,15 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   const getUpdatedTests = (
     currentRows: TestRow[],
   ): ProblemTests | undefined => {
-    try {
-      return {
-        input: currentRows.map((row) =>
-          JSON.parse(`[${row.input}]`),
-        ),
-        output: currentRows.map((row) => {
-          const value = `${row.output.trim() !== "" ? row.output : "[]"}`;
-          return JSON.parse(value);
-        }),
-      };
-    } catch (e) {
-      console.error(
-        "EditableTest saveChanges error: ",
-        (e as Error).message,
-      );
-    }
+    return {
+      input: currentRows.map((row) =>
+        JSON.parse(`[${row.input}]`),
+      ),
+      output: currentRows.map((row) => {
+        const value = `${row.output.trim() !== "" ? row.output : "[]"}`;
+        return JSON.parse(value);
+      }),
+    };
   };
 
   const addRow = () => {
@@ -128,7 +121,12 @@ export const EditableTest: React.FC<EditableTestProps> = ({
 
     try {
       if (value.trim() !== "") {
-        JSON.parse(`[${value}]`);
+        if (field === "input") {
+          JSON.parse(`[${value}]`);
+        }
+        if (field === "output") {
+          JSON.parse(value);
+        }
       }
 
       if (defaultEditingState && !isHaveEditControls) {
@@ -145,10 +143,11 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   };
 
   const saveChanges = () => {
-    setErrorId(null);
     try {
       const newTests = getUpdatedTests(rows);
       if (newTests) onChange(newTests);
+      setErrorId(null);
+      setIsEditing(false);
     } catch (e) {
       console.error(
         "EditableTest saveChanges error: ",
@@ -158,6 +157,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
   };
 
   const handleEditClick = () => {
+    setIsEditing(true);
     if (rows.length === 0) {
       addRow();
     }
@@ -170,6 +170,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
       id: `row-${i}`,
     }));
     setRows(updatedRows);
+    setIsEditing(false);
   };
 
   useEffect(() => {
@@ -289,7 +290,6 @@ export const EditableTest: React.FC<EditableTestProps> = ({
           <EditControls
             vertical
             isEditing={isEditing}
-            onToggle={setIsEditing}
             onEdit={handleEditClick}
             onSave={saveChanges}
             onCancel={handleCancel}
