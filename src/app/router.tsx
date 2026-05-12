@@ -46,6 +46,4 @@ const routes = [
   },
 ];
 
-export const router = createHashRouter(routes, {
-  basename: "/myproblems",
-});
+export const router = createHashRouter(routes);
