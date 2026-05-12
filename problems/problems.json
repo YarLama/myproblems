@@ -35,6 +35,33 @@
           3
         ]
       }
+    },
+    {
+      "id": "16a09e67-4414-4deb-822c-6ac1158afb03",
+      "title": "Reverse String",
+      "description": {
+        "en": "",
+        "ru": "Напишите функцию, которая принимает строку и возвращает её же, но в обратном порядке."
+      },
+      "difficulty": "easy",
+      "category": [],
+      "solution": {
+        "javascript": "/**\n* The 'solution' function is the entry point for your code.\n* \n* @param {...any} args — The arguments passed for each test case.\n* @returns {any} — The result that will be compared with the expected output.\n*/\n\nfunction solution(str) {\n  return str.split('').reverse().join('');\n}\n    "
+      },
+      "tests": {
+        "input": [
+          [
+            "hello"
+          ],
+          [
+            "river"
+          ]
+        ],
+        "output": [
+          "olleh",
+          "revir"
+        ]
+      }
     }
   ]
 }
