@@ -55,6 +55,7 @@ export const IconButton: React.FC<IconButtonProps> = ({
   return (
     <button
       {...props}
+      name={Icons[icon].content}
       className={clsx([
         btnClasses,
         hoverVariantClasses[hoverVariant],

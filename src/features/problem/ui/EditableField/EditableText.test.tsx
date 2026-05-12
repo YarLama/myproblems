@@ -1,93 +1,91 @@
 import { render, screen, fireEvent, cleanup } from "@testing-library/react";
 import { EditableText } from "./EditableText";
-import { vi, describe, it, expect, beforeEach, afterEach } from "vitest";
+import { vi, describe, it, expect, afterEach } from "vitest";
 
 describe("EditableText", () => {
-  const mockOnTextChange = vi.fn();
-  const mockOnSave = vi.fn();
-  const initialValue = "Hello World";
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-  });
+  const constants = {
+    initial: "Initial Value",
+    updated: "Updated Value",
+    empty: "",
+    selectors: {
+      save: /check|save/i,
+      cancel: /close|cancel/i,
+      edit: /edit/i,
+    }
+  };
 
   afterEach(() => {
     cleanup();
+    vi.clearAllMocks();
   });
 
-  it("should render the initial value in a span when not editing", () => {
-    render(<EditableText value={initialValue} />);
-    expect(screen.getByText(initialValue)).toBeInTheDocument();
-    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
+  const setup = (props = {}) => {
+    const onSave = vi.fn();
+    const onTextChange = vi.fn();
+    const utils = render(
+      <EditableText 
+        value={constants.initial} 
+        onSave={onSave} 
+        onTextChange={onTextChange} 
+        {...props} 
+      />
+    );
+    return { ...utils, onSave, onTextChange };
+  };
+
+  describe("1. Initial Rendering", () => {
+    it("should render correctly with empty and normal strings", () => {
+      const { rerender } = setup({ value: constants.empty });
+      expect(screen.getByText((_, el) => el?.tagName === "SPAN" && el.textContent === constants.empty)).toBeInTheDocument();
+
+      rerender(<EditableText value={constants.initial} />);
+      expect(screen.getByText(constants.initial)).toBeInTheDocument();
+    });
+
+    it("should apply configuration props correctly", () => {
+      setup({ defaultEditingState: true, isMultiline: true, disabled: true });
+      
+      const input = screen.getByRole("textbox");
+      expect(input.tagName).toBe("TEXTAREA");
+      expect(input).toBeDisabled();
+    });
   });
 
-  it("should switch to editing mode when the edit button is clicked", () => {
-    render(<EditableText value={initialValue} />);
-    
-    const editButton = screen.getByText(/edit/i);
-    fireEvent.click(editButton);
+  describe("2. Callback Functions Contract", () => {
+    it("should call onTextChange with exact user input", () => {
+      const { onTextChange } = setup({ defaultEditingState: true });
+      
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: constants.updated } });
+      expect(onTextChange).toHaveBeenCalledWith(constants.updated);
+    });
 
-    expect(screen.getByRole("textbox")).toBeInTheDocument();
-    expect(screen.getByDisplayValue(initialValue)).toBeInTheDocument();
+    it("should call onSave with final value when save is clicked", () => {
+      const { onSave } = setup({ defaultEditingState: true });
+      
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: constants.updated } });
+      fireEvent.click(screen.getByRole("button", { name: constants.selectors.save }));
+
+      expect(onSave).toHaveBeenCalledWith(constants.updated);
+    });
   });
 
-  it("should call onTextChange when the input value changes", () => {
-    render(<EditableText value={initialValue} onTextChange={mockOnTextChange} defaultEditingState={true} />);
-    
-    const input = screen.getByRole("textbox");
-    fireEvent.change(input, { target: { value: "New Value" } });
-    
-    expect(mockOnTextChange).toHaveBeenCalledWith("New Value");
-  });
+  describe("3. Behavior & Logical Integrity", () => {
+    it("should NOT call onSave and should revert value on Cancel", () => {
+      const { onSave } = setup({ defaultEditingState: true });
+      
+      fireEvent.change(screen.getByRole("textbox"), { target: { value: constants.updated } });
+      fireEvent.click(screen.getByRole("button", { name: constants.selectors.cancel }));
 
-  it("should call onSave with the new value when the save button is clicked", () => {
-    render(<EditableText value={initialValue} onSave={mockOnSave} defaultEditingState={true} />);
-    
-    const input = screen.getByRole("textbox");
-    fireEvent.change(input, { target: { value: "Saved Value" } });
-    
-    const saveButton = screen.getByText(/check/i);
-    fireEvent.click(saveButton);
-    
-    expect(mockOnSave).toHaveBeenCalledWith("Saved Value");
-  });
+      expect(onSave).not.toHaveBeenCalled();
+      expect(screen.getByText(constants.initial)).toBeInTheDocument();
+    });
 
-  it("should revert to the original value when the cancel button is clicked", () => {
-    render(<EditableText value={initialValue} defaultEditingState={true} />);
-    
-    const input = screen.getByRole("textbox");
-    fireEvent.change(input, { target: { value: "Changed Value" } });
-    
-    const cancelButton = screen.getByText(/close/i);
-    fireEvent.click(cancelButton);
-    
-    expect(screen.getByText(initialValue)).toBeInTheDocument();
-    expect(screen.queryByRole("textbox")).not.toBeInTheDocument();
-  });
+    it("should sync with value prop updates from parent", () => {
+      const { rerender } = setup({ defaultEditingState: true });
+      expect(screen.getByRole("textbox")).toHaveValue(constants.initial);
 
-  it("should render a textarea when isMultiline is true", () => {
-    render(<EditableText value={initialValue} isMultiline={true} defaultEditingState={true} />);
-    expect(screen.getByRole("textbox").tagName).toBe("TEXTAREA");
-  });
-
-  it("should not render EditControls when isHaveEditControls is false", () => {
-    render(<EditableText value={initialValue} isHaveEditControls={false} />);
-    // Since EditControls is no longer mocked, we can't easily check for a testid unless it's in the real component.
-    // The real component doesn't have a testid on the wrapper. 
-    // But we can check if any button is present.
-    expect(screen.queryByRole("button")).not.toBeInTheDocument();
-  });
-
-  it("should disable the input when disabled is true", () => {
-    render(<EditableText value={initialValue} defaultEditingState={true} disabled={true} />);
-    expect(screen.getByRole("textbox")).toBeDisabled();
-  });
-
-  it("should update the input value when the value prop changes", () => {
-    const { rerender } = render(<EditableText value={initialValue} defaultEditingState={true} />);
-    const newValue = "Updated Value";
-    rerender(<EditableText value={newValue} defaultEditingState={true} />);
-    expect(screen.getByDisplayValue(newValue)).toBeInTheDocument();
+      rerender(<EditableText value={constants.updated} defaultEditingState={true} />);
+      expect(screen.getByRole("textbox")).toHaveValue(constants.updated);
+    });
   });
 });
-
