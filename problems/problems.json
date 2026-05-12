@@ -4,7 +4,7 @@
   "data": [
     {
       "id": "3ec684e6-534b-4369-b1f1-293807c27318",
-      "title": "sum two numbers",
+      "title": "Two Sums",
       "description": {
         "en": "",
         "ru": "Нужно создать функцию, которая складывает 2 числа"
@@ -12,16 +12,27 @@
       "difficulty": "easy",
       "category": [],
       "solution": {
-        "javascript": "function sum(a, b) {\n    return a + b;\n}\n\nconsole.log(sum(1,4));\nconsole.log(sum(5,2));"
+        "javascript": "function sum(a, b) {\n    return a + b;\n}\n\nfunction solution(a,b) {\n    return sum(a,b)\n}"
       },
       "tests": {
         "input": [
-          "sum(1,4)",
-          "sum(5,2)"
+          [
+            1,
+            4
+          ],
+          [
+            5,
+            2
+          ],
+          [
+            -2,
+            5
+          ]
         ],
         "output": [
           5,
-          7
+          7,
+          3
         ]
       }
     }
