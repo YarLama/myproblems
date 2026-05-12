@@ -8,7 +8,7 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), tailwindcssvite()],
-    base: env.VITE_BASE_PATH || "/",
+    base: "/myproblems/",
     build: {
       sourcemap: false,
     },
