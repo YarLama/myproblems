@@ -6,7 +6,7 @@ import path from "path";
 export default defineConfig(() => {
   return {
     plugins: [react(), tailwindcssvite()],
-    base: "/myproblems/",
+    base: "/myproblems",
     build: {
       sourcemap: false,
     },
