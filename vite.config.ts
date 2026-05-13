@@ -1,11 +1,36 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcssvite from "@tailwindcss/vite";
+import { VitePWA } from "vite-plugin-pwa";
 import path from "path";
 
 export default defineConfig(() => {
   return {
-    plugins: [react(), tailwindcssvite()],
+    plugins: [
+      react(),
+      tailwindcssvite(),
+      VitePWA({
+        strategies: "injectManifest",
+        srcDir: "src/app",
+        filename: "sw.ts",
+        registerType: "autoUpdate",
+        scope: "./",
+        includeAssets: ["favicon.svg"],
+        injectManifest: {},
+        manifest: {
+          name: "MyProblems",
+          short_name: "MyProblems",
+          theme_color: "#ffffff",
+          icons: [
+            {
+              src: "web-app-manifest-192x192.png",
+              sizes: "192x192",
+              type: "image/png",
+            },
+          ],
+        },
+      }),
+    ],
     base: "/myproblems",
     build: {
       sourcemap: false,
