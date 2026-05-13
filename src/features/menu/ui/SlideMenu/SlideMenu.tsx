@@ -68,9 +68,15 @@ export const SlideMenu = observer(() => {
               Save File As
             </button>
             <div className="border-t border-[var(--color-primary)]" />
-            <button className={buttonClasses}>
-              GitHub
-            </button>
+            <a
+              href="https://github.com/YarLama/myproblems"
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <button className={buttonClasses}>
+                GitHub
+              </button>
+            </a>
           </div>
         </div>
       </div>
