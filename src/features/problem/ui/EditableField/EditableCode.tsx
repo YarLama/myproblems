@@ -92,7 +92,10 @@ export const EditableCode: React.FC<EditableCodeProps> =
             }, delay);
           }
         }
-        onChangeCode?.({ ...currentProblem?.solution, [currentLanguage]: v });
+        onChangeCode?.({
+          ...currentProblem?.solution,
+          [currentLanguage]: v,
+        });
       };
 
       const handleLanguageChange = (
@@ -125,27 +128,30 @@ export const EditableCode: React.FC<EditableCodeProps> =
       }, [solution]);
 
       return (
-        <div>
+        <div className="flex h-full w-full flex-col">
           <ProgrammingLanguageSelect
             language={currentLanguage}
             onChange={handleLanguageChange}
           />
-          <Editor
-            height="400px"
-            defaultLanguage="plaintext"
-            value={code}
-            theme="vs-dark"
-            onChange={handleChangeCode}
-            onMount={(ed) => (editorRef.current = ed)}
-            options={{
-              lineNumbers: "on",
-              minimap: { enabled: false },
-              fontSize: 14,
-              wordWrap: "on",
-              scrollBeyondLastLine: false,
-              automaticLayout: true,
-            }}
-          />
+          <div className="relative flex-1 m:min-h-[400px] w-full mt-2">
+            <div className="absolute inset-0">
+              <Editor
+                defaultLanguage="javascript"
+                value={code}
+                theme="vs-dark"
+                onChange={handleChangeCode}
+                onMount={(ed) => (editorRef.current = ed)}
+                options={{
+                  lineNumbers: "on",
+                  minimap: { enabled: false },
+                  fontSize: 14,
+                  wordWrap: "on",
+                  scrollBeyondLastLine: false,
+                  automaticLayout: true,
+                }}
+              />
+            </div>
+          </div>
         </div>
       );
     },

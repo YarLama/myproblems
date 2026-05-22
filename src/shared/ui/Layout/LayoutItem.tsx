@@ -25,17 +25,17 @@ export const LayoutItem: React.FC<LayoutItemProps> = ({
     useState(defaultExpanded);
 
   const alignClasses = {
-    left: "justify-self-start",
-    center: "justify-self-center",
-    right: "justify-self-end",
+    left: "self-start",
+    center: "self-center",
+    right: "self-end",
   };
   return (
     <div
       className={clsx(
         "flex flex-col",
-        "w-full max-w-xl",
+        "w-full",
         "m:p-2",
-        "[&>*]:w-full [&>*]:h-full",
+        "[&>*]:w-full",
         alignClasses[align],
         fullWidth ? "md:col-span-full" : "col-span-1",
         className,

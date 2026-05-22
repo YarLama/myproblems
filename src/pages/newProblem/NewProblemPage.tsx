@@ -54,69 +54,76 @@ export const NewProblemPage = observer(() => {
   if (!currentProblem) return null;
 
   return (
-    <LayoutGrid className="py-8 m:py-0">
-      <LayoutItem label="Name">
-        <EditableText
-          value={currentProblem.title}
-          onTextChange={(value) =>
-            editProblemField("title", value)
-          }
-          defaultEditingState={true}
-          isHaveEditControls={false}
-        />
-      </LayoutItem>
-      <LayoutItem label="Description">
-        <EditableDescription
-          value={currentProblem.description}
-          onChange={(value) =>
-            editProblemField("description", value)
-          }
-          defaultEditingState={true}
-          isHaveEditControls={false}
-        />
-      </LayoutItem>
-      <LayoutItem label="Difficulty">
-        <EditableDifficulty
-          value={currentProblem.difficulty}
-          onDifficultyChange={(value) =>
-            editProblemField("difficulty", value)
-          }
-          defaultEditingState={true}
-          isHaveEditControls={false}
-        />
-      </LayoutItem>
-      <LayoutItem label="Categories">
-        <EditableCategories
-          categories={currentProblem.category}
-          onCategoriesChange={(cat) =>
-            editProblemField("category", cat)
-          }
-          defaultEditingState={true}
-          isHaveEditControls={false}
-          isHaveAutoFocus={false}
-        />
-      </LayoutItem>
-      <LayoutItem label="Solution">
-        <EditableCode
-          solution={currentProblem.solution}
-          onChangeCode={(value) =>
-            editProblemField("solution", value)
-          }
-          isDebounced={true}
-          isAutoSave={false}
-        />
-      </LayoutItem>
-      <LayoutItem label="Tests">
-        <EditableTest
-          tests={currentProblem.tests}
-          defaultEditingState={true}
-          isHaveEditControls={false}
-          isHaveAutoFocus={false}
-          onChange={(value) =>
-            editProblemField("tests", value)
-          }
-        />
-      </LayoutItem>
+    <LayoutGrid
+      cols={2}
+      className="py-8 px-16 m:py-0 m:px-0"
+    >
+      <div className="flex flex-col gap-6 items-end">
+        <LayoutItem label="Name">
+          <EditableText
+            value={currentProblem.title}
+            onTextChange={(value) =>
+              editProblemField("title", value)
+            }
+            defaultEditingState={true}
+            isHaveEditControls={false}
+          />
+        </LayoutItem>
+        <LayoutItem label="Description">
+          <EditableDescription
+            value={currentProblem.description}
+            onChange={(value) =>
+              editProblemField("description", value)
+            }
+            defaultEditingState={true}
+            isHaveEditControls={false}
+          />
+        </LayoutItem>
+        <LayoutItem label="Difficulty">
+          <EditableDifficulty
+            value={currentProblem.difficulty}
+            onDifficultyChange={(value) =>
+              editProblemField("difficulty", value)
+            }
+            defaultEditingState={true}
+            isHaveEditControls={false}
+          />
+        </LayoutItem>
+        <LayoutItem label="Categories">
+          <EditableCategories
+            categories={currentProblem.category}
+            onCategoriesChange={(cat) =>
+              editProblemField("category", cat)
+            }
+            defaultEditingState={true}
+            isHaveEditControls={false}
+            isHaveAutoFocus={false}
+          />
+        </LayoutItem>
+      </div>
+      <div className="flex flex-col gap-6 items-start">
+        <LayoutItem label="Solution" className="flex-1 md:min-h-[500px]">
+          <EditableCode
+            solution={currentProblem.solution}
+            onChangeCode={(value) =>
+              editProblemField("solution", value)
+            }
+            isDebounced={true}
+            isAutoSave={false}
+          />
+        </LayoutItem>
+        <LayoutItem label="Tests">
+          <EditableTest
+            tests={currentProblem.tests}
+            defaultEditingState={true}
+            isHaveEditControls={false}
+            isHaveAutoFocus={false}
+            onChange={(value) =>
+              editProblemField("tests", value)
+            }
+          />
+        </LayoutItem>
+      </div>
     </LayoutGrid>
   );
 });

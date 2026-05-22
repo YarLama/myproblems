@@ -65,47 +65,59 @@ export const ProblemPage = observer(() => {
     );
 
   return (
-    <LayoutGrid className="py-8 m:py-0">
-      <LayoutItem label="Description">
-        <EditableDescription
-          key={id}
-          value={currentProblem.description}
-          onChange={(value) =>
-            saveData("description", value)
-          }
-        />
-      </LayoutItem>
-      <LayoutItem label="Categories" collapsible defaultExpanded={false}>
-        <EditableCategories
-          categories={currentProblem.category}
-          onCategoriesChange={(cat) =>
-            saveData("category", cat)
-          }
-        />
-      </LayoutItem>
-      <LayoutItem label="Difficulty" collapsible defaultExpanded={false}>
-        <EditableDifficulty
-          value={currentProblem.difficulty}
-        />
-      </LayoutItem>
-      <LayoutItem label="Solution">
-        <EditableCode
-          solution={currentProblem.solution}
-          isAutoSave={true}
-        />
-      </LayoutItem>
-      <LayoutItem label="Tests">
-        <EditableTest
-          tests={currentProblem.tests}
-          onChange={(value) => saveData("tests", value)}
-        />
-      </LayoutItem>
-      <LayoutItem label="Output">
-        <ProblemOutput
-          tests={currentProblem.tests}
-          code={code}
-        />
-      </LayoutItem>
+    <LayoutGrid cols={2} className="py-8 px-16 m:py-0 m:px-0">
+      <div className="flex flex-col gap-6 items-end">
+        <LayoutItem label="Description">
+          <EditableDescription
+            key={id}
+            value={currentProblem.description}
+            onChange={(value) =>
+              saveData("description", value)
+            }
+          />
+        </LayoutItem>
+        <LayoutItem
+          label="Categories"
+          collapsible
+          defaultExpanded={false}
+        >
+          <EditableCategories
+            categories={currentProblem.category}
+            onCategoriesChange={(cat) =>
+              saveData("category", cat)
+            }
+          />
+        </LayoutItem>
+        <LayoutItem
+          label="Difficulty"
+          collapsible
+          defaultExpanded={false}
+        >
+          <EditableDifficulty
+            value={currentProblem.difficulty}
+          />
+        </LayoutItem>
+        <LayoutItem label="Tests">
+          <EditableTest
+            tests={currentProblem.tests}
+            onChange={(value) => saveData("tests", value)}
+          />
+        </LayoutItem>
+      </div>
+      <div className="flex flex-col gap-6 items-start">
+        <LayoutItem label="Solution" className="flex-1 md:min-h-[700px]">
+          <EditableCode
+            solution={currentProblem.solution}
+            isAutoSave={true}
+          />
+        </LayoutItem>
+        <LayoutItem label="Output">
+          <ProblemOutput
+            tests={currentProblem.tests}
+            code={code}
+          />
+        </LayoutItem>
+      </div>
     </LayoutGrid>
   );
 });
