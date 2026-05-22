@@ -121,7 +121,7 @@ class FileStore {
       if (!granted) return;
     }
 
-    await this.writeData(JSON.stringify(data, null, 2));
+    await this.writeData(JSON.stringify(data));
   };
 
   private setupNewHandler = async (
