@@ -65,7 +65,10 @@ export const ProblemPage = observer(() => {
     );
 
   return (
-    <LayoutGrid cols={2} className="py-8 px-16 m:py-0 m:px-0">
+    <LayoutGrid
+      cols={2}
+      className="py-8 px-16 m:py-0 m:px-0"
+    >
       <div className="flex flex-col gap-6 items-end">
         <LayoutItem label="Description">
           <EditableDescription
@@ -105,7 +108,10 @@ export const ProblemPage = observer(() => {
         </LayoutItem>
       </div>
       <div className="flex flex-col gap-6 items-start">
-        <LayoutItem label="Solution" className="flex-1 md:min-h-[700px]">
+        <LayoutItem
+          label="Solution"
+          className="flex-1 md:min-h-[500px]"
+        >
           <EditableCode
             solution={currentProblem.solution}
             isAutoSave={true}
