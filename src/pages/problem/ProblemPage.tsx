@@ -98,6 +98,9 @@ export const ProblemPage = observer(() => {
         >
           <EditableDifficulty
             value={currentProblem.difficulty}
+            isHaveEditControls={false}
+            defaultEditingState
+            onDifficultyChange={(value) => saveData("difficulty", value)}
           />
         </LayoutItem>
         <LayoutItem label="Tests">
