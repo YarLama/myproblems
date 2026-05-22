@@ -20,6 +20,16 @@ export const EditableDescription: React.FC<
   isHaveEditControls = true,
   onChange,
 }) => {
+    const getInitialLanguage = (): AvailableLanguages => {
+      if (value[defaultLanguage]) return defaultLanguage;
+      const filledLanguage = Object.keys(value).find(
+        (key) => value[key as AvailableLanguages],
+      );
+      return (
+        (filledLanguage as AvailableLanguages) ||
+        defaultLanguage
+      );
+    };
     const [isEditing, setIsEditing] = useState(
       defaultEditingState,
     );
@@ -27,7 +37,7 @@ export const EditableDescription: React.FC<
       value[defaultLanguage],
     );
     const [currentLanguage, setCurrentLanguage] =
-      useState<AvailableLanguages>(defaultLanguage);
+      useState<AvailableLanguages>(getInitialLanguage);
     const inputId = useId();
     const textareaRef = useRef<HTMLTextAreaElement>(null);
 
