@@ -105,7 +105,7 @@ class FileStore {
         suggestedName: "my problem list.json",
       });
       await this.setupNewHandler(handler);
-      await this.writeData(JSON.stringify(data, null, 2));
+      await this.writeData(JSON.stringify(data));
     } catch (e) {
       console.error("Save As... error: ", e);
     }
