@@ -75,7 +75,7 @@ export const ProblemPage = observer(() => {
           }
         />
       </LayoutItem>
-      <LayoutItem label="Categories">
+      <LayoutItem label="Categories" collapsible defaultExpanded={false}>
         <EditableCategories
           categories={currentProblem.category}
           onCategoriesChange={(cat) =>
@@ -83,7 +83,7 @@ export const ProblemPage = observer(() => {
           }
         />
       </LayoutItem>
-      <LayoutItem label="Difficulty">
+      <LayoutItem label="Difficulty" collapsible defaultExpanded={false}>
         <EditableDifficulty
           value={currentProblem.difficulty}
         />
