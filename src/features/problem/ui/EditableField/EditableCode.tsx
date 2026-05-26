@@ -1,6 +1,6 @@
 import { useEffect, useRef } from "react";
 import { Editor, type OnMount } from "@monaco-editor/react";
-import { ProgrammingLanguageSelect } from "@ui";
+import { IconButton, ProgrammingLanguageSelect } from "@ui";
 import { ProblemSolution, problemStore } from "@entities";
 import { observer } from "mobx-react-lite";
 import { AvailableProgrammingLanguages } from "@constants/languages";
@@ -108,6 +108,11 @@ export const EditableCode: React.FC<EditableCodeProps> =
         if (editorRef.current) editorRef.current.focus();
       };
 
+      const handleCopyClick = () => {
+        const copiedText = code;
+        navigator.clipboard.writeText(copiedText);
+      };
+
       useEffect(() => {
         const availableLanguages = Object.keys(
           solution || {},
@@ -129,10 +134,17 @@ export const EditableCode: React.FC<EditableCodeProps> =
 
       return (
         <div className="flex h-full w-full flex-col">
-          <ProgrammingLanguageSelect
-            language={currentLanguage}
-            onChange={handleLanguageChange}
-          />
+          <div className="flex justify-between">
+            <ProgrammingLanguageSelect
+              language={currentLanguage}
+              onChange={handleLanguageChange}
+            />
+            <IconButton
+              icon="copy"
+              size="sm"
+              onClick={handleCopyClick}
+            />
+          </div>
           <div className="relative flex-1 m:min-h-[400px] w-full mt-2">
             <div className="absolute inset-0">
               <Editor

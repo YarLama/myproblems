@@ -30,8 +30,7 @@ function solution(...args) {
   //Your code goes here
 
   return null;
-}
-    `,
+}`,
   },
   tests: { input: [[]], output: [] },
 };
