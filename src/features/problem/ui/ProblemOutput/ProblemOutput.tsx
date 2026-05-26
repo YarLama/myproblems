@@ -17,11 +17,14 @@ const formatProblemOutput = (result: ExecutionResult) => {
   const formated = result.stdout
     .map((res) => {
       if (res.status === "success") {
+        const expectedStr = JSON.stringify(res.testExpected);
+        const outputStr = JSON.stringify(res.output);
+
         if (res.testStatus === "success") {
-          return `[  OK  ] Case ${res.testIndex + 1}: Result => ${res.output}`;
+          return `[  OK  ] Case ${res.testIndex + 1}: Result => ${outputStr}`;
         }
         if (res.testStatus === "failed") {
-          return `[ FAIL ] Case ${res.testIndex + 1}: Expected ${res.testExpected}, Actual ${res.output}`;
+          return `[ FAIL ] Case ${res.testIndex + 1}: Expected ${expectedStr}, Actual ${outputStr}`;
         }
       }
       if (res.status === "error") {
