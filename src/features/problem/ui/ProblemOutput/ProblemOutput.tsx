@@ -1,4 +1,8 @@
-import { ProblemTests, useExecuteCode } from "@entities";
+import {
+  ExecutionResult,
+  ProblemTests,
+  useExecuteCode,
+} from "@entities";
 import { EditableText } from "../EditableField/EditableText";
 import { toJS } from "mobx";
 import { useState } from "react";
@@ -9,6 +13,26 @@ interface ProblemOutputProps {
   tests: ProblemTests;
 }
 
+const formatProblemOutput = (result: ExecutionResult) => {
+  const formated = result.stdout
+    .map((res) => {
+      if (res.status === "success") {
+        if (res.testStatus === "success") {
+          return `[  OK  ] Case ${res.testIndex + 1}: Result => ${res.output}`;
+        }
+        if (res.testStatus === "failed") {
+          return `[ FAIL ] Case ${res.testIndex + 1}: Expected ${res.testExpected}, Actual ${res.output}`;
+        }
+      }
+      if (res.status === "error") {
+        return `[ ERR ] Case ${res.testIndex + 1}: ${res.error}`;
+      }
+    })
+    .join("\n");
+
+  return formated;
+};
+
 export const ProblemOutput: React.FC<
   ProblemOutputProps
 > = ({ tests, code }) => {
@@ -16,29 +40,11 @@ export const ProblemOutput: React.FC<
   const { mutate: execute, isPending: isExecuting } =
     useExecuteCode({
       onSuccess: (result) => {
-        const outputString = result.stdout
-          .map((res) => {
-            if (res.status === "success") {
-              if (res.testStatus === "success") {
-                return `${res.testIndex}:${res.testStatus}. ${res.output}`;
-              }
-              if (res.testStatus === "failed") {
-                return `${res.testIndex}:${res.testStatus}. Expected ${res.testExpected}, and return ${res.output}`;
-              }
-            }
-            if (res.status === "error") {
-              return `${res.testIndex}:error runtime: ${res.error}`;
-            }
-          })
-          .join("\n");
+        const outputString = formatProblemOutput(result);
         setOutput(outputString);
-
-        if (result.stderr) {
-          setOutput(result.stderr);
-        }
       },
       onError: (error) => {
-        setOutput(`Error: ${error.message}`);
+        setOutput(`Execution Error: ${error.message}`);
       },
     });
 
@@ -62,7 +68,11 @@ export const ProblemOutput: React.FC<
           disabled
         />
       </div>
-        <IconButton icon="search" size="sm" onClick={handleCheckClick} />
+      <IconButton
+        icon="search"
+        size="sm"
+        onClick={handleCheckClick}
+      />
     </div>
   );
 };
