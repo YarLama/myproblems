@@ -174,6 +174,24 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     setErrorId(null);
   };
 
+  const handleCopyClick = () => {
+    const template_input = "{{I}}";
+    const template_output = "{{O}}";
+    const preset: string = `console.log(solution(${template_input})); //${template_output}`;
+    const copiedText = rows
+      .map((el) => {
+        const replaceInput = preset
+          .split(template_input)
+          .join(el.input);
+        const replaceOutput = replaceInput
+          .split(template_output)
+          .join(el.output);
+        return replaceOutput;
+      })
+      .join("\n");
+    navigator.clipboard.writeText(copiedText);
+  };
+
   useEffect(() => {
     const { input, output } = tests;
 
@@ -280,11 +298,17 @@ export const EditableTest: React.FC<EditableTestProps> = ({
         </tbody>
       </table>
       <div className="flex gap-4 items-start flex-col">
-        {isEditing && (
+        {isEditing ? (
           <IconButton
             icon="add"
             size="sm"
             onClick={addRow}
+          />
+        ) : (
+          <IconButton
+            icon="copy"
+            size="sm"
+            onClick={handleCopyClick}
           />
         )}
         {isHaveEditControls && (

@@ -16,6 +16,7 @@ export const Icons = {
   "up": { content: "arrow_upward", class: "material-icons" },
   "ok": { content: "check", class: "material-icons" },
   "search": { content: "search", class: "material-icons" },
+  "copy": { content: "content_copy", class: "material-icons"}
 } as const;
 
 export type iconNames = keyof typeof Icons;
