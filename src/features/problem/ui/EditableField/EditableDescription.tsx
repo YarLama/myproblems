@@ -112,7 +112,7 @@ export const EditableDescription: React.FC<
             autoFocus={isHaveEditControls}
           />
         ) : (
-          <span className="p-1 border-transparent border">
+          <span className="p-1 border-transparent border whitespace-pre-wrap">
             {value[currentLanguage]}
           </span>
         )}
