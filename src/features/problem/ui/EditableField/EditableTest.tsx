@@ -210,10 +210,9 @@ export const EditableTest: React.FC<EditableTestProps> = ({
           } else {
             throw new Error("input or output are empty");
           }
-        } else {
-            throw new Error("wrong pasted text");
         }
       }
+      if (newRows.length === 0) return;
       const updatedRows = newRows.map(
         ({ input, output }, i) => ({
           input: displayValue(JSON.stringify(input)),
