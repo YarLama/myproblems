@@ -192,6 +192,41 @@ export const EditableTest: React.FC<EditableTestProps> = ({
     navigator.clipboard.writeText(copiedText);
   };
 
+  const handlePasteClick = async () => {
+    try {
+      const newRows = [];
+      const pastedText =
+        await navigator.clipboard.readText();
+      const regex = /solution\((.*?)\)\);\s*\/\/\s*(.*)/;
+      const splitedText = pastedText.split("\n");
+      for (const row of splitedText) {
+        const matched = regex.exec(row);
+        if (matched) {
+          const [, inputRaw, outputRaw] = matched;
+          if (inputRaw && outputRaw) {
+            const input = JSON.parse(`[${inputRaw}]`);
+            const output = JSON.parse(outputRaw);
+            newRows.push({ input, output });
+          } else {
+            throw new Error("input or output are empty");
+          }
+        } else {
+            throw new Error("wrong pasted text");
+        }
+      }
+      const updatedRows = newRows.map(
+        ({ input, output }, i) => ({
+          input: displayValue(JSON.stringify(input)),
+          output: JSON.stringify(output),
+          id: `row-${i}`,
+        }),
+      );
+      setRows(updatedRows);
+    } catch (e) {
+      console.error("Paste Error:", (e as Error).message);
+    }
+  };
+
   useEffect(() => {
     const { input, output } = tests;
 
@@ -299,11 +334,18 @@ export const EditableTest: React.FC<EditableTestProps> = ({
       </table>
       <div className="flex gap-4 items-start flex-col">
         {isEditing ? (
-          <IconButton
-            icon="add"
-            size="sm"
-            onClick={addRow}
-          />
+          <>
+            <IconButton
+              icon="add"
+              size="sm"
+              onClick={addRow}
+            />
+            <IconButton
+              icon="paste"
+              size="sm"
+              onClick={handlePasteClick}
+            />
+          </>
         ) : (
           <IconButton
             icon="copy"
