@@ -1,6 +1,6 @@
 import { routePath } from "@constants/routePaths";
 import { problemStore } from "@entities";
-import { MenuButton, Search } from "@features";
+import { MenuButton, Search, SearchSort } from "@features";
 import { IconButton } from "@ui";
 import { useNavigate } from "react-router";
 import { NavLayout } from "./NavLayout";
@@ -30,13 +30,22 @@ export const ProblemsNav = observer(() => {
           <IconButton icon="add" onClick={handleAddClick} />
         </>
       }
-      center={isProblemsEmpty ? null : <Search />}
+      center={
+        isProblemsEmpty ? null : (
+          <div className="flex gap-0.5">
+            <Search />
+            <SearchSort />
+          </div>
+        )
+      }
       right={
         isProblemsEmpty ? null : (
-          <IconButton
-            icon="shuffle"
-            onClick={handleShuffleClick}
-          />
+          <>
+            <IconButton
+              icon="shuffle"
+              onClick={handleShuffleClick}
+            />
+          </>
         )
       }
     />

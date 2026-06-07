@@ -7,7 +7,6 @@ import {
 } from "./IconButton.types";
 import { iconNames, Icons } from "@constants/icons";
 
-
 const btnClasses = clsx([
   "flex",
   "border",
@@ -17,12 +16,6 @@ const btnClasses = clsx([
   "cursor-pointer",
   "select-none",
 ]);
-
-const sizeClasses: iconSizeClass = {
-  sm: "px-1 text-md",
-  md: "px-2 py-1 text-xl",
-  lg: "px-3 py-2 text-2xl",
-};
 
 const hoverVariantClasses: iconHoverVariantClass = {
   default: clsx([
@@ -52,20 +45,56 @@ export const IconButton: React.FC<IconButtonProps> = ({
   className,
   ...props
 }) => {
+  const isArrayContent = Array.isArray(Icons[icon].content);
+  const arrayContentClasses =
+    isArrayContent &&
+    clsx(["items-center gap-0.5", "px-0"]);
+
+  const sizeClasses: iconSizeClass = {
+    sm: clsx([
+      !isArrayContent ? "px-1" : "px-1",
+      "text-md",
+    ]),
+    md: clsx([
+      !isArrayContent ? "px-2" : "px-1",
+      "py-1 text-xl",
+    ]),
+    lg: clsx([
+      !isArrayContent ? "px-3" : "px-2",
+      "py-2 text-2xl",
+    ]),
+  };
   return (
     <button
       {...props}
-      name={Icons[icon].content}
+      name={icon}
       className={clsx([
         btnClasses,
         hoverVariantClasses[hoverVariant],
         sizeClasses[size],
+        arrayContentClasses,
         className,
       ])}
     >
-      <span className={clsx([Icons[icon].class])}>
-        {Icons[icon].content}
-      </span>
+      {isArrayContent ? (
+        (Icons[icon].content as readonly string[]).map(
+          (el, i) => (
+            <span
+              key={i}
+              className={clsx(
+                [Icons[icon].class],
+                i > 0 && "text-[0.5em]",
+              )}
+            >
+              {el}
+            </span>
+          ),
+        )
+      ) : (
+        <span className={clsx([Icons[icon].class])}>
+          {Icons[icon].content}
+        </span>
+      )}
     </button>
   );
 };

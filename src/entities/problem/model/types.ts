@@ -1,18 +1,24 @@
 import { DifficultyValues } from "@constants/difficulty";
-import { AvailableLanguages, AvailableProgrammingLanguages } from "@constants/languages.ts";
+import {
+  AvailableLanguages,
+  AvailableProgrammingLanguages,
+} from "@constants/languages.ts";
 
 export type ProblemDescription = Record<
   AvailableLanguages,
   string
 >;
-export type ProblemSolution = Partial<Record<AvailableProgrammingLanguages, string>>;
+export type ProblemSolution = Partial<
+  Record<AvailableProgrammingLanguages, string>
+>;
 
 export type ProblemTests<T = unknown, U = unknown> = {
   input: T[];
   output: U[];
 };
 
-export type ProblemDifficulty = typeof DifficultyValues[number];
+export type ProblemDifficulty =
+  (typeof DifficultyValues)[number];
 
 export type Problem<T = unknown, U = unknown> = {
   id: string;
@@ -29,3 +35,5 @@ export type ProblemList = {
   format: "list";
   data: Problem[];
 };
+
+export type problemSortByType = "title";
