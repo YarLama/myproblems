@@ -197,7 +197,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
       const newRows = [];
       const pastedText =
         await navigator.clipboard.readText();
-      const regex = /solution\((.*?)\)\);\s*\/\/\s*(.*)/;
+      const regex = /solution\((.*?)\)\);?\s*\/\/\s*(.*)/;
       const splitedText = pastedText.split("\n");
       for (const row of splitedText) {
         const matched = regex.exec(row);
