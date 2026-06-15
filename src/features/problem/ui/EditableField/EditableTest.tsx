@@ -221,6 +221,11 @@ export const EditableTest: React.FC<EditableTestProps> = ({
         }),
       );
       setRows(updatedRows);
+
+      if (defaultEditingState && !isHaveEditControls) {
+        const newTests = getUpdatedTests(updatedRows);
+        if (newTests) onChange(newTests);
+      }
     } catch (e) {
       console.error("Paste Error:", (e as Error).message);
     }
@@ -235,11 +240,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
       setRows(
         input.map((input, i) => ({
           input: displayValue(JSON.stringify(input)),
-          output:
-            Array.isArray(output[i]) &&
-              output[i].length === 0
-              ? ""
-              : JSON.stringify(output[i]),
+          output: JSON.stringify(output[i] ?? ""),
           id: `row-${i}`,
         })),
       );
