@@ -1,5 +1,8 @@
 import { routePath } from "@constants/routePaths";
-import { problemStore } from "@entities";
+import {
+  problemFilterStore,
+  problemStore,
+} from "@entities";
 import { MenuButton, Search, SearchSort } from "@features";
 import { IconButton } from "@ui";
 import { useNavigate } from "react-router";
@@ -8,8 +11,8 @@ import { observer } from "mobx-react-lite";
 
 export const ProblemsNav = observer(() => {
   const navigate = useNavigate();
-  const { getRandomProblemId, isProblemsEmpty } =
-    problemStore;
+  const { isProblemsEmpty } = problemStore;
+  const { getRandomProblemId } = problemFilterStore;
 
   const handleAddClick = () => {
     navigate(routePath.problems.add);

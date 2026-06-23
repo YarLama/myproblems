@@ -72,33 +72,6 @@ class ProblemStore {
     await this.refreshFromDB();
   };
 
-  getPrevProblemId = (currentId: string): string => {
-    const currentIndex = this.problemList.data.findIndex(
-      (el) => el.id === currentId,
-    );
-    if (currentIndex < 1) return "";
-    return this.problemList.data[currentIndex - 1].id;
-  };
-
-  getNextProblemId = (currentId: string): string => {
-    const currentIndex = this.problemList.data.findIndex(
-      (el) => el.id === currentId,
-    );
-    if (currentIndex + 1 >= this.problemList.data.length)
-      return "";
-    return this.problemList.data[currentIndex + 1].id;
-  };
-
-  getRandomProblemId = (): string | null => {
-    const length = this.problemList.data.length;
-    if (length > 0) {
-      const randomIndex = Math.floor(
-        Math.random() * length,
-      );
-      return this.problemList.data[randomIndex].id;
-    } else return null;
-  };
-
   getProblemTitle = (currentId: string): string => {
     const currentIndex = this.problemList.data.findIndex(
       (el) => el.id === currentId,

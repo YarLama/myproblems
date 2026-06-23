@@ -167,15 +167,49 @@ class ProblemFilter {
 
         if (_a < _b)
           return this.filter.sortOrder === "asc" ? -1 : 1;
-        if (_a < _b)
+        if (_a > _b)
           return this.filter.sortOrder === "asc" ? 1 : -1;
         return 0;
       });
     };
 
     return sortProblems(result);
-    // return result;
   }
+
+  private get filteredIndices(): Map<string, number> {
+    const map = new Map<string, number>();
+    const list = this.filteredProblems;
+    for (let i = 0; i < list.length; i++) {
+      map.set(list[i].id, i);
+    }
+    return map;
+  }
+
+  getPrevProblemId = (currentId: string): string => {
+    const list = this.filteredProblems;
+    const _i = this.filteredIndices.get(currentId);
+
+    if (_i === undefined || _i < 1) return "";
+    return list[_i - 1].id;
+  };
+
+  getNextProblemId = (currentId: string): string => {
+    const list = this.filteredProblems;
+    const _i = this.filteredIndices.get(currentId);
+
+    if (_i === undefined || _i + 1 >= list.length)
+      return "";
+    return list[_i + 1].id;
+  };
+
+  getRandomProblemId = (): string | null => {
+    const list = this.filteredProblems;
+    const l = list.length;
+
+    if (l === 0) return null;
+    const randomIndex = Math.floor(Math.random() * l);
+    return list[randomIndex].id;
+  };
 }
 
 export const problemFilterStore = new ProblemFilter();

@@ -1,16 +1,17 @@
 import { routePath } from "@constants/routePaths";
-import { problemStore } from "@entities";
+import {
+  problemFilterStore,
+  problemStore,
+} from "@entities";
 import { IconButton } from "@ui";
 import { observer } from "mobx-react-lite";
 import { useNavigate } from "react-router";
 
 export const ProblemNavigationButtons = observer(() => {
   const navigate = useNavigate();
-  const {
-    currentProblem,
-    getNextProblemId,
-    getPrevProblemId,
-  } = problemStore;
+  const { currentProblem } = problemStore;
+  const { getNextProblemId, getPrevProblemId } =
+    problemFilterStore;
 
   const nextId = getNextProblemId(currentProblem?.id ?? "");
   const prevId = getPrevProblemId(currentProblem?.id ?? "");
