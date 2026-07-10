@@ -1,6 +1,10 @@
 import { AvailableLanguages } from "@constants/languages";
 import { ProblemDescription } from "@entities";
-import { EditControls, LanguageSelect } from "@ui";
+import {
+  EditControls,
+  IconButton,
+  LanguageSelect,
+} from "@ui";
 import { useEffect, useId, useRef, useState } from "react";
 
 interface EditableDescriptionProps {
@@ -72,6 +76,10 @@ export const EditableDescription: React.FC<
       }
     };
 
+    const handleCopyClick = () => {
+      navigator.clipboard.writeText(newValue);
+    };
+
     const handleChangeLanguage = (
       value: AvailableLanguages,
     ) => {
@@ -93,14 +101,23 @@ export const EditableDescription: React.FC<
             language={currentLanguage}
             onChange={handleChangeLanguage}
           />
-          {isHaveEditControls && (
-            <EditControls
-              isEditing={isEditing}
-              onToggle={setIsEditing}
-              onSave={handleSaveClick}
-              onCancel={handleCancelClick}
-            />
-          )}
+          <div className="flex gap-2 items-start flex-row">
+            {!isEditing && (
+              <IconButton
+                icon="copy"
+                size="sm"
+                onClick={handleCopyClick}
+              />
+            )}
+            {isHaveEditControls && (
+              <EditControls
+                isEditing={isEditing}
+                onToggle={setIsEditing}
+                onSave={handleSaveClick}
+                onCancel={handleCancelClick}
+              />
+            )}
+          </div>
         </div>
         {isEditing ? (
           <textarea

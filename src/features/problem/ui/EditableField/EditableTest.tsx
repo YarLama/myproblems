@@ -332,7 +332,7 @@ export const EditableTest: React.FC<EditableTestProps> = ({
           ))}
         </tbody>
       </table>
-      <div className="flex gap-4 items-start flex-col">
+      <div className="flex gap-2 items-start flex-col">
         {isEditing ? (
           <>
             <IconButton
